@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Sleeply</string>
+    <string name="menu_settings">Settings</string>
+    <string name="action_sleep_timer">Sleep timer</string>
+    <string name="sleep_timer_title">Sleep timer</string>
+    <string name="update_content">to be implemented</string>
+    <string name="update_title">What\\\'s new</string>
+    <string name="update_positive">I understand</string>
+    <string name="action_email_dev">Email developer</string>
+    <string name="action_about">About</string>
+    <string name="email_subject">Feedback Sleepify</string>
+    <string name="email_intent_title">Anything to add?</string>
+    <string name="dev_email_address">nielsmasdorp+sleeply@gmail.com</string>
+    <string name="email_intent_type">mailto</string>
+    <string name="about_title">About Sleeply</string>
+    <string name="about_positive">OK</string>
+    <string name="about_message"><![CDATA[
+        Current version: 0.1, made by:<br/><br/>
+        <b>Niels Masdorp</b><br/>
+        <a href=\'https://play.google.com/store/search?q=pub:Niels%20Masdorp\'>Google Play</a>&nbsp;&nbsp;
+        <a href=\'https://plus.google.com/118171808911702111152\'>Google+</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/NielsMasdorp\'>GitHub</a>&nbsp;&nbsp;
+        <a href=\'https://www.linkedin.com/profile/view?id=257462649\'>LinkedIn</a>&nbsp;&nbsp;<br/><br/>
+        <b>Thanks to:</b><br/>
+        <a href=\'https://github.com/afollestad/material-dialogs\'>Material Dialogs</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/JakeWharton/butterknife\'>Butterknife</a>&nbsp;&nbsp;
+        <a href=\'https://freepik.com\'>Freepik</a>&nbsp;&nbsp;
+    ]]></string>
+    <string name="rainy_stream_title">It is a rainy day</string>
+    <string name="ocean_stream_title">Floating in the ocean</string>
+    <string name="forest_stream_title">Sounds of the forest</string>
+    <string name="meditation_stream_title">Shamanic meditation</string>
+    <string name="rainy_stream_desc">Better stay inside and relax</string>
+    <string name="ocean_stream_desc">Fall asleep listening to the waves</string>
+    <string name="forest_stream_desc">Lay back and listen to a calm creek and birds</string>
+    <string name="meditation_stream_desc">Meditate and enter a state of deep relaxation</string>
+    <string name="stream_error_toast">Couldn\'t open stream, Check your internet connection. If this continues to fail please contact me.</string>
+    <string name="no_wifi_toast">Not connected to WiFi, be aware that this uses a LOT of data!</string>
+
+    <string-array name="sleep_timer">
+        <item>Off</item>
+        <item>15 minutes</item>
+        <item>20 minutes</item>
+        <item>30 minutes</item>
+        <item>40 minutes</item>
+        <item>50 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>3 hours</item>
+    </string-array>
+
+</resources>
