@@ -147,6 +147,7 @@ public class StreamService extends Service implements
 
         if (action.equalsIgnoreCase(ACTION_STOP)) {
             Log.i(TAG, "handleIntent: stopping stream from notification");
+
             stopStreaming();
             toBackground();
             stopSelf();
@@ -186,10 +187,7 @@ public class StreamService extends Service implements
             mPlayer.reset();
         }
 
-        if (mCountDownTimer != null) {
-            mCountDownTimer.cancel();
-            mCountDownTimer = null;
-        }
+        stopSleepTimer();
     }
 
     /**
@@ -198,6 +196,7 @@ public class StreamService extends Service implements
      * @return the playing stream or null
      */
     public Stream getPlayingStream() {
+
         if (null != mPlayer && mPlayer.isPlaying()) {
             return mCurrentStream;
         }
@@ -210,7 +209,6 @@ public class StreamService extends Service implements
      * @param milliseconds to wait before sleep
      */
     public void setSleepTimer(int milliseconds) {
-
         Log.i(TAG, "setSleepTimer: setting sleep timer for " + milliseconds + "ms");
 
         stopSleepTimer();
@@ -247,10 +245,10 @@ public class StreamService extends Service implements
     }
 
     private void timerDoneBroadcast() {
+        Log.i(TAG, "setSleepTimer: sleep timer is done, notifying bindings.");
 
         Intent intent = new Intent(TIMER_DONE_INTENT);
         mBroadcastManager.sendBroadcast(intent);
-        Log.i(TAG, "setSleepTimer: sleep timer is done, notifying bindings.");
     }
 
     @Override
@@ -260,6 +258,7 @@ public class StreamService extends Service implements
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Log.i(TAG, "onError: " + what + ", " + extra);
+
         Toast.makeText(StreamService.this, R.string.stream_error_toast, Toast.LENGTH_SHORT).show();
         mp.reset();
         isMediaPlayerPreparing = false;
@@ -269,6 +268,7 @@ public class StreamService extends Service implements
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+
         isMediaPlayerPreparing = false;
         notifyStreamLoaded(true);
         mp.start();
