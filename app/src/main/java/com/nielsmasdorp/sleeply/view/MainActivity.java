@@ -41,6 +41,7 @@ import com.nielsmasdorp.sleeply.model.Stream;
 import com.nielsmasdorp.sleeply.service.StreamService;
 import com.nielsmasdorp.sleeply.service.StreamService.StreamBinder;
 import com.nielsmasdorp.sleeply.util.Constants;
+import com.nielsmasdorp.sleeply.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -276,44 +277,13 @@ public class MainActivity extends AppCompatActivity {
                 .items(R.array.sleep_timer)
                 .itemsCallback((dialog, view, which, text) -> {
                     if (isPlaying) {
-                        mStreamService.setSleepTimer(calculateMs(which));
+                        mStreamService.setSleepTimer(TimeUtil.calculateMs(which));
                         mSleepTimerText.setText("");
                     } else {
                         Toast.makeText(MainActivity.this, "Start a stream first..", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .show();
-    }
-
-    /**
-     * How many milliseconds should the sleep timer last
-     *
-     * @param option selected in list
-     * @return milliseconds for timer
-     */
-    private int calculateMs(int option) {
-        switch (option) {
-            case 0:
-                return 0;
-            case 1:
-                return (int) TimeUnit.SECONDS.toMillis(15);
-            case 2:
-                return (int) TimeUnit.MINUTES.toMillis(20);
-            case 3:
-                return (int) TimeUnit.MINUTES.toMillis(30);
-            case 4:
-                return (int) TimeUnit.MINUTES.toMillis(40);
-            case 5:
-                return (int) TimeUnit.MINUTES.toMillis(50);
-            case 6:
-                return (int) TimeUnit.HOURS.toMillis(1);
-            case 7:
-                return (int) TimeUnit.HOURS.toMillis(2);
-            case 8:
-                return (int) TimeUnit.HOURS.toMillis(3);
-            default:
-                return 0;
-        }
     }
 
     @SuppressWarnings("unused")
