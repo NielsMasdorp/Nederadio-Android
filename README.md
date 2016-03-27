@@ -1,4 +1,4 @@
-![alt tag](http://imgur.com/yAMKOet)
+![alt tag](http://i.imgur.com/yAMKOet.jpg)
 
 ###Fall asleep with Sleeply
 
