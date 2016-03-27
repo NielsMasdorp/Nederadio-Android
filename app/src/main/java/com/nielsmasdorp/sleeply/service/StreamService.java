@@ -168,7 +168,7 @@ public class StreamService extends Service implements
 
         try {
             isMediaPlayerPreparing = true;
-            mPlayer.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), Constants.soundCloudApiKey)));
+            mPlayer.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), getString(R.string.soundclound_api_key))));
             mPlayer.setLooping(true);
             mCurrentStream = stream;
         } catch (Exception e) {

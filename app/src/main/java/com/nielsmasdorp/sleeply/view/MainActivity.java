@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.Crashlytics;
 import com.nielsmasdorp.sleeply.BuildConfig;
 import com.nielsmasdorp.sleeply.R;
 import com.nielsmasdorp.sleeply.model.Stream;
@@ -43,6 +44,7 @@ import com.nielsmasdorp.sleeply.service.StreamService.StreamBinder;
 import com.nielsmasdorp.sleeply.util.Constants;
 import com.nielsmasdorp.sleeply.util.TimeUtil;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -142,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        //Removed when not in alpha/beta
+        getSupportActionBar().setTitle("Sleeply");
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mCm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
