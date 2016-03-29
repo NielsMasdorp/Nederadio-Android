@@ -2,6 +2,7 @@ package com.nielsmasdorp.sleeply.interactor;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 
 import javax.inject.Singleton;
 
@@ -19,8 +20,8 @@ public class InteractorModule {
 
     @Provides
     @Singleton
-    public MainInteractor provideMainInteractor(Application application, SharedPreferences preferences) {
+    public MainInteractor provideMainInteractor(Application application, SharedPreferences preferences, ConnectivityManager connectivityManager) {
 
-        return new MainInteractorImpl(application, preferences);
+        return new MainInteractorImpl(application, preferences, connectivityManager);
     }
 }

@@ -225,7 +225,7 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void error(String error) {
 
-        Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, error, Toast.LENGTH_LONG).show();
     }
 
     /**

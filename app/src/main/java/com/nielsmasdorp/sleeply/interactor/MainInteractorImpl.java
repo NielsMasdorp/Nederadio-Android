@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -31,17 +33,22 @@ public class MainInteractorImpl implements MainInteractor {
     final static String LAST_STREAM_IDENTIFIER = "last_stream_identifier";
 
     Application application;
-    StreamService streamService;
-    Boolean bound = false;
-    OnStreamServiceListener listener;
-    List<Stream> streams;
     SharedPreferences preferences;
+    ConnectivityManager connectivityManager;
+
+    StreamService streamService;
+    OnStreamServiceListener listener;
+
+    Boolean boundToService = false;
+
+    List<Stream> streams;
     Stream currentStream;
 
-    public MainInteractorImpl(Application application, SharedPreferences preferences) {
+    public MainInteractorImpl(Application application, SharedPreferences preferences, ConnectivityManager connectivityManager) {
 
         this.application = application;
         this.preferences = preferences;
+        this.connectivityManager = connectivityManager;
 
         streams = new ArrayList<>();
         streams.add(new Stream(0, "https://api.soundcloud.com/tracks/110697958/stream", application.getString(R.string.rainy_stream_title), application.getString(R.string.rainy_stream_desc), R.drawable.rain_background));
@@ -77,7 +84,7 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void unbindService() {
 
-        if (bound) {
+        if (boundToService) {
             application.unbindService(serviceConnection);
         }
         LocalBroadcastManager.getInstance(application).unregisterReceiver(broadcastReceiver);
@@ -91,6 +98,7 @@ public class MainInteractorImpl implements MainInteractor {
         if (!streamService.isPlaying()) {
             streamService.playStream(currentStream);
             listener.setLoading();
+            checkIfOnWifi();
         } else {
             streamService.stopStreaming();
             listener.streamStopped();
@@ -223,6 +231,16 @@ public class MainInteractorImpl implements MainInteractor {
         }
     }
 
+    private void checkIfOnWifi() {
+
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
+                listener.error(application.getString(R.string.no_wifi_toast));
+            }
+        }
+    }
+
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
@@ -234,7 +252,7 @@ public class MainInteractorImpl implements MainInteractor {
             Log.i(TAG, "onServiceConnected: successfully bound to service.");
             StreamService.StreamBinder binder = (StreamService.StreamBinder) service;
             streamService = binder.getService();
-            bound = true;
+            boundToService = true;
             currentStream = streamService.getPlayingStream();
             if (currentStream != null) {
                 listener.restoreUI(currentStream, true);
@@ -248,7 +266,7 @@ public class MainInteractorImpl implements MainInteractor {
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             Log.i(TAG, "onServiceDisconnected: disconnected from service.");
-            bound = false;
+            boundToService = false;
         }
     };
 
