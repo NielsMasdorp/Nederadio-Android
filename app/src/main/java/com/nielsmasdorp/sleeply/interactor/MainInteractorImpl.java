@@ -212,7 +212,7 @@ public class MainInteractorImpl implements MainInteractor {
             case 0:
                 return 0;
             case 1:
-                return (int) TimeUnit.MINUTES.toMillis(15);
+                return (int) TimeUnit.SECONDS.toMillis(15);
             case 2:
                 return (int) TimeUnit.MINUTES.toMillis(20);
             case 3:
