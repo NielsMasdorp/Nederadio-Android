@@ -40,6 +40,7 @@
     <string name="meditation_stream_desc">Meditate and enter a state of deep relaxation</string>
     <string name="stream_error_toast">Couldn\'t open stream, Check your internet connection. If this continues to fail please contact me.</string>
     <string name="no_wifi_toast">Not connected to WiFi, be aware that this uses a LOT of data!</string>
+    <string name="start_stream_error_toast">Start a stream first.</string>
 
     <string-array name="sleep_timer">
         <item>Off</item>

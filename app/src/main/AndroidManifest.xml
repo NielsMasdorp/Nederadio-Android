@@ -16,7 +16,7 @@
             android:name="com.nielsmasdorp.sleeply.service.StreamService"
             android:enabled="true" />
         <activity
-            android:name="com.nielsmasdorp.sleeply.view.MainActivity"
+            android:name=".ui.stream.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar.Transparent">
             <intent-filter>

@@ -19,8 +19,7 @@ import android.widget.Toast;
 
 import com.nielsmasdorp.sleeply.R;
 import com.nielsmasdorp.sleeply.model.Stream;
-import com.nielsmasdorp.sleeply.util.Constants;
-import com.nielsmasdorp.sleeply.view.MainActivity;
+import com.nielsmasdorp.sleeply.ui.stream.MainActivity;
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -154,6 +153,13 @@ public class StreamService extends Service implements
         }
     }
 
+    public boolean isPlaying() {
+        if (mPlayer == null) {
+            return false;
+        }
+        return mPlayer.isPlaying();
+    }
+
     /**
      * Start play a stream
      */
@@ -275,7 +281,7 @@ public class StreamService extends Service implements
     }
 
     /**
-     * Send out a broadcast indicating stream was started with success or couldnt be found
+     * Send out a broadcast indicating stream was started with success or couldn't be found
      *
      * @param success
      */
