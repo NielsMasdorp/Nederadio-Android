@@ -37,7 +37,7 @@ public class MainInteractorImpl implements MainInteractor {
     ConnectivityManager connectivityManager;
 
     StreamService streamService;
-    OnStreamServiceListener listener;
+    OnStreamServiceListener presenter;
 
     Boolean boundToService = false;
 
@@ -58,8 +58,9 @@ public class MainInteractorImpl implements MainInteractor {
     }
 
     @Override
-    public void startService(OnStreamServiceListener listener) {
-        this.listener = listener;
+    public void startService(OnStreamServiceListener presenter) {
+
+        this.presenter = presenter;
 
         Intent intent = new Intent(application, StreamService.class);
         if (!isServiceAlreadyRunning()) {
@@ -97,11 +98,11 @@ public class MainInteractorImpl implements MainInteractor {
 
         if (!streamService.isPlaying()) {
             streamService.playStream(currentStream);
-            listener.setLoading();
+            presenter.setLoading();
             checkIfOnWifi();
         } else {
-            streamService.stopStreaming();
-            listener.streamStopped();
+            streamService.stopStreaming(true);
+            presenter.streamStopped();
         }
     }
 
@@ -116,11 +117,11 @@ public class MainInteractorImpl implements MainInteractor {
         }
 
         if (streamService.isPlaying()) {
-            streamService.stopStreaming();
+            streamService.stopStreaming(false);
             playStream();
         }
 
-        listener.animateTo(currentStream);
+        presenter.animateTo(currentStream);
     }
 
     @Override
@@ -134,11 +135,11 @@ public class MainInteractorImpl implements MainInteractor {
         }
 
         if (streamService.isPlaying()) {
-            streamService.stopStreaming();
+            streamService.stopStreaming(false);
             playStream();
         }
 
-        listener.animateTo(currentStream);
+        presenter.animateTo(currentStream);
     }
 
     @Override
@@ -147,7 +148,7 @@ public class MainInteractorImpl implements MainInteractor {
         if (streamService.isPlaying()) {
             streamService.setSleepTimer(calculateMs(option));
         } else {
-            listener.error(application.getString(R.string.start_stream_error_toast));
+            presenter.error(application.getString(R.string.start_stream_error_toast));
         }
     }
 
@@ -176,15 +177,15 @@ public class MainInteractorImpl implements MainInteractor {
         if (intent.getAction().equals(StreamService.STREAM_DONE_LOADING_INTENT)) {
             boolean success = intent.getBooleanExtra(StreamService.STREAM_DONE_LOADING_SUCCESS, false);
             if (!success) {
-                listener.streamStopped();
+                presenter.streamStopped();
             } else {
-                listener.streamPlaying();
+                presenter.streamPlaying();
             }
         } else if (intent.getAction().equals(StreamService.TIMER_DONE_INTENT)) {
-            listener.streamStopped();
+            presenter.streamStopped();
         } else if (intent.getAction().equals(StreamService.TIMER_UPDATE_INTENT)) {
             long timerValue = (long) intent.getIntExtra(StreamService.TIMER_UPDATE_VALUE, 0);
-            listener.updateTimerValue(formatTimer(timerValue));
+            presenter.updateTimerValue(formatTimer(timerValue));
         }
     }
 
@@ -236,7 +237,7 @@ public class MainInteractorImpl implements MainInteractor {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         if (activeNetwork != null) {
             if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
-                listener.error(application.getString(R.string.no_wifi_toast));
+                presenter.error(application.getString(R.string.no_wifi_toast));
             }
         }
     }
@@ -255,11 +256,11 @@ public class MainInteractorImpl implements MainInteractor {
             boundToService = true;
             currentStream = streamService.getPlayingStream();
             if (currentStream != null) {
-                listener.restoreUI(currentStream, true);
+                presenter.restoreUI(currentStream, true);
             } else {
                 int last = preferences.getInt(LAST_STREAM_IDENTIFIER, 0);
                 currentStream = streams.get(last);
-                listener.restoreUI(currentStream, false);
+                presenter.restoreUI(currentStream, false);
             }
         }
 

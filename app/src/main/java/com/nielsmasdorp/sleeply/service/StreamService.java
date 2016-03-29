@@ -147,7 +147,7 @@ public class StreamService extends Service implements
         if (action.equalsIgnoreCase(ACTION_STOP)) {
             Log.i(TAG, "handleIntent: stopping stream from notification");
 
-            stopStreaming();
+            stopStreaming(true);
             toBackground();
             stopSelf();
         }
@@ -186,14 +186,14 @@ public class StreamService extends Service implements
     /**
      * Stop the MediaPlayer if something is streaming
      */
-    public void stopStreaming() {
+    public void stopStreaming(boolean stopTimer) {
 
         if (null != mPlayer && mPlayer.isPlaying()) {
             mPlayer.stop();
             mPlayer.reset();
         }
 
-        stopSleepTimer();
+        if (stopTimer) stopSleepTimer();
     }
 
     /**
@@ -230,7 +230,7 @@ public class StreamService extends Service implements
                 }
 
                 public void onFinish() {
-                    stopStreaming();
+                    stopStreaming(true);
                     timerDoneBroadcast();
                     toBackground();
                 }
