@@ -40,25 +40,25 @@ import butterknife.OnClick;
 public class MainActivity extends BaseActivity implements MainView {
 
     @Bind(R.id.playBtn)
-    ImageButton mPlayButton;
+    ImageButton playButton;
     @Bind(R.id.nextBtn)
-    ImageButton mNextButton;
+    ImageButton nextButton;
     @Bind(R.id.prevBtn)
-    ImageButton mPrevButton;
+    ImageButton previousButton;
     @Bind(R.id.titleText)
-    TextView mTitleText;
+    TextView titleText;
     @Bind(R.id.descText)
-    TextView mDescText;
+    TextView descText;
     @Bind(R.id.sleepTimerText)
-    TextView mSleepTimerText;
+    TextView sleepTimerText;
     @Bind(R.id.loading)
-    ProgressBar mLoadingBar;
+    ProgressBar uiLoading;
     @Bind(R.id.loadingStream)
-    ProgressBar mStreamLoading;
+    ProgressBar streamLoading;
     @Bind(R.id.background)
-    ImageView mBackground;
+    ImageView background;
     @Bind(R.id.mainUI)
-    RelativeLayout mMainUI;
+    RelativeLayout mainUI;
 
     @Inject
     MainPresenter presenter;
@@ -138,9 +138,9 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void initializeUI(Stream stream, boolean isPlaying) {
 
-        mTitleText.setText(stream.getTitle());
-        mDescText.setText(stream.getDesc());
-        mBackground.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, stream.getImageResource()));
+        titleText.setText(stream.getTitle());
+        descText.setText(stream.getDesc());
+        background.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, stream.getImageResource()));
 
         if (isPlaying) {
             setToPlaying();
@@ -148,19 +148,19 @@ public class MainActivity extends BaseActivity implements MainView {
             setToStopped();
         }
 
-        mMainUI.setVisibility(View.VISIBLE);
-        mLoadingBar.setVisibility(View.GONE);
+        mainUI.setVisibility(View.VISIBLE);
+        uiLoading.setVisibility(View.GONE);
     }
 
     @Override
     public void setLoading() {
 
-        mStreamLoading.setVisibility(View.VISIBLE);
-        mPlayButton.setVisibility(View.INVISIBLE);
-        mNextButton.setEnabled(false);
-        mPrevButton.setEnabled(false);
+        streamLoading.setVisibility(View.VISIBLE);
+        playButton.setVisibility(View.INVISIBLE);
+        nextButton.setEnabled(false);
+        previousButton.setEnabled(false);
 
-        mPlayButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_stop_48dp));
+        playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_stop_48dp));
     }
 
     @Override
@@ -168,8 +168,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
         stopLoading();
 
-        mPlayButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_stop_48dp));
-        mSleepTimerText.setText("");
+        playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_stop_48dp));
+        sleepTimerText.setText("");
     }
 
     @Override
@@ -177,22 +177,22 @@ public class MainActivity extends BaseActivity implements MainView {
 
         stopLoading();
 
-        mPlayButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_48dp));
-        mSleepTimerText.setText("");
+        playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_48dp));
+        sleepTimerText.setText("");
     }
 
     private void stopLoading() {
 
-        mStreamLoading.setVisibility(View.INVISIBLE);
-        mPlayButton.setVisibility(View.VISIBLE);
-        mNextButton.setEnabled(true);
-        mPrevButton.setEnabled(true);
+        streamLoading.setVisibility(View.INVISIBLE);
+        playButton.setVisibility(View.VISIBLE);
+        nextButton.setEnabled(true);
+        previousButton.setEnabled(true);
     }
 
     @Override
     public void animateTo(Stream currentStream) {
 
-        mBackground.startAnimation(fadeOut);
+        background.startAnimation(fadeOut);
 
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
 
@@ -203,10 +203,10 @@ public class MainActivity extends BaseActivity implements MainView {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                mBackground.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, currentStream.getImageResource()));
-                mTitleText.setText(currentStream.getTitle());
-                mDescText.setText(currentStream.getDesc());
-                mBackground.startAnimation(fadeIn);
+                background.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, currentStream.getImageResource()));
+                titleText.setText(currentStream.getTitle());
+                descText.setText(currentStream.getDesc());
+                background.startAnimation(fadeIn);
             }
 
             @Override
@@ -217,25 +217,9 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
-    public void updateTimer(Long timeLeft) {
+    public void updateTimer(String timeLeft) {
 
-        if (timeLeft > TimeUnit.HOURS.toMillis(1)) {
-
-            mSleepTimerText.setText(String.format("%02d:%02d:%02d",
-                    TimeUnit.MILLISECONDS.toHours(timeLeft),
-                    TimeUnit.MILLISECONDS.toMinutes(timeLeft) -
-                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
-                    TimeUnit.MILLISECONDS.toSeconds(timeLeft) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft))));
-        } else {
-
-            mSleepTimerText.setText(String.format("%02d:%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(timeLeft) -
-                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
-                    TimeUnit.MILLISECONDS.toSeconds(timeLeft) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft))));
-        }
-
+        sleepTimerText.setText(timeLeft);
     }
 
     @Override
@@ -254,7 +238,7 @@ public class MainActivity extends BaseActivity implements MainView {
                 .items(R.array.sleep_timer)
                 .itemsCallback((dialog, view, which, text) -> {
                     presenter.setSleepTimer(which);
-                    mSleepTimerText.setText("");
+                    sleepTimerText.setText("");
                 })
                 .show();
     }

@@ -17,7 +17,7 @@ public interface MainView {
 
     void animateTo(Stream currentStream);
 
-    void updateTimer(Long timeLeft);
+    void updateTimer(String timeLeft);
 
     void error(String error);
 }

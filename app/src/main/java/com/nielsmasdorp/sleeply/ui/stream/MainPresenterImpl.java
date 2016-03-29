@@ -60,7 +60,7 @@ public class MainPresenterImpl implements MainPresenter, OnStreamServiceListener
     }
 
     @Override
-    public void updateTimerValue(Long timeLeft) {
+    public void updateTimerValue(String timeLeft) {
 
         view.updateTimer(timeLeft);
     }

@@ -9,7 +9,7 @@ public interface OnStreamServiceListener {
 
     void streamStopped();
 
-    void updateTimerValue(Long timeLeft);
+    void updateTimerValue(String timeLeft);
 
     void restoreUI(Stream stream, boolean isPlaying);
 

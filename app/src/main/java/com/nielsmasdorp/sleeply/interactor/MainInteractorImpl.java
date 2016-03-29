@@ -176,7 +176,25 @@ public class MainInteractorImpl implements MainInteractor {
             listener.streamStopped();
         } else if (intent.getAction().equals(StreamService.TIMER_UPDATE_INTENT)) {
             long timerValue = (long) intent.getIntExtra(StreamService.TIMER_UPDATE_VALUE, 0);
-            listener.updateTimerValue(timerValue);
+            listener.updateTimerValue(formatTimer(timerValue));
+        }
+    }
+
+    private String formatTimer(long timeLeft) {
+
+        if (timeLeft > TimeUnit.HOURS.toMillis(1)) {
+            return String.format("%02d:%02d:%02d",
+                    TimeUnit.MILLISECONDS.toHours(timeLeft),
+                    TimeUnit.MILLISECONDS.toMinutes(timeLeft) -
+                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
+                    TimeUnit.MILLISECONDS.toSeconds(timeLeft) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft)));
+        } else {
+            return String.format("%02d:%02d",
+                    TimeUnit.MILLISECONDS.toMinutes(timeLeft) -
+                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
+                    TimeUnit.MILLISECONDS.toSeconds(timeLeft) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft)));
         }
     }
 
