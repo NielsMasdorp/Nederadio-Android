@@ -30,7 +30,7 @@ public class StreamService extends Service implements
 
     private static final String TAG = StreamService.class.getSimpleName();
 
-    public static final int NOTIFY_ID = 1;
+    private static final int NOTIFY_ID = 1;
 
     public static final String STREAM_DONE_LOADING_INTENT = "stream_done_loading_intent";
     public static final String STREAM_DONE_LOADING_SUCCESS = "stream_done_loading_success";
@@ -38,7 +38,7 @@ public class StreamService extends Service implements
     public static final String TIMER_UPDATE_VALUE = "timer_update_value";
     public static final String TIMER_DONE_INTENT = "timer_done_intent";
 
-    public static final String ACTION_STOP = "action_stop";
+    private static final String ACTION_STOP = "action_stop";
 
     private boolean isMediaPlayerPreparing = false;
 
@@ -154,10 +154,8 @@ public class StreamService extends Service implements
     }
 
     public boolean isPlaying() {
-        if (mPlayer == null) {
-            return false;
-        }
-        return mPlayer.isPlaying();
+
+        return mPlayer != null && mPlayer.isPlaying();
     }
 
     /**
@@ -242,7 +240,7 @@ public class StreamService extends Service implements
     /**
      * Stop the sleep timer
      */
-    public void stopSleepTimer() {
+    private void stopSleepTimer() {
 
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();

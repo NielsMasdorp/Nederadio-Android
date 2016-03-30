@@ -1,6 +1,7 @@
 package com.nielsmasdorp.sleeply.network;
 
 import android.app.Application;
+import android.content.Context;
 import android.net.ConnectivityManager;
 
 import javax.inject.Singleton;
@@ -21,6 +22,6 @@ public class NetworkModule {
     @Singleton
     public ConnectivityManager provideConnectivityManager(Application application) {
 
-        return (ConnectivityManager) application.getSystemService(application.CONNECTIVITY_SERVICE);
+        return (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 }

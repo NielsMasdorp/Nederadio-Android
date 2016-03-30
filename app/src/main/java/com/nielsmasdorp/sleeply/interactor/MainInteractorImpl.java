@@ -29,20 +29,20 @@ import java.util.concurrent.TimeUnit;
  */
 public class MainInteractorImpl implements MainInteractor {
 
-    final static String TAG = MainInteractorImpl.class.getSimpleName();
-    final static String LAST_STREAM_IDENTIFIER = "last_stream_identifier";
+    private final static String TAG = MainInteractorImpl.class.getSimpleName();
+    private final static String LAST_STREAM_IDENTIFIER = "last_stream_identifier";
 
-    Application application;
-    SharedPreferences preferences;
-    ConnectivityManager connectivityManager;
+    private Application application;
+    private SharedPreferences preferences;
+    private ConnectivityManager connectivityManager;
 
-    StreamService streamService;
-    OnStreamServiceListener presenter;
+    private StreamService streamService;
+    private OnStreamServiceListener presenter;
 
-    Boolean boundToService = false;
+    private Boolean boundToService = false;
 
-    List<Stream> streams;
-    Stream currentStream;
+    private List<Stream> streams;
+    private Stream currentStream;
 
     public MainInteractorImpl(Application application, SharedPreferences preferences, ConnectivityManager connectivityManager) {
 

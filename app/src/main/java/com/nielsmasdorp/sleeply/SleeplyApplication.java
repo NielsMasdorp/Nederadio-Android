@@ -20,7 +20,7 @@ public class SleeplyApplication extends Application {
     @Inject
     Application application;
 
-    ObjectGraph objectGraph;
+    private ObjectGraph objectGraph;
 
     @Override
     public void onCreate() {

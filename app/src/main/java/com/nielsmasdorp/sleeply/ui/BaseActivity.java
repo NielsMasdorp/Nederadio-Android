@@ -10,7 +10,7 @@ import java.util.List;
 import dagger.ObjectGraph;
 
 /**
- * Created by niels on 29-3-16.
+ * @author Niels Masdorp (NielsMasdorp)
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
