@@ -3,6 +3,8 @@ package com.nielsmasdorp.sleeply.ui.stream;
 import com.nielsmasdorp.sleeply.interactor.MainInteractor;
 import com.nielsmasdorp.sleeply.model.Stream;
 
+import java.util.List;
+
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
@@ -54,6 +56,18 @@ public class MainPresenterImpl implements MainPresenter, OnStreamServiceListener
     }
 
     @Override
+    public void getAllStreams() {
+
+        interactor.getAllStreams();
+    }
+
+    @Override
+    public void streamPicked(Stream stream) {
+
+        interactor.streamPicked(stream);
+    }
+
+    @Override
     public void streamStopped() {
 
         view.setToStopped();
@@ -93,5 +107,11 @@ public class MainPresenterImpl implements MainPresenter, OnStreamServiceListener
     public void error(String error) {
 
         view.error(error);
+    }
+
+    @Override
+    public void showAllStreams(List<Stream> streams, Stream currentStream) {
+
+        view.showStreamsDialog(streams, currentStream);
     }
 }

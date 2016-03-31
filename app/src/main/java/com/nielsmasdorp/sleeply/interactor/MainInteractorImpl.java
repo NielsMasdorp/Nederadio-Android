@@ -156,6 +156,24 @@ public class MainInteractorImpl implements MainInteractor {
         }
     }
 
+    @Override
+    public void getAllStreams() {
+
+        presenter.showAllStreams(streams, currentStream);
+    }
+
+    @Override
+    public void streamPicked(Stream stream) {
+
+        currentStream = stream;
+        if (streamService.isPlaying()) {
+            streamService.stopStreaming(false);
+            playStream();
+        }
+
+        presenter.animateTo(currentStream);
+    }
+
     /**
      * See if the StreamService is already running in the background.
      *

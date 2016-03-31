@@ -5,5 +5,6 @@
     <color name="colorAccent">#009688</color>
     <color name="secondaryText">#727272</color>
     <color name="primaryText">#212121</color>
-    
+    <color name="greyTransparent">#99727272</color>
+
 </resources>
