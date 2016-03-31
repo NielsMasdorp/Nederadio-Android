@@ -29,6 +29,11 @@
         <a href=\'https://soundcloud.com/cosmomedia\'>Cosmomedia</a>&nbsp;&nbsp;
         <a href=\'https://soundcloud.com/hend-abdelhamed\'>Hend Abdelhamed</a>&nbsp;&nbsp;
         <a href=\'https://soundcloud.com/user9175165\'>User9175165</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/dave-smith-173\'>SybokTHS</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/dave-smith-173\'>SybokTHS</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/avesource\'>Wavesource</a>&nbsp;&nbsp;
+        <a href=\'http://soundcloud.com/mark-aria\'>Mark Aria</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/ryanm1994\'>Ryan M</a>&nbsp;&nbsp;
     ]]></string>
     <string name="rainy_stream_title">It is a rainy day</string>
     <string name="ocean_stream_title">Floating in the ocean</string>
@@ -47,6 +52,14 @@
     <string name="next_button_content_desc">Next button</string>
     <string name="stream_notification_image_content_desc">Notification stream image</string>
     <string name="notification_cancel_button_content_desc">Cancel notification button</string>
+    <string name="delta_waves_stream_title">Delta waves</string>
+    <string name="delta_waves_stream_desc">Relaxing music to help you sleep</string>
+    <string name="lucid_stream_title">Lucid dreaming</string>
+    <string name="lucid_stream_desc">Binatural beats</string>
+    <string name="autumn_stream_title">Autumn wind</string>
+    <string name="autumn_stream_desc">Must be nice to stay inside</string>
+    <string name="void_stream_title">Enter the void</string>
+    <string name="void_stream_desc">Don\'t forget to come back</string>
 
     <string-array name="sleep_timer">
         <item>Off</item>

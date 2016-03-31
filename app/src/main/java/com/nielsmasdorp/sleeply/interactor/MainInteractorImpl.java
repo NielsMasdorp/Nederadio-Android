@@ -55,6 +55,10 @@ public class MainInteractorImpl implements MainInteractor {
         streams.add(new Stream(1, "https://api.soundcloud.com/tracks/13262271/stream", application.getString(R.string.ocean_stream_title), application.getString(R.string.ocean_stream_desc), R.drawable.ocean_background));
         streams.add(new Stream(2, "https://api.soundcloud.com/tracks/97924982/stream", application.getString(R.string.forest_stream_title), application.getString(R.string.forest_stream_desc), R.drawable.nature_background));
         streams.add(new Stream(3, "https://api.soundcloud.com/tracks/149844883/stream", application.getString(R.string.meditation_stream_title), application.getString(R.string.meditation_stream_desc), R.drawable.meditation_background));
+        streams.add(new Stream(4, "https://api.soundcloud.com/tracks/78048378/stream", application.getString(R.string.delta_waves_stream_title), application.getString(R.string.delta_waves_stream_desc), R.drawable.delta_waves_background));
+        streams.add(new Stream(5, "https://api.soundcloud.com/tracks/210719226/stream", application.getString(R.string.lucid_stream_title), application.getString(R.string.lucid_stream_desc), R.drawable.lucid_background));
+        streams.add(new Stream(6, "https://api.soundcloud.com/tracks/176629663/stream", application.getString(R.string.autumn_stream_title), application.getString(R.string.autumn_stream_desc), R.drawable.autumn_background));
+        streams.add(new Stream(7, "https://api.soundcloud.com/tracks/189015106/stream", application.getString(R.string.void_stream_title), application.getString(R.string.void_stream_desc), R.drawable.void_background));
     }
 
     @Override
