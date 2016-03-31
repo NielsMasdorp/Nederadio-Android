@@ -9,6 +9,11 @@ Sleeply as of now, contains 4 sounds:
 - Ocean sounds
 - Rain
 - Shamanic meditation
+- Delta waves
+- Lucid dreaming
+- Autumn wind
+- Enter the void
+- 
 
 But I plan to add more. The user interface is beautiful and it supports playing in the background as well as a sleep timer configurable between 15 minutes and 3 hours.
 
