@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +14,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,8 @@ public class MainActivity extends BaseActivity implements MainView {
     ImageButton nextButton;
     @Bind(R.id.prevBtn)
     ImageButton previousButton;
+    @Bind(R.id.showSoundsBtn)
+    Button showSoundsButton;
     @Bind(R.id.titleText)
     TextView titleText;
     @Bind(R.id.descText)
@@ -57,7 +62,7 @@ public class MainActivity extends BaseActivity implements MainView {
     @Bind(R.id.background)
     ImageView background;
     @Bind(R.id.mainUI)
-    RelativeLayout mainUI;
+    LinearLayout mainUI;
 
     @Inject
     MainPresenter presenter;
@@ -134,6 +139,13 @@ public class MainActivity extends BaseActivity implements MainView {
         }
     }
 
+    @SuppressWarnings("unused")
+    @OnClick(R.id.showSoundsBtn)
+    public void showSoundsClicked() {
+
+        presenter.getAllStreams();
+    }
+
     @Override
     public void initializeUI(Stream stream, boolean isPlaying) {
 
@@ -158,6 +170,7 @@ public class MainActivity extends BaseActivity implements MainView {
         playButton.setVisibility(View.INVISIBLE);
         nextButton.setEnabled(false);
         previousButton.setEnabled(false);
+        showSoundsButton.setEnabled(false);
 
         playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_stop_48dp));
     }
@@ -185,6 +198,7 @@ public class MainActivity extends BaseActivity implements MainView {
         playButton.setVisibility(View.VISIBLE);
         nextButton.setEnabled(true);
         previousButton.setEnabled(true);
+        showSoundsButton.setEnabled(true);
     }
 
     @Override
@@ -226,6 +240,28 @@ public class MainActivity extends BaseActivity implements MainView {
         Toast.makeText(MainActivity.this, error, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showStreamsDialog(List<Stream> streams, Stream currentStream) {
+
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .customView(R.layout.dialog_sounds, true)
+                .build();
+
+        RecyclerView grid = (RecyclerView) dialog.getCustomView();
+        if (grid != null) {
+            grid.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+            grid.setAdapter(new StreamGridAdapter(MainActivity.this, streams, (view, position, dataSet) -> {
+                dialog.dismiss();
+                if (position != currentStream.getId()) {
+
+                    presenter.streamPicked(streams.get(position));
+                }
+            }));
+        }
+
+        dialog.show();
+    }
+
     /**
      * Pick a desired sleep timer
      */
@@ -245,6 +281,7 @@ public class MainActivity extends BaseActivity implements MainView {
      * Send an email
      */
     private void sendEmail() {
+
         Intent requestIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 getString(R.string.email_intent_type), getString(R.string.dev_email_address), null));
         requestIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));

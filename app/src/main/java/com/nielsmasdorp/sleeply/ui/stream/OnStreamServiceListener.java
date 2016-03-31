@@ -2,6 +2,8 @@ package com.nielsmasdorp.sleeply.ui.stream;
 
 import com.nielsmasdorp.sleeply.model.Stream;
 
+import java.util.List;
+
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
@@ -20,4 +22,6 @@ public interface OnStreamServiceListener {
     void animateTo(Stream currentStream);
 
     void error(String string);
+
+    void showAllStreams(List<Stream> streams, Stream currentStream);
 }

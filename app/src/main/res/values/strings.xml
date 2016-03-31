@@ -24,6 +24,7 @@
         <a href=\'https://github.com/afollestad/material-dialogs\'>Material Dialogs</a>&nbsp;&nbsp;
         <a href=\'https://github.com/JakeWharton/butterknife\'>Butterknife</a>&nbsp;&nbsp;
         <a href=\'http://square.github.io/dagger/\'>Dagger</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/ReactiveX/RxAndroid/\'>RxAndroid</a>&nbsp;&nbsp;
         <a href=\'www.freepik.com\'>Freepik</a>&nbsp;&nbsp;
         <a href=\'https://soundcloud.com/tauqeer-ahmad-waheedi\'>Tauqeer Waheedi</a>&nbsp;&nbsp;
         <a href=\'https://soundcloud.com/cosmomedia\'>Cosmomedia</a>&nbsp;&nbsp;
@@ -60,6 +61,8 @@
     <string name="autumn_stream_desc">Must be nice to stay inside</string>
     <string name="void_stream_title">Enter the void</string>
     <string name="void_stream_desc">Don\'t forget to come back</string>
+    <string name="all_sounds_button">show all</string>
+    <string name="show_sounds_dialog_button">BACK</string>
 
     <string-array name="sleep_timer">
         <item>Off</item>

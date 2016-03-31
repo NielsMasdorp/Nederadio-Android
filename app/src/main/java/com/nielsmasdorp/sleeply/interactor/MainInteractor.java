@@ -1,6 +1,7 @@
 package com.nielsmasdorp.sleeply.interactor;
 
 
+import com.nielsmasdorp.sleeply.model.Stream;
 import com.nielsmasdorp.sleeply.ui.stream.OnStreamServiceListener;
 
 /**
@@ -19,4 +20,8 @@ public interface MainInteractor {
     void previousStream();
 
     void setSleepTimer(int ms);
+
+    void getAllStreams();
+
+    void streamPicked(Stream stream);
 }
