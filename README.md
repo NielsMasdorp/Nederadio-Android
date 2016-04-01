@@ -1,4 +1,4 @@
-![alt tag](http://i.imgur.com/yAMKOet.jpg)
+![alt tag](http://i.imgur.com/aVeMHcr.jpg)
 
 ###Fall asleep with Sleeply
 
@@ -22,7 +22,7 @@ If you know any sounds that help you fall asleep, contact me from within the app
 ###Used libraries
 * [Butterknife](https://github.com/JakeWharton/butterknife)
 * [Dagger](http://square.github.io/dagger/)
-* [RxAndroid](https://github.com/ReactiveX/RxAndroid)
+* [Glide](https://github.com/bumptech/glide)
 * [Material Dialogs](https://github.com/afollestad/material-dialogs)
 
 License
