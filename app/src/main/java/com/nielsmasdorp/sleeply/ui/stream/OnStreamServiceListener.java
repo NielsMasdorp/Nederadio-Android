@@ -23,5 +23,5 @@ public interface OnStreamServiceListener {
 
     void error(String string);
 
-    void showAllStreams(List<Stream> streams, Stream currentStream);
+    void showAllStreams(List<Stream> streams);
 }

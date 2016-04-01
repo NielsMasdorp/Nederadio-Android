@@ -132,6 +132,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="48dp"
             android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:text="@string/all_sounds_button"
             android:textColor="@android:color/white" />

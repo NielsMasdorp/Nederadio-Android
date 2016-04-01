@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nielsmasdorp.sleeply.R;
 import com.nielsmasdorp.sleeply.model.Stream;
@@ -66,6 +67,9 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Inject
     MainPresenter presenter;
+
+    @Inject
+    StreamGridAdapter gridAdapter;
 
     private Animation fadeOut, fadeIn;
 
@@ -151,7 +155,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
         titleText.setText(stream.getTitle());
         descText.setText(stream.getDesc());
-        background.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, stream.getImageResource()));
+        background.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, stream.getBigImgRes()));
 
         if (isPlaying) {
             setToPlaying();
@@ -215,7 +219,7 @@ public class MainActivity extends BaseActivity implements MainView {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                background.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, currentStream.getImageResource()));
+                background.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, currentStream.getBigImgRes()));
                 titleText.setText(currentStream.getTitle());
                 descText.setText(currentStream.getDesc());
                 background.startAnimation(fadeIn);
@@ -241,22 +245,22 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
-    public void showStreamsDialog(List<Stream> streams, Stream currentStream) {
+    public void showStreamsDialog(List<Stream> streams) {
 
         MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .customView(R.layout.dialog_sounds, true)
+                .contentGravity(GravityEnum.CENTER)
+                .customView(R.layout.dialog_sounds, false)
                 .build();
 
         RecyclerView grid = (RecyclerView) dialog.getCustomView();
         if (grid != null) {
             grid.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-            grid.setAdapter(new StreamGridAdapter(MainActivity.this, streams, (view, position, dataSet) -> {
-                dialog.dismiss();
-                if (position != currentStream.getId()) {
+            gridAdapter.setData(streams, (view, position, dataSet) -> {
 
-                    presenter.streamPicked(streams.get(position));
-                }
-            }));
+                presenter.streamPicked(streams.get(position));
+                dialog.dismiss();
+            });
+            grid.setAdapter(gridAdapter);
         }
 
         dialog.show();

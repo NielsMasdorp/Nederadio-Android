@@ -23,5 +23,5 @@ public interface MainView {
 
     void error(String error);
 
-    void showStreamsDialog(List<Stream> streams, Stream currentStream);
+    void showStreamsDialog(List<Stream> streams);
 }

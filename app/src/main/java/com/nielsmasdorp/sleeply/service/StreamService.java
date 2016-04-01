@@ -111,7 +111,7 @@ public class StreamService extends Service implements
                 .setShowWhen(false)
                 .setContent(notificationView);
 
-        notificationView.setImageViewResource(R.id.streamIcon, mCurrentStream.getImageResource());
+        notificationView.setImageViewResource(R.id.streamIcon, mCurrentStream.getSmallImgRes());
         notificationView.setTextViewText(R.id.titleTxt, getString(R.string.app_name));
         notificationView.setTextViewText(R.id.descTxt, mCurrentStream.getTitle());
 

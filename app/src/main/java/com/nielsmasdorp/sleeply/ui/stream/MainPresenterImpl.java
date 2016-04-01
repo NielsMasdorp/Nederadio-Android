@@ -110,8 +110,8 @@ public class MainPresenterImpl implements MainPresenter, OnStreamServiceListener
     }
 
     @Override
-    public void showAllStreams(List<Stream> streams, Stream currentStream) {
+    public void showAllStreams(List<Stream> streams) {
 
-        view.showStreamsDialog(streams, currentStream);
+        view.showStreamsDialog(streams);
     }
 }

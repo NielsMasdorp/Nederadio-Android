@@ -1,8 +1,5 @@
 package com.nielsmasdorp.sleeply.ui.stream;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,32 +7,35 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.RequestManager;
 import com.nielsmasdorp.sleeply.R;
 import com.nielsmasdorp.sleeply.model.Stream;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
 public class StreamGridAdapter extends RecyclerView.Adapter<StreamGridAdapter.ViewHolder> {
 
+    private RequestManager glide;
     private List<Stream> dataSet;
-    public OnItemClickListener itemClickListener;
-    private Context context;
+    private OnItemClickListener itemClickListener;
 
-    public StreamGridAdapter(Context context, List<Stream> myDataset, OnItemClickListener itemClickListener) {
+    public StreamGridAdapter(RequestManager glide) {
 
-        this.dataSet = myDataset;
-        this.itemClickListener = itemClickListener;
-        this.context = context;
+        this.dataSet = new ArrayList<>();
+        this.glide = glide;
+    }
+
+    public void setData(List<Stream> streams, OnItemClickListener listener) {
+        this.dataSet = streams;
+        this.itemClickListener = listener;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,6 +64,8 @@ public class StreamGridAdapter extends RecyclerView.Adapter<StreamGridAdapter.Vi
         @Bind(R.id.streamTitle)
         TextView name;
 
+        Stream stream;
+
         public ViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
@@ -74,29 +76,14 @@ public class StreamGridAdapter extends RecyclerView.Adapter<StreamGridAdapter.Vi
         @Override
         public void onClick(View v) {
 
-            itemClickListener.onItemClick(v, getLayoutPosition(), dataSet);
+            itemClickListener.onItemClick(v, getAdapterPosition(), dataSet);
         }
 
         public void bindStream(Stream stream) {
 
-            getBitMap(stream)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Bitmap>() {
-                        @Override
-                        public void onCompleted() {
-                        }
+            this.stream = stream;
 
-                        @Override
-                        public void onError(Throwable e) {
-                        }
-
-                        @Override
-                        public void onNext(Bitmap bitmap) {
-
-                            image.setImageBitmap(bitmap);
-                        }
-                    });
+            glide.load(stream.getSmallImgRes()).into(image);
             name.setText(stream.getTitle());
         }
     }
@@ -106,12 +93,4 @@ public class StreamGridAdapter extends RecyclerView.Adapter<StreamGridAdapter.Vi
         void onItemClick(View view, int position, List<Stream> dataSet);
     }
 
-    private Observable<Bitmap> getBitMap(Stream stream) {
-
-        return Observable.defer(() -> {
-
-            Bitmap bm = BitmapFactory.decodeResource(context.getResources(), stream.getImageResource());
-            return Observable.just(bm);
-        });
-    }
 }

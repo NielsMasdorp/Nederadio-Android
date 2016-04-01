@@ -1,5 +1,6 @@
 package com.nielsmasdorp.sleeply.ui.stream;
 
+import com.bumptech.glide.RequestManager;
 import com.nielsmasdorp.sleeply.AppModule;
 import com.nielsmasdorp.sleeply.interactor.MainInteractor;
 
@@ -13,7 +14,8 @@ import dagger.Provides;
  */
 @Module(
         injects = MainActivity.class,
-        addsTo = AppModule.class
+        addsTo = AppModule.class,
+        complete = false
 )
 public class MainModule {
 
@@ -35,5 +37,12 @@ public class MainModule {
     public MainView provideMainView() {
 
         return view;
+    }
+
+    @Provides
+    @Singleton
+    public StreamGridAdapter provideStreamGridAdapter(RequestManager glide) {
+
+        return new StreamGridAdapter(glide);
     }
 }

@@ -9,14 +9,16 @@ public class Stream {
     private String url;
     private String title;
     private String desc;
-    private int imageResource;
+    private int bigImgRes;
+    private int smallImgRes;
 
-    public Stream(int id, String url, String title, String desc, int imageResource) {
+    public Stream(int id, String url, String title, String desc, int bigImgRes, int smallImgRes) {
         this.id = id;
         this.url = url;
         this.title = title;
         this.desc = desc;
-        this.imageResource = imageResource;
+        this.bigImgRes = bigImgRes;
+        this.smallImgRes = smallImgRes;
     }
 
     public int getId() {
@@ -51,11 +53,19 @@ public class Stream {
         this.desc = desc;
     }
 
-    public int getImageResource() {
-        return imageResource;
+    public int getBigImgRes() {
+        return bigImgRes;
     }
 
-    public void setImageResource(int imageResource) {
-        this.imageResource = imageResource;
+    public void setBigImgRes(int bigImgRes) {
+        this.bigImgRes = bigImgRes;
+    }
+
+    public int getSmallImgRes() {
+        return smallImgRes;
+    }
+
+    public void setSmallImgRes(int smallImgRes) {
+        this.smallImgRes = smallImgRes;
     }
 }

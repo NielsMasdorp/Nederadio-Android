@@ -26,8 +26,8 @@ android {
         applicationId "com.nielsmasdorp.sleeply"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 6
-        versionName "0.1.1"
+        versionCode 7
+        versionName "0.2.0"
     }
     buildTypes {
         release {
@@ -46,8 +46,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
     compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
