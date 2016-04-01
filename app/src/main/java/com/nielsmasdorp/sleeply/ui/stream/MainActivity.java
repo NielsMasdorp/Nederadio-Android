@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity implements MainView {
         previousButton.setEnabled(false);
         showSoundsButton.setEnabled(false);
 
-        playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_stop_48dp));
+        playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_pause_48dp));
     }
 
     @Override
@@ -184,7 +184,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
         stopLoading();
 
-        playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_stop_48dp));
+        playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_pause_48dp));
     }
 
     @Override

@@ -18,6 +18,7 @@ import android.util.Log;
 import com.nielsmasdorp.sleeply.R;
 import com.nielsmasdorp.sleeply.model.Stream;
 import com.nielsmasdorp.sleeply.service.StreamService;
+import com.nielsmasdorp.sleeply.service.StreamService.State;
 import com.nielsmasdorp.sleeply.ui.stream.OnStreamServiceListener;
 
 import java.util.ArrayList;
@@ -100,13 +101,21 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void playStream() {
 
-        if (!streamService.isPlaying()) {
-            streamService.playStream(currentStream);
-            presenter.setLoading();
-            checkIfOnWifi();
-        } else {
-            streamService.stopStreaming(true);
-            presenter.streamStopped();
+        switch (streamService.getState()) {
+
+            case STOPPED:
+                streamService.playStream(currentStream);
+                presenter.setLoading();
+                checkIfOnWifi();
+                break;
+            case PAUSED:
+                streamService.resumeStream();
+                presenter.streamPlaying();
+                break;
+            case PLAYING:
+                streamService.pauseStream();
+                presenter.streamStopped();
+                break;
         }
     }
 
@@ -120,8 +129,8 @@ public class MainInteractorImpl implements MainInteractor {
             currentStream = streams.get(0);
         }
 
-        if (streamService.isPlaying()) {
-            streamService.stopStreaming(false);
+        if (streamService.getState() == State.PLAYING || streamService.getState() == State.PAUSED) {
+            streamService.stopStreaming();
             playStream();
         }
 
@@ -138,8 +147,8 @@ public class MainInteractorImpl implements MainInteractor {
             currentStream = streams.get(streams.size() - 1);
         }
 
-        if (streamService.isPlaying()) {
-            streamService.stopStreaming(false);
+        if (streamService.getState() == State.PLAYING || streamService.getState() == State.PAUSED) {
+            streamService.stopStreaming();
             playStream();
         }
 
@@ -149,7 +158,7 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void setSleepTimer(int option) {
 
-        if (streamService.isPlaying()) {
+        if (streamService.getState() == State.PLAYING) {
             streamService.setSleepTimer(calculateMs(option));
         } else {
             presenter.error(application.getString(R.string.start_stream_error_toast));
@@ -169,8 +178,8 @@ public class MainInteractorImpl implements MainInteractor {
 
             currentStream = stream;
 
-            if (streamService.isPlaying()) {
-                streamService.stopStreaming(false);
+            if (streamService.getState() == State.PLAYING || streamService.getState() == State.PAUSED) {
+                streamService.stopStreaming();
                 playStream();
             }
 
@@ -282,7 +291,7 @@ public class MainInteractorImpl implements MainInteractor {
             boundToService = true;
             currentStream = streamService.getPlayingStream();
             if (currentStream != null) {
-                presenter.restoreUI(currentStream, true);
+                presenter.restoreUI(currentStream, streamService.getState() == State.PLAYING);
             } else {
                 int last = preferences.getInt(LAST_STREAM_IDENTIFIER, 0);
                 currentStream = streams.get(last);

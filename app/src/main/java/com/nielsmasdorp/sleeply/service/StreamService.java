@@ -40,7 +40,9 @@ public class StreamService extends Service implements
 
     private static final String ACTION_STOP = "action_stop";
 
-    private boolean isMediaPlayerPreparing = false;
+    public enum State {PAUSED, STOPPED, PLAYING, PREPARING}
+
+    private State state = State.STOPPED;
 
     private final IBinder mStreamBinder = new StreamBinder();
     private MediaPlayer mPlayer;
@@ -84,7 +86,7 @@ public class StreamService extends Service implements
 
     @Override
     public boolean onUnbind(Intent intent) {
-        if (mPlayer.isPlaying() || isMediaPlayerPreparing) {
+        if (mPlayer.isPlaying() || state == State.PREPARING) {
             toForeground();
         }
         return true;
@@ -147,15 +149,16 @@ public class StreamService extends Service implements
         if (action.equalsIgnoreCase(ACTION_STOP)) {
             Log.i(TAG, "handleIntent: stopping stream from notification");
 
-            stopStreaming(true);
+            stopStreaming();
+            stopSleepTimer();
             toBackground();
             stopSelf();
         }
     }
 
-    public boolean isPlaying() {
+    public State getState() {
 
-        return mPlayer != null && mPlayer.isPlaying();
+        return state;
     }
 
     /**
@@ -171,7 +174,7 @@ public class StreamService extends Service implements
         mPlayer.reset();
 
         try {
-            isMediaPlayerPreparing = true;
+            state = State.PREPARING;
             mPlayer.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), getString(R.string.soundclound_api_key))));
             mPlayer.setLooping(true);
             mCurrentStream = stream;
@@ -181,17 +184,33 @@ public class StreamService extends Service implements
         mPlayer.prepareAsync();
     }
 
+    public void pauseStream() {
+
+        if (state == State.PLAYING) {
+            mPlayer.pause();
+            stopSleepTimer();
+            state = State.PAUSED;
+        }
+    }
+
+    public void resumeStream() {
+
+        if (state == State.PAUSED) {
+            mPlayer.start();
+            state = State.PLAYING;
+        }
+    }
+
     /**
      * Stop the MediaPlayer if something is streaming
      */
-    public void stopStreaming(boolean stopTimer) {
+    public void stopStreaming() {
 
-        if (null != mPlayer && mPlayer.isPlaying()) {
+        if (state == State.PLAYING) {
             mPlayer.stop();
             mPlayer.reset();
+            state = State.STOPPED;
         }
-
-        if (stopTimer) stopSleepTimer();
     }
 
     /**
@@ -201,7 +220,7 @@ public class StreamService extends Service implements
      */
     public Stream getPlayingStream() {
 
-        if (null != mPlayer && mPlayer.isPlaying()) {
+        if (state == State.PLAYING || state == State.PAUSED) {
             return mCurrentStream;
         }
         return null;
@@ -228,7 +247,8 @@ public class StreamService extends Service implements
                 }
 
                 public void onFinish() {
-                    stopStreaming(true);
+                    stopStreaming();
+                    stopSleepTimer();
                     timerDoneBroadcast();
                     toBackground();
                 }
@@ -265,17 +285,17 @@ public class StreamService extends Service implements
 
         Toast.makeText(StreamService.this, R.string.stream_error_toast, Toast.LENGTH_SHORT).show();
         mp.reset();
-        isMediaPlayerPreparing = false;
         notifyStreamLoaded(false);
+        state = State.STOPPED;
         return false;
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
 
-        isMediaPlayerPreparing = false;
         notifyStreamLoaded(true);
         mp.start();
+        state = State.PLAYING;
     }
 
     /**
