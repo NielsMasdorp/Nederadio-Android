@@ -15,7 +15,6 @@
         android:fontFamily="sans-serif-light"
         android:maxLines="1"
         android:text=""
-        android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 
