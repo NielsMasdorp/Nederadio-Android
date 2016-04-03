@@ -206,7 +206,7 @@ public class StreamService extends Service implements
      */
     public void stopStreaming() {
 
-        if (state == State.PLAYING) {
+        if (state == State.PLAYING || state == State.PAUSED) {
             mPlayer.stop();
             mPlayer.reset();
             state = State.STOPPED;
