@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sleeply ALPHA</string>
+    <string name="app_name">Sleeply BETA</string>
     <string name="menu_settings">Settings</string>
     <string name="action_sleep_timer">Sleep timer</string>
     <string name="sleep_timer_title">Sleep timer</string>
@@ -14,7 +14,7 @@
     <string name="about_title">About Sleeply</string>
     <string name="about_positive">OK</string>
     <string name="about_message"><![CDATA[
-        Current version: 0.2.4 ALPHA, made by:<br/><br/>
+        Current version: 0.2.4 BETA, made by:<br/><br/>
         <b>Niels Masdorp</b><br/>
         <a href=\'https://play.google.com/store/search?q=pub:Niels%20Masdorp\'>Google Play</a>&nbsp;&nbsp;
         <a href=\'https://plus.google.com/118171808911702111152\'>Google+</a>&nbsp;&nbsp;
