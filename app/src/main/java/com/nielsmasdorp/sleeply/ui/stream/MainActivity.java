@@ -25,10 +25,10 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nielsmasdorp.sleeply.R;
+import com.nielsmasdorp.sleeply.SleeplyApplication;
 import com.nielsmasdorp.sleeply.model.Stream;
 import com.nielsmasdorp.sleeply.ui.BaseActivity;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -74,11 +74,6 @@ public class MainActivity extends BaseActivity implements MainView {
     private Animation fadeOut, fadeIn;
 
     @Override
-    protected List<Object> getModules() {
-        return Arrays.asList(new MainModule(this));
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         presenter.startService();
@@ -95,6 +90,7 @@ public class MainActivity extends BaseActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        ((SleeplyApplication) getApplication()).provideApplicationComponent(this).inject(this);
         setTitle(getString(R.string.action_bar_title));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

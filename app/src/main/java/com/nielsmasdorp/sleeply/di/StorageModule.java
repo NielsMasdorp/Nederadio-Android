@@ -1,4 +1,4 @@
-package com.nielsmasdorp.sleeply.storage;
+package com.nielsmasdorp.sleeply.di;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -12,10 +12,7 @@ import dagger.Provides;
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
-@Module(
-        complete = false,
-        library = true
-)
+@Module
 public class StorageModule {
 
     @Provides

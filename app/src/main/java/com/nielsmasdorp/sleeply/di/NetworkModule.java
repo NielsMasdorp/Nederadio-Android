@@ -1,4 +1,4 @@
-package com.nielsmasdorp.sleeply.network;
+package com.nielsmasdorp.sleeply.di;
 
 import android.app.Application;
 import android.content.Context;
@@ -16,10 +16,7 @@ import dagger.Provides;
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
-@Module(
-        complete = false,
-        library = true
-)
+@Module
 public class NetworkModule {
 
     @Provides

@@ -1,8 +1,11 @@
-package com.nielsmasdorp.sleeply.interactor;
+package com.nielsmasdorp.sleeply.di;
 
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+
+import com.nielsmasdorp.sleeply.interactor.MainInteractor;
+import com.nielsmasdorp.sleeply.interactor.MainInteractorImpl;
 
 import javax.inject.Singleton;
 
@@ -12,10 +15,7 @@ import dagger.Provides;
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
-@Module(
-        library = true,
-        complete = false
-)
+@Module
 public class InteractorModule {
 
     @Provides

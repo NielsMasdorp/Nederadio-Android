@@ -8,25 +8,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.nielsmasdorp.sleeply.R;
-import com.nielsmasdorp.sleeply.SleeplyApplication;
-
-import java.util.List;
-
-import dagger.ObjectGraph;
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private ObjectGraph activityGraph;
     private View customActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityGraph = ((SleeplyApplication) getApplication()).createScopedGraph(getModules().toArray());
-        activityGraph.inject(this);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -39,12 +31,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(customActivityTitle);
     }
 
-    protected abstract List<Object> getModules();
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        activityGraph = null;
     }
 
     @Override

@@ -3,13 +3,15 @@ package com.nielsmasdorp.sleeply;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.nielsmasdorp.sleeply.di.AppModule;
+import com.nielsmasdorp.sleeply.di.ApplicationComponent;
+import com.nielsmasdorp.sleeply.di.DaggerApplicationComponent;
+import com.nielsmasdorp.sleeply.di.MainModule;
+import com.nielsmasdorp.sleeply.di.NetworkModule;
+import com.nielsmasdorp.sleeply.di.StorageModule;
+import com.nielsmasdorp.sleeply.di.InteractorModule;
+import com.nielsmasdorp.sleeply.ui.stream.MainView;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import dagger.ObjectGraph;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -17,10 +19,7 @@ import io.fabric.sdk.android.Fabric;
  */
 public class SleeplyApplication extends Application {
 
-    @Inject
-    Application application;
-
-    private ObjectGraph objectGraph;
+    ApplicationComponent applicationComponent;
 
     @Override
     public void onCreate() {
@@ -28,20 +27,18 @@ public class SleeplyApplication extends Application {
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());
         }
-
-        objectGraph = ObjectGraph.create(getModules().toArray());
-        objectGraph.inject(this);
     }
 
-    public Application getApplication() {
-        return application;
-    }
+    public ApplicationComponent provideApplicationComponent(MainView view) {
 
-    private List<Object> getModules() {
-        return Arrays.asList(new AppModule(this));
-    }
+        applicationComponent = DaggerApplicationComponent.builder()
+                .appModule(new AppModule(this))
+                .storageModule(new StorageModule())
+                .networkModule(new NetworkModule())
+                .interactorModule(new InteractorModule())
+                .mainModule(new MainModule(view))
+                .build();
 
-    public ObjectGraph createScopedGraph(Object... modules) {
-        return objectGraph.plus(modules);
+        return applicationComponent;
     }
 }
