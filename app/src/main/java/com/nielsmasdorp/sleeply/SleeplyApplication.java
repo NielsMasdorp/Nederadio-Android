@@ -6,10 +6,10 @@ import com.crashlytics.android.Crashlytics;
 import com.nielsmasdorp.sleeply.di.AppModule;
 import com.nielsmasdorp.sleeply.di.ApplicationComponent;
 import com.nielsmasdorp.sleeply.di.DaggerApplicationComponent;
+import com.nielsmasdorp.sleeply.di.InteractorModule;
 import com.nielsmasdorp.sleeply.di.MainModule;
 import com.nielsmasdorp.sleeply.di.NetworkModule;
 import com.nielsmasdorp.sleeply.di.StorageModule;
-import com.nielsmasdorp.sleeply.di.InteractorModule;
 import com.nielsmasdorp.sleeply.ui.stream.MainView;
 
 import io.fabric.sdk.android.Fabric;
