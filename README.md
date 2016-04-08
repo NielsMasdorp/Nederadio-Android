@@ -21,7 +21,7 @@ If you know any sounds that help you fall asleep, contact me from within the app
 
 ###Used libraries
 * [Butterknife](https://github.com/JakeWharton/butterknife)
-* [Dagger](http://square.github.io/dagger/)
+* [Dagger2](http://google.github.io/dagger/)
 * [Glide](https://github.com/bumptech/glide)
 * [Material Dialogs](https://github.com/afollestad/material-dialogs)
 
