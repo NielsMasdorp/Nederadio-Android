@@ -44,22 +44,22 @@ public class StreamService extends Service implements
 
     private State state = State.STOPPED;
 
-    private final IBinder mStreamBinder = new StreamBinder();
-    private MediaPlayer mPlayer;
-    private Stream mCurrentStream;
-    private LocalBroadcastManager mBroadcastManager;
-    private CountDownTimer mCountDownTimer;
+    private final IBinder streamBinder = new StreamBinder();
+    private MediaPlayer player;
+    private Stream currentStream;
+    private LocalBroadcastManager broadcastManager;
+    private CountDownTimer countDownTimer;
 
     public void onCreate() {
         super.onCreate();
 
-        mPlayer = new MediaPlayer();
-        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mPlayer.setOnPreparedListener(this);
-        mPlayer.setOnCompletionListener(this);
-        mPlayer.setOnErrorListener(this);
+        player = new MediaPlayer();
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        player.setOnPreparedListener(this);
+        player.setOnCompletionListener(this);
+        player.setOnErrorListener(this);
 
-        mBroadcastManager = LocalBroadcastManager.getInstance(this);
+        broadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
     public class StreamBinder extends Binder {
@@ -71,7 +71,7 @@ public class StreamService extends Service implements
     @Override
     public IBinder onBind(Intent intent) {
         toBackground();
-        return mStreamBinder;
+        return streamBinder;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class StreamService extends Service implements
 
     @Override
     public boolean onUnbind(Intent intent) {
-        if (mPlayer.isPlaying() || state == State.PREPARING) {
+        if (player.isPlaying() || state == State.PREPARING) {
             toForeground();
         }
         return true;
@@ -113,9 +113,9 @@ public class StreamService extends Service implements
                 .setShowWhen(false)
                 .setContent(notificationView);
 
-        notificationView.setImageViewResource(R.id.streamIcon, mCurrentStream.getSmallImgRes());
+        notificationView.setImageViewResource(R.id.streamIcon, currentStream.getSmallImgRes());
         notificationView.setTextViewText(R.id.titleTxt, getString(R.string.app_name));
-        notificationView.setTextViewText(R.id.descTxt, mCurrentStream.getTitle());
+        notificationView.setTextViewText(R.id.descTxt, currentStream.getTitle());
 
         Intent closeIntent = new Intent(getApplicationContext(), StreamService.class);
         closeIntent.setAction(ACTION_STOP);
@@ -167,27 +167,27 @@ public class StreamService extends Service implements
     public void playStream(Stream stream) {
 
         // If a stream was already running stop it and reset
-        if (mPlayer.isPlaying()) {
-            mPlayer.stop();
+        if (player.isPlaying()) {
+            player.stop();
         }
 
-        mPlayer.reset();
+        player.reset();
 
         try {
             state = State.PREPARING;
-            mPlayer.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), getString(R.string.soundclound_api_key))));
-            mPlayer.setLooping(true);
-            mCurrentStream = stream;
+            player.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), getString(R.string.soundclound_api_key))));
+            player.setLooping(true);
+            currentStream = stream;
         } catch (Exception e) {
             Log.e(TAG, "playStream: ", e);
         }
-        mPlayer.prepareAsync();
+        player.prepareAsync();
     }
 
     public void pauseStream() {
 
         if (state == State.PLAYING) {
-            mPlayer.pause();
+            player.pause();
             stopSleepTimer();
             state = State.PAUSED;
         }
@@ -196,7 +196,7 @@ public class StreamService extends Service implements
     public void resumeStream() {
 
         if (state == State.PAUSED) {
-            mPlayer.start();
+            player.start();
             state = State.PLAYING;
         }
     }
@@ -207,8 +207,8 @@ public class StreamService extends Service implements
     public void stopStreaming() {
 
         if (state == State.PLAYING || state == State.PAUSED) {
-            mPlayer.stop();
-            mPlayer.reset();
+            player.stop();
+            player.reset();
             state = State.STOPPED;
         }
     }
@@ -221,7 +221,7 @@ public class StreamService extends Service implements
     public Stream getPlayingStream() {
 
         if (state == State.PLAYING || state == State.PAUSED) {
-            return mCurrentStream;
+            return currentStream;
         }
         return null;
     }
@@ -238,12 +238,12 @@ public class StreamService extends Service implements
 
         if (milliseconds != 0) {
 
-            mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
+            countDownTimer = new CountDownTimer(milliseconds, 1000) {
 
                 public void onTick(long millisUntilFinished) {
                     Intent intent = new Intent(TIMER_UPDATE_INTENT);
                     intent.putExtra(TIMER_UPDATE_VALUE, (int) millisUntilFinished);
-                    mBroadcastManager.sendBroadcast(intent);
+                    broadcastManager.sendBroadcast(intent);
                 }
 
                 public void onFinish() {
@@ -262,9 +262,9 @@ public class StreamService extends Service implements
      */
     private void stopSleepTimer() {
 
-        if (mCountDownTimer != null) {
-            mCountDownTimer.cancel();
-            mCountDownTimer = null;
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
         }
     }
 
@@ -272,7 +272,7 @@ public class StreamService extends Service implements
         Log.i(TAG, "setSleepTimer: sleep timer is done, notifying bindings.");
 
         Intent intent = new Intent(TIMER_DONE_INTENT);
-        mBroadcastManager.sendBroadcast(intent);
+        broadcastManager.sendBroadcast(intent);
     }
 
     @Override
@@ -307,7 +307,7 @@ public class StreamService extends Service implements
 
         Intent intent = new Intent(STREAM_DONE_LOADING_INTENT);
         intent.putExtra(STREAM_DONE_LOADING_SUCCESS, success);
-        mBroadcastManager.sendBroadcast(intent);
+        broadcastManager.sendBroadcast(intent);
     }
 
     @Override
