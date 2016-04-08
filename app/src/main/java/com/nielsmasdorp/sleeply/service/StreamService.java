@@ -21,6 +21,10 @@ import com.nielsmasdorp.sleeply.R;
 import com.nielsmasdorp.sleeply.model.Stream;
 import com.nielsmasdorp.sleeply.ui.stream.MainActivity;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
@@ -175,7 +179,12 @@ public class StreamService extends Service implements
 
         try {
             state = State.PREPARING;
-            player.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), getString(R.string.soundclound_api_key))));
+
+            List<String> keys = Arrays.asList(getResources().getStringArray(R.array.api_keys));
+            String key = keys.get((new Random()).nextInt(keys.size()));
+            Log.i(TAG, "playStream: using key " + key);
+
+            player.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), key)));
             player.setLooping(true);
             currentStream = stream;
         } catch (Exception e) {
