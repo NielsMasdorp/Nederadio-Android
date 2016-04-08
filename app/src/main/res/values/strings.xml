@@ -65,6 +65,9 @@
     <string name="all_sounds_button">show all</string>
     <string name="show_sounds_dialog_button">BACK</string>
     <string name="action_bar_title">Sleeply</string>
+    <string name="action_wifi_only">Stream on WiFi only</string>
+    <string name="no_wifi_setting_toast">Not connected to Wifi</string>
+    <string name="toast_no_wifi_but_playing">Stream stopped since you are not on WiFi</string>
 
     <string-array name="sleep_timer">
         <item>Off</item>

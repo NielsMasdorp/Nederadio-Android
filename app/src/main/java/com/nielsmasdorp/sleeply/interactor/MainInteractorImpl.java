@@ -32,6 +32,7 @@ public class MainInteractorImpl implements MainInteractor {
 
     private final static String TAG = MainInteractorImpl.class.getSimpleName();
     private final static String LAST_STREAM_IDENTIFIER = "last_stream_identifier";
+    private final static String STREAM_WIFI_ONLY = "stream_wifi_only";
 
     private Application application;
     private SharedPreferences preferences;
@@ -73,7 +74,10 @@ public class MainInteractorImpl implements MainInteractor {
             application.startService(intent);
         }
         Log.i(TAG, "onStart: binding to service.");
-        application.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+
+        if (!boundToService) {
+            boundToService = application.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
         registerBroadcastReceiver();
     }
 
@@ -92,6 +96,7 @@ public class MainInteractorImpl implements MainInteractor {
 
         if (boundToService) {
             application.unbindService(serviceConnection);
+            boundToService = false;
         }
         LocalBroadcastManager.getInstance(application).unregisterReceiver(broadcastReceiver);
 
@@ -101,16 +106,30 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void playStream() {
 
-        switch (streamService.getState()) {
+        boolean connectedToWifi = checkIfOnWifi();
 
+        switch (streamService.getState()) {
             case STOPPED:
-                streamService.playStream(currentStream);
-                presenter.setLoading();
-                checkIfOnWifi();
+                if (connectedToWifi || !isStreamWifiOnly()) {
+                    streamService.playStream(currentStream);
+                    presenter.setLoading();
+                    if (!connectedToWifi) {
+                        presenter.error(application.getString(R.string.no_wifi_toast));
+                    }
+                } else {
+                    presenter.error(application.getString(R.string.no_wifi_setting_toast));
+                }
                 break;
             case PAUSED:
-                streamService.resumeStream();
-                presenter.streamPlaying();
+                if (connectedToWifi || !isStreamWifiOnly()) {
+                    streamService.resumeStream();
+                    presenter.streamPlaying();
+                    if (!connectedToWifi) {
+                        presenter.error(application.getString(R.string.no_wifi_toast));
+                    }
+                } else {
+                    presenter.error(application.getString(R.string.no_wifi_setting_toast));
+                }
                 break;
             case PLAYING:
                 streamService.pauseStream();
@@ -187,6 +206,24 @@ public class MainInteractorImpl implements MainInteractor {
         }
     }
 
+    @Override
+    public boolean isStreamWifiOnly() {
+
+        return preferences.getBoolean(STREAM_WIFI_ONLY, false);
+    }
+
+    @Override
+    public void setStreamWifiOnly(boolean checked) {
+
+        if (checked && (streamService.getState() == State.PLAYING || streamService.getState() == State.PAUSED)) {
+            streamService.stopStreaming();
+            presenter.streamStopped();
+            presenter.error(application.getString(R.string.toast_no_wifi_but_playing));
+        }
+
+        preferences.edit().putBoolean(STREAM_WIFI_ONLY, checked).apply();
+    }
+
     /**
      * See if the StreamService is already running in the background.
      *
@@ -247,7 +284,7 @@ public class MainInteractorImpl implements MainInteractor {
             case 0:
                 return 0;
             case 1:
-                return (int) TimeUnit.SECONDS.toMillis(15);
+                return (int) TimeUnit.MINUTES.toMillis(15);
             case 2:
                 return (int) TimeUnit.MINUTES.toMillis(20);
             case 3:
@@ -267,14 +304,15 @@ public class MainInteractorImpl implements MainInteractor {
         }
     }
 
-    private void checkIfOnWifi() {
+    private boolean checkIfOnWifi() {
 
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         if (activeNetwork != null) {
             if (activeNetwork.getType() != ConnectivityManager.TYPE_WIFI) {
-                presenter.error(application.getString(R.string.no_wifi_toast));
+                return false;
             }
         }
+        return true;
     }
 
     /**
@@ -288,7 +326,6 @@ public class MainInteractorImpl implements MainInteractor {
             Log.i(TAG, "onServiceConnected: successfully bound to service.");
             StreamService.StreamBinder binder = (StreamService.StreamBinder) service;
             streamService = binder.getService();
-            boundToService = true;
             currentStream = streamService.getPlayingStream();
             if (currentStream != null) {
                 presenter.restoreUI(currentStream, streamService.getState() == State.PLAYING);
@@ -302,7 +339,7 @@ public class MainInteractorImpl implements MainInteractor {
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             Log.i(TAG, "onServiceDisconnected: disconnected from service.");
-            boundToService = false;
+            streamService = null;
         }
     };
 

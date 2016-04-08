@@ -24,4 +24,8 @@ public interface MainInteractor {
     void getAllStreams();
 
     void streamPicked(Stream stream);
+
+    boolean isStreamWifiOnly();
+
+    void setStreamWifiOnly(boolean checked);
 }

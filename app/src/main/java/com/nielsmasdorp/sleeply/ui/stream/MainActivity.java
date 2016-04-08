@@ -1,6 +1,7 @@
 package com.nielsmasdorp.sleeply.ui.stream;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -89,14 +90,9 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         ((SleeplyApplication) getApplication()).provideApplicationComponent(this).inject(this);
+        ButterKnife.bind(this);
         setTitle(getString(R.string.action_bar_title));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
 
         fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
@@ -109,8 +105,19 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        menu.findItem(R.id.menu_stream_on_wifi).setChecked(presenter.isStreamWifiOnly());
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_stream_on_wifi:
+                presenter.setStreamWifiOnly(!item.isChecked());
+                invalidateOptionsMenu();
+                break;
             case R.id.menu_sleep_timer:
                 selectSleepTimer();
                 break;

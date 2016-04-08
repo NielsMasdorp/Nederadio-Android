@@ -68,6 +68,18 @@ public class MainPresenterImpl implements MainPresenter, OnStreamServiceListener
     }
 
     @Override
+    public boolean isStreamWifiOnly() {
+
+        return interactor.isStreamWifiOnly();
+    }
+
+    @Override
+    public void setStreamWifiOnly(boolean checked) {
+
+        interactor.setStreamWifiOnly(checked);
+    }
+
+    @Override
     public void streamStopped() {
 
         view.setToStopped();
