@@ -1,9 +1,7 @@
 package com.nielsmasdorp.sleeply.ui.stream;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,7 +10,6 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -118,9 +115,6 @@ public class MainActivity extends BaseActivity implements MainView {
                 presenter.setStreamWifiOnly(!item.isChecked());
                 invalidateOptionsMenu();
                 break;
-            case R.id.menu_sleep_timer:
-                selectSleepTimer();
-                break;
             case R.id.menu_email:
                 sendEmail();
                 break;
@@ -132,7 +126,7 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @SuppressWarnings("unused")
-    @OnClick({R.id.prevBtn, R.id.playBtn, R.id.nextBtn})
+    @OnClick({R.id.prevBtn, R.id.playBtn, R.id.nextBtn, R.id.showSoundsBtn, R.id.sleepTimerBtn})
     public void musicControls(View view) {
         switch (view.getId()) {
             case R.id.prevBtn:
@@ -144,14 +138,13 @@ public class MainActivity extends BaseActivity implements MainView {
             case R.id.nextBtn:
                 presenter.nextStream();
                 break;
+            case R.id.showSoundsBtn:
+                presenter.getAllStreams();
+                break;
+            case R.id.sleepTimerBtn:
+                selectSleepTimer();
+                break;
         }
-    }
-
-    @SuppressWarnings("unused")
-    @OnClick(R.id.showSoundsBtn)
-    public void showSoundsClicked() {
-
-        presenter.getAllStreams();
     }
 
     @Override

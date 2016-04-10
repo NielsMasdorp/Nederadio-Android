@@ -100,7 +100,7 @@ public class MainInteractorImpl implements MainInteractor {
         }
         LocalBroadcastManager.getInstance(application).unregisterReceiver(broadcastReceiver);
 
-        preferences.edit().putInt(LAST_STREAM_IDENTIFIER, currentStream.getId()).apply();
+        preferences.edit().putInt(LAST_STREAM_IDENTIFIER, currentStream != null ? currentStream.getId() : 0).apply();
     }
 
     @Override

@@ -63,6 +63,17 @@
 
         </RelativeLayout>
 
+        <ImageButton
+            android:id="@+id/sleepTimerBtn"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/sleep_timer_button_content"
+            android:gravity="center"
+            android:src="@drawable/ic_access_time_24dp" />
+
         <RelativeLayout
             android:id="@+id/musicControls"
             android:layout_width="match_parent"
@@ -131,7 +142,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="48dp"
-            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:text="@string/all_sounds_button"

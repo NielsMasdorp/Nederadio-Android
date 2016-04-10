@@ -9,10 +9,6 @@
         app:showAsAction="always">
         <menu>
             <item
-                android:id="@+id/menu_sleep_timer"
-                android:title="@string/action_sleep_timer" />
-
-            <item
                 android:id="@+id/menu_stream_on_wifi"
                 android:checkable="true"
                 android:title="@string/action_wifi_only" />

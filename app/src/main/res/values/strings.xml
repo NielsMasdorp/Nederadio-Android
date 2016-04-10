@@ -14,7 +14,7 @@
     <string name="about_title">About Sleeply</string>
     <string name="about_positive">OK</string>
     <string name="about_message"><![CDATA[
-        Current version: 0.2.5 BETA, made by:<br/><br/>
+        Current version: 0.2.8 BETA, made by:<br/><br/>
         <b>Niels Masdorp</b><br/>
         <a href=\'https://play.google.com/store/search?q=pub:Niels%20Masdorp\'>Google Play</a>&nbsp;&nbsp;
         <a href=\'https://plus.google.com/118171808911702111152\'>Google+</a>&nbsp;&nbsp;
@@ -68,6 +68,7 @@
     <string name="action_wifi_only">Stream on WiFi only</string>
     <string name="no_wifi_setting_toast">Not connected to Wifi</string>
     <string name="toast_no_wifi_but_playing">Stream stopped since you are not on WiFi</string>
+    <string name="sleep_timer_button_content">Pick a sleep timer</string>
 
     <string-array name="sleep_timer">
         <item>Off</item>
