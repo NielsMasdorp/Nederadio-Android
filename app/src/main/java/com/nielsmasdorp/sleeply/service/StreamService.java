@@ -182,7 +182,6 @@ public class StreamService extends Service implements
 
             List<String> keys = Arrays.asList(getResources().getStringArray(R.array.api_keys));
             String key = keys.get((new Random()).nextInt(keys.size()));
-            Log.i(TAG, "playStream: using key " + key);
 
             player.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), key)));
             player.setLooping(true);

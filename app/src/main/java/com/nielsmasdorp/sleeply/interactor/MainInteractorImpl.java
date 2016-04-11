@@ -73,9 +73,9 @@ public class MainInteractorImpl implements MainInteractor {
             Log.i(TAG, "onStart: service not running, starting service.");
             application.startService(intent);
         }
-        Log.i(TAG, "onStart: binding to service.");
 
         if (!boundToService) {
+            Log.i(TAG, "onStart: binding to service.");
             boundToService = application.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         }
         registerBroadcastReceiver();
