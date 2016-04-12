@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements MainView {
         setContentView(R.layout.activity_main);
         ((SleeplyApplication) getApplication()).provideApplicationComponent(this).inject(this);
         ButterKnife.bind(this);
-        setTitle(getString(R.string.action_bar_title));
+        setTitle(getString(R.string.app_name));
 
         fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
