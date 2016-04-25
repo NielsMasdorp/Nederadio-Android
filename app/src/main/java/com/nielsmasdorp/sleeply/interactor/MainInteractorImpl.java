@@ -215,11 +215,13 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void setStreamWifiOnly(boolean checked) {
 
-        if (checked && (streamService.getState() == State.PLAYING || streamService.getState() == State.PAUSED)) {
-            streamService.stopStreaming();
-            presenter.streamStopped();
-            presenter.error(application.getString(R.string.toast_no_wifi_but_playing));
-        }
+        if (checked)
+            if (((streamService.getState() == State.PLAYING) || (streamService.getState() == State.PAUSED)))
+                if (!checkIfOnWifi()) {
+                    streamService.stopStreaming();
+                    presenter.streamStopped();
+                    presenter.error(application.getString(R.string.toast_no_wifi_but_playing));
+                }
 
         preferences.edit().putBoolean(STREAM_WIFI_ONLY, checked).apply();
     }
