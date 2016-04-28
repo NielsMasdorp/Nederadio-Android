@@ -252,6 +252,8 @@ public class MainInteractorImpl implements MainInteractor {
             boolean success = intent.getBooleanExtra(StreamService.STREAM_DONE_LOADING_SUCCESS, false);
             if (!success) {
                 presenter.streamStopped();
+                presenter.error(application.getString(R.string.stream_error_toast));
+
             } else {
                 presenter.streamPlaying();
             }
@@ -286,7 +288,7 @@ public class MainInteractorImpl implements MainInteractor {
             case 0:
                 return 0;
             case 1:
-                return (int) TimeUnit.MINUTES.toMillis(15);
+                return (int) TimeUnit.SECONDS.toMillis(35);
             case 2:
                 return (int) TimeUnit.MINUTES.toMillis(20);
             case 3:

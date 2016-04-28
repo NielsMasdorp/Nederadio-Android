@@ -24,6 +24,7 @@ import com.nielsmasdorp.sleeply.ui.stream.MainActivity;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -35,6 +36,7 @@ public class StreamService extends Service implements
     private static final String TAG = StreamService.class.getSimpleName();
 
     private static final int NOTIFY_ID = 1;
+    private final float MAX_VOLUME = 1.0f;
 
     public static final String STREAM_DONE_LOADING_INTENT = "stream_done_loading_intent";
     public static final String STREAM_DONE_LOADING_SUCCESS = "stream_done_loading_success";
@@ -185,6 +187,7 @@ public class StreamService extends Service implements
 
             player.setDataSource(this, Uri.parse(String.format("%s?client_id=%s", stream.getUrl(), key)));
             player.setLooping(true);
+            player.setVolume(MAX_VOLUME, MAX_VOLUME);
             currentStream = stream;
         } catch (Exception e) {
             Log.e(TAG, "playStream: ", e);
@@ -252,6 +255,10 @@ public class StreamService extends Service implements
                     Intent intent = new Intent(TIMER_UPDATE_INTENT);
                     intent.putExtra(TIMER_UPDATE_VALUE, (int) millisUntilFinished);
                     broadcastManager.sendBroadcast(intent);
+                    if (millisUntilFinished < TimeUnit.SECONDS.toMillis(30)) {
+                        //lower the volume by respective step
+                        lowerVolume((int) ((int) millisUntilFinished/TimeUnit.SECONDS.toMillis(1)));
+                    }
                 }
 
                 public void onFinish() {
@@ -266,7 +273,17 @@ public class StreamService extends Service implements
     }
 
     /**
-     * Stop the sleep timer
+     * Lowers the volume of the stream to a step
+     * @param step out of a max of 30
+     */
+    private void lowerVolume(int step) {
+
+        float voulme = ((float) step)/30f;
+        player.setVolume(voulme, voulme);
+    }
+
+    /**
+     * Stop the sleep timer and restore volume to max
      */
     private void stopSleepTimer() {
 
@@ -274,6 +291,7 @@ public class StreamService extends Service implements
             countDownTimer.cancel();
             countDownTimer = null;
         }
+        player.setVolume(MAX_VOLUME, MAX_VOLUME);
     }
 
     private void timerDoneBroadcast() {
@@ -291,7 +309,6 @@ public class StreamService extends Service implements
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Log.i(TAG, "onError: " + what + ", " + extra);
 
-        Toast.makeText(StreamService.this, R.string.stream_error_toast, Toast.LENGTH_SHORT).show();
         mp.reset();
         notifyStreamLoaded(false);
         state = State.STOPPED;
