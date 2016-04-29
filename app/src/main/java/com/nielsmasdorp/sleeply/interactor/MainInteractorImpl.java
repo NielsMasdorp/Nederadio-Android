@@ -23,6 +23,7 @@ import com.nielsmasdorp.sleeply.ui.stream.OnStreamServiceListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -268,14 +269,14 @@ public class MainInteractorImpl implements MainInteractor {
     private String formatTimer(long timeLeft) {
 
         if (timeLeft > TimeUnit.HOURS.toMillis(1)) {
-            return String.format("%02d:%02d:%02d",
+            return String.format(Locale.getDefault(), "%02d:%02d:%02d",
                     TimeUnit.MILLISECONDS.toHours(timeLeft),
                     TimeUnit.MILLISECONDS.toMinutes(timeLeft) -
                             TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
                     TimeUnit.MILLISECONDS.toSeconds(timeLeft) -
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft)));
         } else {
-            return String.format("%02d:%02d",
+            return String.format(Locale.getDefault(), "%02d:%02d",
                     TimeUnit.MILLISECONDS.toMinutes(timeLeft) -
                             TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
                     TimeUnit.MILLISECONDS.toSeconds(timeLeft) -
@@ -288,7 +289,7 @@ public class MainInteractorImpl implements MainInteractor {
             case 0:
                 return 0;
             case 1:
-                return (int) TimeUnit.SECONDS.toMillis(35);
+                return (int) TimeUnit.MINUTES.toMillis(15);
             case 2:
                 return (int) TimeUnit.MINUTES.toMillis(20);
             case 3:
