@@ -1,4 +1,4 @@
-![alt tag](http://i.imgur.com/aVeMHcr.jpg)
+![alt tag](http://i.imgur.com/Uy9w5WN.jpg)
 
 ###Fall asleep with Sleeply
 
@@ -18,6 +18,10 @@ The user interface is beautiful and it supports playing in the background as wel
 
 Don't wait any longer and start falling asleep more peacefully!
 If you know any sounds that help you fall asleep, contact me from within the app and i'll add them. Go to the [Google+](https://plus.google.com/communities/103127046711774033512) community to test Sleeply.
+
+###Screenshots
+
+![alt tag](http://i.imgur.com/aVeMHcr.jpg)
 
 ###Used libraries
 * [Butterknife](https://github.com/JakeWharton/butterknife)
