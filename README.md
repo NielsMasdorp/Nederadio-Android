@@ -2,6 +2,10 @@
 
 ###Fall asleep with Sleeply
 
+<a href="https://play.google.com/store/apps/details?id=com.nielsmasdorp.sleeply">
+<img align="middle" alt="Get it on Google Play" src="http://steverichey.github.io/google-play-badge-svg/img/en_get.svg" />
+</a>
+
 Having trouble falling asleep? I did, and listening to calming music helped me.
 Sleeply as of now, contains 8 sounds:
 
