@@ -2,7 +2,6 @@ package com.nielsmasdorp.sleeply.ui.stream.components
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -20,6 +19,7 @@ import com.nielsmasdorp.sleeply.ui.stream.MainViewModel
 import com.nielsmasdorp.sleeply.ui.stream.MainViewModel.Companion.EMPTY_ERROR
 import com.nielsmasdorp.sleeply.ui.stream.MainViewModel.Event.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.nielsmasdorp.sleeply.domain.stream.StreamingError
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
@@ -31,12 +31,9 @@ fun StreamsScreen(
 
     val viewData = viewModel.viewData.observeAsState()
     val sleepTimer = viewModel.sleepTimer.observeAsState()
-    val networkEnabled = viewModel.networkEnabled.observeAsState()
-    val events = viewModel.eventsFlow.collectAsState(initial = Empty)
-    val errors = viewModel.errorFlow.collectAsState(initial = EMPTY_ERROR)
 
-    CheckError(errors.value)
-    CheckEvent(events.value)
+    CheckError()
+    CheckEvent()
 
     var showMenu by remember { mutableStateOf(false) }
 
@@ -65,18 +62,6 @@ fun StreamsScreen(
                     onDismissRequest = { showMenu = false }
                 ) {
                     DropdownMenuItem(onClick = {
-                        viewModel.setPlayOnNetworkEnabled(
-                            !(networkEnabled.value ?: true)
-                        )
-                    }) {
-                        // TODO color
-                        Text("Stream on WiFi only")
-                        Checkbox(
-                            checked = networkEnabled.value ?: true,
-                            onCheckedChange = { viewModel.setPlayOnNetworkEnabled(it) }
-                        )
-                    }
-                    DropdownMenuItem(onClick = {
                         viewModel.onEmailDeveloperPicked()
                         showMenu = false
                     }) {
@@ -95,11 +80,9 @@ fun StreamsScreen(
 }
 
 @Composable
-fun CheckEvent(
-    value: MainViewModel.Event,
-    viewModel: MainViewModel = viewModel()
-) {
-    when (value) {
+fun CheckEvent(viewModel: MainViewModel = viewModel()) {
+    val state = viewModel.eventsFlow.collectAsState(initial = Empty)
+    when (state.value) {
         ShowAbout -> AboutAppDialog(
             onDismiss = { viewModel.onAboutDismissed() }
         )
@@ -109,12 +92,12 @@ fun CheckEvent(
         )
         is ShowTimer -> SleepTimerDialog(onSelect = {
             viewModel.setSleepTimer(it)
-            viewModel.onAboutDismissed()
+            viewModel.onTimerDismissed()
         }, onDismiss = {
-            viewModel.onAboutDismissed()
+            viewModel.onTimerDismissed()
         })
         is ShowStreams -> PickStreamDialog(
-            streams = value.streams,
+            streams = (state.value as ShowStreams).streams,
             onSelect = {
                 viewModel.onStreamsDismissed()
                 viewModel.onStreamPicked(it)
@@ -125,15 +108,13 @@ fun CheckEvent(
 }
 
 @Composable
-fun CheckError(
-    error: String?,
-    viewModel: MainViewModel = viewModel(),
-) {
-    if (!error.isNullOrEmpty()) {
+fun CheckError(viewModel: MainViewModel = viewModel()) {
+    val error = viewModel.errorFlow.collectAsState(initial = EMPTY_ERROR)
+    if (error.value is StreamingError.Filled) {
         viewModel.onErrorShown()
         Toast.makeText(
             LocalContext.current,
-            error,
+            (error.value as StreamingError.Filled).error,
             Toast.LENGTH_SHORT
         ).show()
     }

@@ -2,8 +2,6 @@ package com.nielsmasdorp.sleeply.ui.stream
 
 import androidx.lifecycle.*
 import com.nielsmasdorp.sleeply.domain.settings.GetLastPlayedIndex
-import com.nielsmasdorp.sleeply.domain.settings.GetStreamOnNetworkEnabled
-import com.nielsmasdorp.sleeply.domain.settings.SetStreamOnNetworkEnabled
 import com.nielsmasdorp.sleeply.domain.stream.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -19,9 +17,7 @@ import java.util.concurrent.TimeUnit
 class MainViewModel(
     private val getAllStreams: GetAllStreams,
     private val streamManager: StreamManager,
-    private val getLastPlayedIndex: GetLastPlayedIndex,
-    private val setStreamOnNetworkEnabled: SetStreamOnNetworkEnabled,
-    getStreamOnNetworkEnabled: GetStreamOnNetworkEnabled
+    private val getLastPlayedIndex: GetLastPlayedIndex
 ) : ViewModel() {
 
     val viewData: LiveData<Stream> = streamManager.stateFlow
@@ -33,13 +29,10 @@ class MainViewModel(
         .filterNotNull()
         .asLiveData()
 
-    val networkEnabled: LiveData<Boolean> = getStreamOnNetworkEnabled.flow
-        .asLiveData()
-
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val errorChannel = Channel<String?>(Channel.BUFFERED)
+    private val errorChannel = Channel<StreamingError>(Channel.BUFFERED)
     val errorFlow = errorChannel.receiveAsFlow()
 
     fun onStarted(controls: PlayerControls) {
@@ -68,12 +61,6 @@ class MainViewModel(
             withContext(Dispatchers.Main) {
                 eventChannel.send(Event.ShowStreams(streams))
             }
-        }
-    }
-
-    fun setPlayOnNetworkEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            setStreamOnNetworkEnabled(enabled)
         }
     }
 
@@ -106,7 +93,7 @@ class MainViewModel(
     }
 
     fun onErrorShown() {
-        viewModelScope.launch { errorChannel.send(EMPTY_ERROR) }
+        viewModelScope.launch { errorChannel.send(StreamingError.Empty) }
     }
 
     private fun calculateMs(option: Int): Long {

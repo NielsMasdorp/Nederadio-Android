@@ -26,14 +26,12 @@ val streamModule = module {
     single<StreamRepository> { MemoryStreamRepository(androidApplication()) }
     single { GetStreamById(get()) }
     single { GetAllStreams(get()) }
-    single<StreamManager> { AndroidStreamManager(get(), get(), get(), get()) }
+    single<StreamManager> { AndroidStreamManager(get(), get()) }
 }
 
 val settingsModule = module {
     single { GetLastPlayedIndex(get()) }
     single { SetLastPlayedIndex(get()) }
-    single { GetStreamOnNetworkEnabled(get()) }
-    single { SetStreamOnNetworkEnabled(get()) }
     single<SettingsRepository> { SharedPreferencesSettingsRepository(androidApplication()) }
 }
 
@@ -43,5 +41,5 @@ val networkModule = module {
 }
 
 val uiModule = module {
-    viewModel { MainViewModel(get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
 }

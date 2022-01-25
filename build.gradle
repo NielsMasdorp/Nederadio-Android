@@ -15,9 +15,6 @@ buildscript {
     ext.androidx_media3_version = '1.0.0-alpha01'
     ext.androidx_compose_version = '1.2.0-alpha01'
 
-    //misc
-    ext.flow_preferences_version = '1.5.0'
-
     //koin
     ext.koin_version = '3.1.5'
 
@@ -26,7 +23,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
     }

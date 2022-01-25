@@ -19,13 +19,10 @@ import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
 import androidx.media3.session.SessionToken
 import androidx.media3.ui.PlayerControlView
-import androidx.media3.ui.StyledPlayerControlView
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.nielsmasdorp.sleeply.R
-import com.nielsmasdorp.sleeply.domain.connectivity.NetworkManager
-import com.nielsmasdorp.sleeply.domain.settings.GetStreamOnNetworkEnabled
 import com.nielsmasdorp.sleeply.service.StreamService
 import com.nielsmasdorp.sleeply.domain.settings.SetLastPlayedIndex
 import com.nielsmasdorp.sleeply.domain.stream.*
@@ -43,9 +40,7 @@ import java.io.ByteArrayOutputStream
 @SuppressLint("UnsafeOptInUsageError")
 class AndroidStreamManager(
     private val application: Application,
-    private val setLastPlayedIndex: SetLastPlayedIndex,
-    private val getStreamOnNetworkEnabled: GetStreamOnNetworkEnabled,
-    private val networkManager: NetworkManager
+    private val setLastPlayedIndex: SetLastPlayedIndex
 ) : StreamManager, MediaController.Listener, Player.Listener {
 
     private val serviceJob = SupervisorJob()
@@ -61,7 +56,7 @@ class AndroidStreamManager(
 
     override val sleepTimerFlow: MutableStateFlow<Long?> = MutableStateFlow(null)
 
-    override val errorFlow: MutableStateFlow<String?> = MutableStateFlow(null)
+    override val errorFlow: MutableStateFlow<StreamingError> = MutableStateFlow(StreamingError.Empty)
 
     override fun initialize(streams: List<Stream>, startIndex: Int, controls: PlayerControls) {
         this.streams = streams
@@ -112,22 +107,6 @@ class AndroidStreamManager(
      */
     override fun onPlayerError(error: PlaybackException) {
         sendError(error = application.getString(R.string.stream_error_toast))
-    }
-
-    /**
-     * Called when the [Player] pauses or starts playing
-     */
-    override fun onIsPlayingChanged(isPlaying: Boolean) {
-        managerScope.launch {
-            if (isPlaying && !streamingAllowed()) {
-                withContext(Dispatchers.Main) {
-                    requireController().pause()
-                    sendError(
-                        error = application.getString(R.string.streaming_not_allowed_due_to_network)
-                    )
-                }
-            }
-        }
     }
 
     override fun release() = MediaController.releaseFuture(controllerFuture)
@@ -183,13 +162,8 @@ class AndroidStreamManager(
         return byteStream.toByteArray()
     }
 
-    private suspend fun streamingAllowed(): Boolean {
-        return getStreamOnNetworkEnabled.await() || networkManager.isOnWifi()
-    }
-
     private fun sendError(error: String) {
-        errorFlow.value = error
-        errorFlow.value = null // reset value to accept duplicate errors
+        errorFlow.value = StreamingError.Filled(error = error)
     }
 
     private fun PlayerControls.view(): PlayerControlView = this as PlayerControlView

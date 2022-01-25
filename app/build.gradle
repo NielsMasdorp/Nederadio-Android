@@ -7,7 +7,6 @@ repositories {
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.nielsmasdorp.sleeply"
@@ -65,7 +64,6 @@ dependencies {
     implementation "io.insert-koin:koin-android:$koin_version"
 
     // misc
-    implementation "com.fredporciuncula:flow-preferences:$flow_preferences_version"
     implementation 'com.google.accompanist:accompanist-insets:0.24.0-alpha'
     implementation "com.google.accompanist:accompanist-placeholder:0.24.0-alpha"
 }

@@ -20,7 +20,7 @@ interface StreamManager {
     /**
      * [Flow] of optional error
      */
-    val errorFlow: Flow<String?>
+    val errorFlow: Flow<StreamingError>
 
     /**
      * Initialize this manager
