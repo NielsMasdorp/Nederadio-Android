@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.nielsmasdorp.sleeply.domain.stream.PlayerControls
 import com.nielsmasdorp.sleeply.ui.stream.components.StreamsScreen
+import com.nielsmasdorp.sleeply.ui.theme.AppTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -18,12 +19,13 @@ class StreamActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // TODO fix rotation
         super.onCreate(savedInstanceState)
         val playerControls: PlayerControls = SleeplyPlayerControlsView(this)
         setContent {
-            ProvideWindowInsets {
-                StreamsScreen(playerControls = playerControls)
+            AppTheme {
+                ProvideWindowInsets {
+                    StreamsScreen(playerControls = playerControls)
+                }
             }
         }
         viewModel.onStarted(playerControls)

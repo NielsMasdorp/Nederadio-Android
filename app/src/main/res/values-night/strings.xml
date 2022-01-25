@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">Sleeply</string>
+    <string name="notification_channel_name">Sleeply</string>
+    <string name="notification_channel_description">Tracks</string>
+    <string name="menu_settings">Settings</string>
+    <string name="action_sleep_timer">Sleep timer</string>
+    <string name="sleep_timer_title">Set sleep timer</string>
+    <string name="update_title">What\'s new</string>
+    <string name="update_positive">I understand</string>
+    <string name="action_email_dev">Email developer</string>
+    <string name="action_about">About</string>
+    <string name="email_subject">Feedback Sleeply</string>
+    <string name="email_intent_title">Anything to add?</string>
+    <string name="dev_email_address">nielsmasdorp+sleeply@gmail.com</string>
+    <string name="email_intent_type">mailto</string>
+    <string name="about_title">About Sleeply</string>
+    <string name="about_positive">OK</string>
+    <string name="about_message"><![CDATA[
+        Current version: 0.3.1, made by:<br/><br/>
+        <b>Niels Masdorp</b><br/>
+        <a href=\'https://play.google.com/store/search?q=pub:Niels%20Masdorp\'>Google Play</a>&nbsp;&nbsp;
+        <a href=\'https://plus.google.com/118171808911702111152\'>Google+</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/NielsMasdorp\'>GitHub</a>&nbsp;&nbsp;
+        <a href=\'https://www.linkedin.com/profile/view?id=257462649\'>LinkedIn</a>&nbsp;&nbsp;<br/><br/>
+        <b>Libraries:</b><br/>
+        <a href=\'https://github.com/afollestad/material-dialogs\'>Material Dialogs</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/JakeWharton/butterknife\'>Butterknife</a>&nbsp;&nbsp;
+        <a href=\'http://google.github.io/dagger/\'>Dagger2</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/bumptech/glide\'>Glide</a>&nbsp;&nbsp;<br/><br/>
+        <b>Thanks to:</b><br/>
+        <a href=\'www.freepik.com\'>Freepik</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/tauqeer-ahmad-waheedi\'>Tauqeer Waheedi</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/cosmomedia\'>Cosmomedia</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/hend-abdelhamed\'>Hend Abdelhamed</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/user9175165\'>User9175165</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/dave-smith-173\'>SybokTHS</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/dave-smith-173\'>SybokTHS</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/avesource\'>Wavesource</a>&nbsp;&nbsp;
+        <a href=\'http://soundcloud.com/mark-aria\'>Mark Aria</a>&nbsp;&nbsp;
+        <a href=\'https://soundcloud.com/ryanm1994\'>Ryan M</a>&nbsp;&nbsp;
+    ]]></string>
+    <string name="rainy_stream_title">It is a rainy day</string>
+    <string name="ocean_stream_title">Floating in the ocean</string>
+    <string name="forest_stream_title">Sounds of the forest</string>
+    <string name="meditation_stream_title">Shamanic meditation</string>
+    <string name="rainy_stream_desc">Better stay inside and relax</string>
+    <string name="ocean_stream_desc">Fall asleep listening to the waves</string>
+    <string name="forest_stream_desc">Lay back and listen to a calm creek and birds</string>
+    <string name="meditation_stream_desc">Meditate and enter a state of deep relaxation</string>
+    <string name="stream_error_toast">Couldn\'t open stream, Check your internet connection. If this continues to fail please contact me.</string>
+    <string name="background_content_description">Background</string>
+    <string name="previous_button_content_desc">Previous button</string>
+    <string name="play_button_content_desc">Play button</string>
+    <string name="next_button_content_desc">Next button</string>
+    <string name="stream_notification_image_content_desc">Notification stream image</string>
+    <string name="notification_cancel_button_content_desc">Cancel notification button</string>
+    <string name="delta_waves_stream_title">Delta waves</string>
+    <string name="delta_waves_stream_desc">Relaxing music to help you sleep</string>
+    <string name="lucid_stream_title">Lucid dreaming</string>
+    <string name="lucid_stream_desc">Binatural beats</string>
+    <string name="autumn_stream_title">Autumn wind</string>
+    <string name="autumn_stream_desc">Must be nice to stay inside</string>
+    <string name="void_stream_title">Enter the void</string>
+    <string name="void_stream_desc">Don\'t forget to come back</string>
+    <string name="all_sounds_button">show all</string>
+    <string name="show_sounds_dialog_button">BACK</string>
+    <string name="action_wifi_only">Stream on WiFi only</string>
+    <string name="no_wifi_setting_toast">Not connected to Wifi</string>
+    <string name="streaming_not_allowed_due_to_network">Stream stopped since you are not on WiFi</string>
+    <string name="sleep_timer_not_allowed">There needs to be a stream playing first.</string>
+    <string name="sleep_timer_button_content">Pick a sleep timer</string>
+
+    <string-array name="sleep_timer">
+        <item>Off</item>
+        <item>10 minutes</item>
+        <item>15 minutes</item>
+        <item>20 minutes</item>
+        <item>30 minutes</item>
+        <item>40 minutes</item>
+        <item>50 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>3 hours</item>
+    </string-array>
+
+</resources>

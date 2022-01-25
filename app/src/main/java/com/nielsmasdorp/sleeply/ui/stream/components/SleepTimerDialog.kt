@@ -4,18 +4,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme as Material2
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.nielsmasdorp.sleeply.R
 
@@ -29,17 +26,16 @@ fun SleepTimerDialog(
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
-            color = Color.DarkGray,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             modifier = modifier,
-            shape = RoundedCornerShape(8.dp)
+            shape = Material2.shapes.medium,
         ) {
             Column(modifier) {
                 Text(
                     modifier = Modifier.padding(16.dp),
                     text = stringResource(id = R.string.sleep_timer_title),
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    fontSize = 20.sp
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 LazyColumn {
@@ -51,10 +47,9 @@ fun SleepTimerDialog(
                         ) {
                             Text(
                                 modifier = Modifier.padding(16.dp),
-                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.titleSmall,
                                 text = item,
-                                color = Color.White,
-                                fontSize = 16.sp
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }

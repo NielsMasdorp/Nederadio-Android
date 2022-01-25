@@ -56,7 +56,8 @@ class AndroidStreamManager(
 
     override val sleepTimerFlow: MutableStateFlow<Long?> = MutableStateFlow(null)
 
-    override val errorFlow: MutableStateFlow<StreamingError> = MutableStateFlow(StreamingError.Empty)
+    override val errorFlow: MutableStateFlow<StreamingError> =
+        MutableStateFlow(StreamingError.Empty)
 
     override fun initialize(streams: List<Stream>, startIndex: Int, controls: PlayerControls) {
         this.streams = streams
@@ -109,7 +110,11 @@ class AndroidStreamManager(
         sendError(error = application.getString(R.string.stream_error_toast))
     }
 
-    override fun release() = MediaController.releaseFuture(controllerFuture)
+    override fun release() {
+        controllerFuture.get().removeListener(this)
+        requireController().removeListener(this)
+        MediaController.releaseFuture(controllerFuture)
+    }
 
     override fun streamPicked(index: Int) = requireController().seekTo(index, 0L)
 
@@ -128,8 +133,8 @@ class AndroidStreamManager(
 
     private fun initController(streams: List<Stream>, startIndex: Int, controls: PlayerControls) {
         controls.view().player = requireController()
+        requireController().addListener(this)
         if (requireController().mediaItemCount == 0) {
-            requireController().addListener(this)
             streams.forEach { stream ->
                 requireController().addMediaItem(
                     MediaItem.Builder()

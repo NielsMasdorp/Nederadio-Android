@@ -2,9 +2,14 @@ package com.nielsmasdorp.sleeply.ui.stream.components
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.material.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -21,6 +26,7 @@ import com.nielsmasdorp.sleeply.ui.stream.MainViewModel.Event.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nielsmasdorp.sleeply.domain.stream.StreamingError
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun StreamsScreen(
@@ -48,30 +54,46 @@ fun StreamsScreen(
             modifier = Modifier.statusBarsPadding(),
             elevation = 0.dp,
             backgroundColor = Color.Transparent,
-            title = { Text(stringResource(id = R.string.app_name), color = Color.White) },
+            title = {
+                Text(
+                    style = MaterialTheme.typography.titleLarge,
+                    text = stringResource(id = R.string.app_name),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            },
             actions = {
                 IconButton(onClick = { showMenu = !showMenu }) {
                     Icon(
                         Icons.Default.Settings,
                         contentDescription = "Settings",
-                        tint = Color.White
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
                 DropdownMenu(
+                    modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant),
                     expanded = showMenu,
                     onDismissRequest = { showMenu = false }
                 ) {
+
                     DropdownMenuItem(onClick = {
                         viewModel.onEmailDeveloperPicked()
                         showMenu = false
                     }) {
-                        Text("Email developer")
+                        Text(
+                            text = "Email developer",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                     DropdownMenuItem(onClick = {
                         viewModel.onAboutPicked()
                         showMenu = false
                     }) {
-                        Text("About")
+                        Text(
+                            text = "About",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }

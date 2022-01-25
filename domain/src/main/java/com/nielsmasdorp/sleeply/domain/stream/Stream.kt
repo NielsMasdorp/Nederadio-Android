@@ -8,6 +8,5 @@ data class Stream(
     val url: String,
     val title: String,
     val desc: String,
-    val bigImgRes: Int,
     val smallImgRes: Int
 )

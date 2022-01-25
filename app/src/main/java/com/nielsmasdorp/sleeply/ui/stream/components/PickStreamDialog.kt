@@ -5,18 +5,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
 import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material.MaterialTheme as Material2
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.nielsmasdorp.sleeply.domain.stream.Stream
 import androidx.compose.ui.graphics.Color
@@ -30,8 +31,8 @@ fun PickStreamDialog(
 ) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
-            color = Color.DarkGray,
-            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            shape = Material2.shapes.medium,
             modifier = modifier
         ) {
             LazyVerticalGrid(cells = GridCells.Fixed(2), contentPadding = PaddingValues(8.dp)) {
@@ -49,10 +50,9 @@ fun PickStreamDialog(
                         Box(Modifier.wrapContentSize(Alignment.Center)) {
                             Text(
                                 text = item.title,
+                                style = MaterialTheme.typography.labelMedium,
                                 textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Bold,
                                 color = Color.White,
-                                fontSize = 16.sp,
                             )
                         }
                     }

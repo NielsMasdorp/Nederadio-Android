@@ -45,6 +45,7 @@ allprojects {
                 freeCompilerArgs += ["-Xuse-experimental=androidx.media3.common.util.UnstableApi"]
                 freeCompilerArgs += ["-Xuse-experimental=androidx.compose.foundation.ExperimentalFoundationApi"]
                 freeCompilerArgs += ["-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi"]
+                freeCompilerArgs += ["-Xuse-experimental=androidx.compose.material.ExperimentalMaterial3Api"]
                 freeCompilerArgs += ["-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"]
                 freeCompilerArgs += ["-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi"]
                 freeCompilerArgs += ["-Xuse-experimental=androidx.compose.runtime.ExperimentalComposeApi"]

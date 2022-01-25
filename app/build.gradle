@@ -55,6 +55,7 @@ dependencies {
     implementation "androidx.compose.material:material-icons-core:$androidx_compose_version"
     implementation "androidx.compose.material:material-icons-extended:$androidx_compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$androidx_compose_version"
+    implementation "androidx.compose.material3:material3:1.0.0-alpha03"
 
     //kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_android_version"

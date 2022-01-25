@@ -4,22 +4,19 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.MaterialTheme as Material2
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.placeholder.placeholder
@@ -36,24 +33,10 @@ fun CurrentStreamView(
     viewData: State<Stream?>,
     sleepTimer: State<String?>
 ) {
-    Surface(modifier = modifier) {
-        Crossfade(
-            targetState = viewData.value,
-            animationSpec = tween(750),
-            modifier = Modifier
-                .placeholder(
-                    visible = viewData.value == null,
-                    color = Color.LightGray
-                )
-                .fillMaxSize()
-        ) { data ->
-            Image(
-                painterResource(data?.bigImgRes ?: R.drawable.empty_background),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.primary
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -62,7 +45,7 @@ fun CurrentStreamView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Card(
-                shape = RoundedCornerShape(8.dp),
+                shape = Material2.shapes.medium,
                 modifier = Modifier.size(256.dp)
             ) {
                 Crossfade(
@@ -71,7 +54,7 @@ fun CurrentStreamView(
                     modifier = Modifier
                         .placeholder(
                             visible = viewData.value == null,
-                            color = Color.DarkGray
+                            color = MaterialTheme.colorScheme.secondary
                         )
                         .size(128.dp)
                 ) { data ->
@@ -91,26 +74,23 @@ fun CurrentStreamView(
                 modifier = Modifier
                     .padding(top = 16.dp),
                 text = viewData.value?.title ?: "",
-                fontWeight = FontWeight.Light,
-                color = Color.White,
-                fontSize = 32.sp
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
             Text(
                 modifier = Modifier
                     .padding(top = 8.dp),
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Light,
                 text = viewData.value?.desc ?: "",
-                color = Color.White,
-                fontSize = 18.sp
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
             Spacer(Modifier.height(64.dp))
             Text(
                 textAlign = TextAlign.Center,
                 text = sleepTimer.value ?: "",
-                fontWeight = FontWeight.Light,
-                color = Color.White,
-                fontSize = 18.sp
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
             Spacer(Modifier.height(24.dp))
             AndroidView(
@@ -121,16 +101,16 @@ fun CurrentStreamView(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 TextButton(onClick = { viewModel.onTimerPicked() }) {
                     Text(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         text = "sleep timer",
-                        fontSize = 16.sp
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 }
                 TextButton(onClick = { viewModel.onPickStreams() }) {
                     Text(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         text = "all streams",
-                        fontSize = 16.sp
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 }
             }
