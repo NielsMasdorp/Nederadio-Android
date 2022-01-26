@@ -1,20 +1,19 @@
 package com.nielsmasdorp.sleeply.ui.stream.components
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
@@ -25,6 +24,8 @@ import com.nielsmasdorp.sleeply.ui.stream.MainViewModel.Companion.EMPTY_ERROR
 import com.nielsmasdorp.sleeply.ui.stream.MainViewModel.Event.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nielsmasdorp.sleeply.domain.stream.StreamingError
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnsafeOptInUsageError")
@@ -35,15 +36,18 @@ fun StreamsScreen(
     playerControls: PlayerControls
 ) {
 
+    val coroutineScope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+
     val viewData = viewModel.viewData.observeAsState()
     val sleepTimer = viewModel.sleepTimer.observeAsState()
 
-    CheckError()
+    CheckError(coroutineScope = coroutineScope, scaffoldState = scaffoldState)
     CheckEvent()
 
     var showMenu by remember { mutableStateOf(false) }
 
-    Scaffold(modifier = modifier) {
+    Scaffold(modifier = modifier, scaffoldState = scaffoldState) {
         CurrentStreamView(
             modifier = modifier,
             playerControls = playerControls,
@@ -130,14 +134,18 @@ fun CheckEvent(viewModel: MainViewModel = viewModel()) {
 }
 
 @Composable
-fun CheckError(viewModel: MainViewModel = viewModel()) {
+fun CheckError(
+    viewModel: MainViewModel = viewModel(),
+    coroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState
+) {
     val error = viewModel.errorFlow.collectAsState(initial = EMPTY_ERROR)
-    if (error.value is StreamingError.Filled) {
-        viewModel.onErrorShown()
-        Toast.makeText(
-            LocalContext.current,
-            (error.value as StreamingError.Filled).error,
-            Toast.LENGTH_SHORT
-        ).show()
+    error.value.let { errorVal ->
+        if (errorVal is StreamingError.Filled) {
+            viewModel.onErrorShown()
+            coroutineScope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(message = errorVal.error)
+            }
+        }
     }
 }
