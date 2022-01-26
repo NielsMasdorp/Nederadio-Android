@@ -1,11 +1,10 @@
 package com.nielsmasdorp.sleeply.ui.stream
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.children
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerControlView
@@ -29,13 +28,13 @@ class SleeplyPlayerControlsView @JvmOverloads constructor(
      * Set colors for the relevant controls
      */
     fun setColors(playPauseColor: Int, controlColor: Int) {
-        children.first().findViewWithTag<AppCompatImageButton>("play").backgroundTintList =
+        children.first().findViewWithTag<AppCompatImageView>("play").backgroundTintList =
             ColorStateList.valueOf(playPauseColor)
-        children.first().findViewWithTag<AppCompatImageButton>("pause").backgroundTintList =
+        children.first().findViewWithTag<AppCompatImageView>("pause").backgroundTintList =
             ColorStateList.valueOf(playPauseColor)
-        children.first().findViewWithTag<AppCompatImageButton>("prev").backgroundTintList =
+        children.first().findViewWithTag<AppCompatImageView>("prev").backgroundTintList =
             ColorStateList.valueOf(controlColor)
-        children.first().findViewWithTag<AppCompatImageButton>("next").backgroundTintList =
+        children.first().findViewWithTag<AppCompatImageView>("next").backgroundTintList =
             ColorStateList.valueOf(controlColor)
     }
 

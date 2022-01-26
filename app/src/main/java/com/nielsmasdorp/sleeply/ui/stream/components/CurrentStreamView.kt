@@ -1,6 +1,5 @@
 package com.nielsmasdorp.sleeply.ui.stream.components
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -8,15 +7,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.placeholder.placeholder
 import com.nielsmasdorp.sleeply.R
 import com.nielsmasdorp.sleeply.domain.stream.PlayerControls
@@ -32,6 +33,7 @@ import com.nielsmasdorp.sleeply.domain.stream.Stream
 import com.nielsmasdorp.sleeply.ui.stream.MainViewModel
 import com.nielsmasdorp.sleeply.ui.stream.SleeplyPlayerControlsView
 
+@UnstableApi
 @Composable
 fun CurrentStreamView(
     modifier: Modifier = Modifier,
@@ -132,7 +134,7 @@ fun CurrentStreamView(
                         style = MaterialTheme.typography.titleLarge,
                     )
                 }
-                TextButton(onClick = { viewModel.onPickStreams() }) {
+                androidx.compose.material3.TextButton(onClick = { viewModel.onPickStreams() }) {
                     Text(
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         text = stringResource(id = R.string.all_streams_button),

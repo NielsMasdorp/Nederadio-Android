@@ -5,14 +5,15 @@
     android:layout_height="wrap_content"
     tools:background="@color/colorPrimary">
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/exo_prev"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:tag="prev"
         android:layout_toStartOf="@+id/playPause"
-        android:background="@drawable/ic_prev" />
+        android:background="@drawable/ic_prev"
+        android:foreground="?attr/actionBarItemBackground"
+        android:tag="prev" />
 
     <FrameLayout
         android:id="@+id/playPause"
@@ -22,32 +23,35 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp">
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/exo_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:src="@drawable/ic_play"
+            android:foreground="?attr/actionBarItemBackground"
             android:tag="play"
-            android:background="@drawable/ic_play"
             android:visibility="gone" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/exo_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:tag="pause"
-            android:background="@drawable/ic_pause" />
+            android:background="@drawable/ic_pause"
+            android:foreground="?attr/actionBarItemBackground"
+            android:tag="pause" />
 
     </FrameLayout>
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/exo_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:tag="next"
         android:layout_toEndOf="@+id/playPause"
-        android:background="@drawable/ic_next" />
+        android:background="@drawable/ic_next"
+        android:foreground="?attr/actionBarItemBackground"
+        android:tag="next" />
 
 </RelativeLayout>
