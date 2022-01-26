@@ -21,11 +21,16 @@ If you know any sounds that help you fall asleep, contact me from within the app
 
 ## Screenshots
 
-![alt tag](http://i.imgur.com/aVeMHcr.jpg)
+![Alt text](/screenshots/screenshot1.png?raw=true "1")
+![Alt text](/screenshots/screenshot2.png?raw=true "2")
+![Alt text](/screenshots/screenshot3.png?raw=true "3")
+![Alt text](/screenshots/screenshot4.png?raw=true "4")
+![Alt text](/screenshots/screenshot5.png?raw=true "5")
 
 ## Used libraries
 
 Sleeply is fully written in Kotlin leveraging MVVM and Clean Architecture principles.
+It uses the new Material3 theme with Material You support. Also Dark/Light mode is included
 
 * [Koin](https://github.com/InsertKoinIO/koin)
 * [Jetpack Media3](https://github.com/androidx/media)
