@@ -10,6 +10,10 @@
         <entry key="../../../../../../layout/compose-model-1643105860338.xml" value="0.1" />
         <entry key="../../../../../../layout/compose-model-1643137317854.xml" value="0.1" />
         <entry key="../../../../../../layout/custom_preview.xml" value="0.18518518518518517" />
+        <entry key="app/src/main/res/drawable-night/ic_next.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-night/ic_pause.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-night/ic_play.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-night/ic_prev.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v21/image_selector.xml" value="0.14907407407407408" />
         <entry key="app/src/main/res/drawable/exo_player_control_view.xml" value="0.16574074074074074" />
         <entry key="app/src/main/res/drawable/ic_access_time_24dp.xml" value="0.2351851851851852" />

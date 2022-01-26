@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:tag="prev"
         android:layout_toStartOf="@+id/playPause"
         android:background="@drawable/ic_prev" />
 
@@ -19,14 +20,14 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/play_pause_bg">
+        android:layout_marginEnd="32dp">
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/exo_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:tag="play"
             android:background="@drawable/ic_play"
             android:visibility="gone" />
 
@@ -35,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:tag="pause"
             android:background="@drawable/ic_pause" />
 
     </FrameLayout>
@@ -44,6 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:tag="next"
         android:layout_toEndOf="@+id/playPause"
         android:background="@drawable/ic_next" />
 

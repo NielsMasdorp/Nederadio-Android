@@ -29,7 +29,7 @@ fun AboutAppDialog(
             Text(
                 color = MaterialTheme.colorScheme.onSurface,
                 text = stringResource(id = R.string.about_title),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleLarge
             )
         },
         text = {
@@ -44,7 +44,7 @@ fun AboutAppDialog(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { onDismiss() }
                 ) {
-                    Text("Close")
+                    Text(stringResource(id = R.string.about_positive))
                 }
             }
         }

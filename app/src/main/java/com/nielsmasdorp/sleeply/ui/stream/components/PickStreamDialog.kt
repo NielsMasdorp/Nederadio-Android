@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material.MaterialTheme as Material2
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -31,8 +31,8 @@ fun PickStreamDialog(
 ) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            shape = Material2.shapes.medium,
+            color = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(24.dp),
             modifier = modifier
         ) {
             LazyVerticalGrid(cells = GridCells.Fixed(2), contentPadding = PaddingValues(8.dp)) {
@@ -50,7 +50,7 @@ fun PickStreamDialog(
                         Box(Modifier.wrapContentSize(Alignment.Center)) {
                             Text(
                                 text = item.title,
-                                style = MaterialTheme.typography.labelMedium,
+                                style = MaterialTheme.typography.bodyLarge,
                                 textAlign = TextAlign.Center,
                                 color = Color.White,
                             )

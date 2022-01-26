@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--    unused-->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF8D437F</color>
     <color name="secondaryText">#727272</color>
-    <color name="primaryText">#ffffff</color>
-=
+
 </resources>

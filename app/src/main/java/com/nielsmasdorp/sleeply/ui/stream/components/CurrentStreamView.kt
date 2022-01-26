@@ -1,20 +1,26 @@
 package com.nielsmasdorp.sleeply.ui.stream.components
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.MaterialTheme as Material2
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -24,7 +30,9 @@ import com.nielsmasdorp.sleeply.R
 import com.nielsmasdorp.sleeply.domain.stream.PlayerControls
 import com.nielsmasdorp.sleeply.domain.stream.Stream
 import com.nielsmasdorp.sleeply.ui.stream.MainViewModel
+import com.nielsmasdorp.sleeply.ui.stream.SleeplyPlayerControlsView
 
+@SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun CurrentStreamView(
     modifier: Modifier = Modifier,
@@ -35,7 +43,7 @@ fun CurrentStreamView(
 ) {
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.primaryContainer
     ) {
         Column(
             modifier = Modifier
@@ -45,7 +53,7 @@ fun CurrentStreamView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Card(
-                shape = Material2.shapes.medium,
+                shape = RoundedCornerShape(24.dp),
                 modifier = Modifier.size(256.dp)
             ) {
                 Crossfade(
@@ -54,7 +62,7 @@ fun CurrentStreamView(
                     modifier = Modifier
                         .placeholder(
                             visible = viewData.value == null,
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.primary
                         )
                         .size(128.dp)
                 ) { data ->
@@ -75,7 +83,7 @@ fun CurrentStreamView(
                     .padding(top = 16.dp),
                 text = viewData.value?.title ?: "",
                 style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Text(
                 modifier = Modifier
@@ -83,33 +91,52 @@ fun CurrentStreamView(
                 textAlign = TextAlign.Center,
                 text = viewData.value?.desc ?: "",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Spacer(Modifier.height(64.dp))
             Text(
                 textAlign = TextAlign.Center,
                 text = sleepTimer.value ?: "",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Spacer(Modifier.height(24.dp))
-            AndroidView(
-                factory = { playerControls.getView() },
+            Box(
                 modifier = Modifier.fillMaxWidth()
-            )
+            ) {
+                val controlColor = MaterialTheme.colorScheme.onPrimaryContainer.toArgb()
+                val playPauseColor = MaterialTheme.colorScheme.onPrimary.toArgb()
+                Box(
+                    modifier = Modifier
+                        .size(72.dp)
+                        .align(Alignment.Center)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                )
+                AndroidView(
+                    factory = {
+                        (playerControls.getView() as SleeplyPlayerControlsView).apply {
+                            setColors(playPauseColor, controlColor)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                )
+            }
             Spacer(Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 TextButton(onClick = { viewModel.onTimerPicked() }) {
                     Text(
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        text = "sleep timer",
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        text = stringResource(id = R.string.sleep_timer_button),
                         style = MaterialTheme.typography.titleLarge,
                     )
                 }
                 TextButton(onClick = { viewModel.onPickStreams() }) {
                     Text(
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        text = "all streams",
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        text = stringResource(id = R.string.all_streams_button),
                         style = MaterialTheme.typography.titleLarge,
                     )
                 }

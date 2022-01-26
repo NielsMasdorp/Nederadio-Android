@@ -58,19 +58,19 @@ fun StreamsScreen(
                 Text(
                     style = MaterialTheme.typography.titleLarge,
                     text = stringResource(id = R.string.app_name),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             },
             actions = {
                 IconButton(onClick = { showMenu = !showMenu }) {
                     Icon(
                         Icons.Default.Settings,
-                        contentDescription = "Settings",
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        contentDescription = stringResource(id = R.string.settings_content_description),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
                 DropdownMenu(
-                    modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant),
+                    modifier = Modifier.background(MaterialTheme.colorScheme.surface),
                     expanded = showMenu,
                     onDismissRequest = { showMenu = false }
                 ) {
@@ -80,9 +80,9 @@ fun StreamsScreen(
                         showMenu = false
                     }) {
                         Text(
-                            text = "Email developer",
+                            text = stringResource(id = R.string.action_email_dev),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     DropdownMenuItem(onClick = {
@@ -90,9 +90,9 @@ fun StreamsScreen(
                         showMenu = false
                     }) {
                         Text(
-                            text = "About",
+                            text = stringResource(id = R.string.action_about),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }

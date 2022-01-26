@@ -4,8 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme as Material2
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -26,15 +26,15 @@ fun SleepTimerDialog(
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
-            color = MaterialTheme.colorScheme.surfaceVariant,
+            color = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(24.dp),
             modifier = modifier,
-            shape = Material2.shapes.medium,
         ) {
             Column(modifier) {
                 Text(
                     modifier = Modifier.padding(16.dp),
                     text = stringResource(id = R.string.sleep_timer_title),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleLarge,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -49,7 +49,7 @@ fun SleepTimerDialog(
                                 modifier = Modifier.padding(16.dp),
                                 style = MaterialTheme.typography.titleSmall,
                                 text = item,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }

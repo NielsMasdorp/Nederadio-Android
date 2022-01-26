@@ -28,7 +28,6 @@ If you know any sounds that help you fall asleep, contact me from within the app
 Sleeply is fully written in Kotlin leveraging MVVM and Clean Architecture principles.
 
 * [Koin](https://github.com/InsertKoinIO/koin)
-* [Flow-Preferences](https://github.com/tfcporciuncula/flow-preferences)
 * [Jetpack Media3](https://github.com/androidx/media)
 * [Jetpack Compose](https://developer.android.com/jetpack/compose)
 
