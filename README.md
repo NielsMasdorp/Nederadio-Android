@@ -21,11 +21,11 @@ If you know any sounds that help you fall asleep, contact me from within the app
 
 ## Screenshots
 
-![Alt text](app/screenshots/screenshot1.png?raw=true | width=100)
-![Alt text](app/screenshots/screenshot2.png?raw=true | width=100)
-![Alt text](app/screenshots/screenshot3.png?raw=true | width=100)
-![Alt text](app/screenshots/screenshot4.png?raw=true | width=100)
-![Alt text](app/screenshots/screenshot5.png?raw=true | width=100)
+![](app/screenshots/screenshot1.png?raw=true | width=100)
+![](app/screenshots/screenshot2.png?raw=true | width=100)
+![](app/screenshots/screenshot3.png?raw=true | width=100)
+![](app/screenshots/screenshot4.png?raw=true | width=100)
+![](app/screenshots/screenshot5.png?raw=true | width=100)
 
 ## Used libraries
 
