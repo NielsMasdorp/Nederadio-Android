@@ -7,13 +7,14 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.view.children
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerControlView
 import com.nielsmasdorp.sleeply.domain.stream.PlayerControls
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
-@SuppressLint("UnsafeOptInUsageError")
+@UnstableApi
 class SleeplyPlayerControlsView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

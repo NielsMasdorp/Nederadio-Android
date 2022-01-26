@@ -32,7 +32,6 @@ import com.nielsmasdorp.sleeply.domain.stream.Stream
 import com.nielsmasdorp.sleeply.ui.stream.MainViewModel
 import com.nielsmasdorp.sleeply.ui.stream.SleeplyPlayerControlsView
 
-@SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun CurrentStreamView(
     modifier: Modifier = Modifier,

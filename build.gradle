@@ -50,7 +50,7 @@ allprojects {
                 freeCompilerArgs += ["-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi"]
                 freeCompilerArgs += ["-Xuse-experimental=androidx.compose.runtime.ExperimentalComposeApi"]
                 freeCompilerArgs += ["-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi"]
-                freeCompilerArgs += ["-Xuse-experimental=androidx.media3.common.util.UnstableApi"]
+                freeCompilerArgs += ["-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi"]
             }
         }
     }

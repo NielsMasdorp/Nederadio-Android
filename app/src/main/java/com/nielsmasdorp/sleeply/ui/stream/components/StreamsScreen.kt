@@ -1,11 +1,9 @@
 package com.nielsmasdorp.sleeply.ui.stream.components
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,8 +25,6 @@ import com.nielsmasdorp.sleeply.domain.stream.StreamingError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun StreamsScreen(
     modifier: Modifier = Modifier,
