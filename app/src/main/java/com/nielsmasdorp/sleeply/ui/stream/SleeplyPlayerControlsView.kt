@@ -22,19 +22,26 @@ class SleeplyPlayerControlsView @JvmOverloads constructor(
 
     init {
         showTimeoutMs = 0 // always show
+        showShuffleButton = true
     }
 
     /**
      * Set colors for the relevant controls
      */
     fun setColors(playPauseColor: Int, controlColor: Int) {
-        children.first().findViewWithTag<AppCompatImageView>("play").backgroundTintList =
-            ColorStateList.valueOf(playPauseColor)
-        children.first().findViewWithTag<AppCompatImageView>("pause").backgroundTintList =
-            ColorStateList.valueOf(playPauseColor)
+        children.first().findViewWithTag<AppCompatImageView>("play").apply {
+            backgroundTintList = ColorStateList.valueOf(playPauseColor)
+            imageTintList = ColorStateList.valueOf(playPauseColor)
+        }
+        children.first().findViewWithTag<AppCompatImageView>("pause").apply {
+            backgroundTintList = ColorStateList.valueOf(playPauseColor)
+            imageTintList = ColorStateList.valueOf(playPauseColor)
+        }
         children.first().findViewWithTag<AppCompatImageView>("prev").backgroundTintList =
             ColorStateList.valueOf(controlColor)
         children.first().findViewWithTag<AppCompatImageView>("next").backgroundTintList =
+            ColorStateList.valueOf(controlColor)
+        children.first().findViewWithTag<AppCompatImageView>("shuffle").imageTintList =
             ColorStateList.valueOf(controlColor)
     }
 

@@ -46,8 +46,8 @@ fun SleepTimerDialog(
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                modifier = Modifier.padding(16.dp),
-                                style = MaterialTheme.typography.titleSmall,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                                style = MaterialTheme.typography.titleMedium,
                                 text = item,
                                 color = MaterialTheme.colorScheme.onSurface
                             )

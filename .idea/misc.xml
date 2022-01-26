@@ -14,7 +14,9 @@
         <entry key="app/src/main/res/drawable-night/ic_pause.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-night/ic_play.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-night/ic_prev.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-nodpi/exo_controls_shuffle_off.xml" value="0.143" />
         <entry key="app/src/main/res/drawable-v21/image_selector.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/exo_controls_shuffle_on.xml" value="0.143" />
         <entry key="app/src/main/res/drawable/exo_player_control_view.xml" value="0.16574074074074074" />
         <entry key="app/src/main/res/drawable/ic_access_time_24dp.xml" value="0.2351851851851852" />
         <entry key="app/src/main/res/drawable/ic_baseline_pause_48.xml" value="0.16574074074074074" />
@@ -27,6 +29,7 @@
         <entry key="app/src/main/res/drawable/ic_pause.xml" value="0.16574074074074074" />
         <entry key="app/src/main/res/drawable/ic_play.xml" value="0.16574074074074074" />
         <entry key="app/src/main/res/drawable/ic_prev.xml" value="0.16574074074074074" />
+        <entry key="app/src/main/res/drawable/ic_shuffle.xml" value="0.143" />
         <entry key="app/src/main/res/drawable/image_selector.xml" value="0.14907407407407408" />
         <entry key="app/src/main/res/drawable/play_pause_bg.xml" value="0.16574074074074074" />
         <entry key="app/src/main/res/layout/action_bar_title.xml" value="0.14947916666666666" />

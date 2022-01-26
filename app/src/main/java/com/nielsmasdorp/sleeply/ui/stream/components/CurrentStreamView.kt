@@ -21,8 +21,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
@@ -91,24 +93,22 @@ fun CurrentStreamView(
                     .padding(top = 8.dp),
                 textAlign = TextAlign.Center,
                 text = viewData.value?.desc ?: "",
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 18.sp
+                ),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
-            Spacer(Modifier.height(64.dp))
-            Text(
-                textAlign = TextAlign.Center,
-                text = sleepTimer.value ?: "",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(32.dp))
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 val controlColor = MaterialTheme.colorScheme.onPrimaryContainer.toArgb()
                 val playPauseColor = MaterialTheme.colorScheme.onPrimary.toArgb()
                 Box(
                     modifier = Modifier
+                        .padding(top = 72.dp)
                         .size(72.dp)
                         .align(Alignment.Center)
                         .clip(CircleShape)
@@ -116,16 +116,24 @@ fun CurrentStreamView(
                 )
                 AndroidView(
                     factory = {
-                        (playerControls.getView() as SleeplyPlayerControlsView).apply {
-                            setColors(playPauseColor, controlColor)
-                        }
+                        playerControls.getView() as SleeplyPlayerControlsView
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.Center)
+                        .align(Alignment.Center),
+                    update = { view ->
+                        view.setColors(playPauseColor, controlColor)
+                    }
                 )
             }
-            Spacer(Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                textAlign = TextAlign.Center,
+                text = sleepTimer.value ?: "",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 TextButton(onClick = { viewModel.onTimerPicked() }) {
                     Text(
@@ -134,7 +142,7 @@ fun CurrentStreamView(
                         style = MaterialTheme.typography.titleLarge,
                     )
                 }
-                androidx.compose.material3.TextButton(onClick = { viewModel.onPickStreams() }) {
+                TextButton(onClick = { viewModel.onPickStreams() }) {
                     Text(
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         text = stringResource(id = R.string.all_streams_button),

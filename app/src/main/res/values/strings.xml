@@ -56,17 +56,17 @@
     <string name="ocean_stream_title">Floating in the ocean</string>
     <string name="forest_stream_title">Sounds of the forest</string>
     <string name="meditation_stream_title">Shamanic meditation</string>
-    <string name="rainy_stream_desc">Better stay inside and relax</string>
-    <string name="ocean_stream_desc">Fall asleep listening to the waves</string>
-    <string name="forest_stream_desc">Lay back and listen to a calm creek and birds</string>
+    <string name="rainy_stream_desc">Better stay inside and relax while listening to the rain</string>
+    <string name="ocean_stream_desc">Fall asleep and drift away listening to the waves</string>
+    <string name="forest_stream_desc">Lay back in bed and listen to a calm creek and birds</string>
     <string name="meditation_stream_desc">Meditate and enter a state of deep relaxation</string>
     <string name="stream_error_toast">Couldn\'t open stream, Check your internet connection. If this continues to fail please contact me.</string>
     <string name="delta_waves_stream_title">Delta waves</string>
-    <string name="delta_waves_stream_desc">Relaxing music to help you sleep</string>
+    <string name="delta_waves_stream_desc">Relaxing music to help you sleep and meditate</string>
     <string name="lucid_stream_title">Lucid dreaming</string>
-    <string name="lucid_stream_desc">Binatural beats</string>
+    <string name="lucid_stream_desc">Listen to bi-natural beats and control your sleep</string>
     <string name="autumn_stream_title">Autumn wind</string>
-    <string name="autumn_stream_desc">Must be nice to stay inside</string>
-    <string name="void_stream_title">Enter the void</string>
-    <string name="void_stream_desc">Don\'t forget to come back</string>
+    <string name="autumn_stream_desc">Must be nice to stay inside when its cold out</string>
+    <string name="void_stream_title">Into the void</string>
+    <string name="void_stream_desc">Zoom past the event horizon into a new dimension</string>
 </resources>
