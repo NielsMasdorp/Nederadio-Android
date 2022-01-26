@@ -21,7 +21,7 @@ If you know any sounds that help you fall asleep, contact me from within the app
 
 ## Screenshots
 
-![](app/screenshots/screenshot1.png?raw=true | width=100)
+<img src="app/screenshots/screenshot1.png?raw=true" width="100" height="100">
 ![](app/screenshots/screenshot2.png?raw=true | width=100)
 ![](app/screenshots/screenshot3.png?raw=true | width=100)
 ![](app/screenshots/screenshot4.png?raw=true | width=100)
