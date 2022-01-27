@@ -51,10 +51,10 @@ fun CurrentStreamView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentSize(align = Alignment.BottomStart)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(128.dp))
             Card(
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier.size(256.dp)
@@ -99,7 +99,14 @@ fun CurrentStreamView(
                 ),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
-            Spacer(Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                textAlign = TextAlign.Center,
+                text = sleepTimer.value ?: "",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+            Spacer(modifier = Modifier.weight(1.0f))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -126,13 +133,6 @@ fun CurrentStreamView(
                     }
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                textAlign = TextAlign.Center,
-                text = sleepTimer.value ?: "",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
             Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 TextButton(onClick = { viewModel.onTimerPicked() }) {
