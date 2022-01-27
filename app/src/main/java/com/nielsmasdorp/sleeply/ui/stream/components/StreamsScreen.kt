@@ -1,6 +1,7 @@
 package com.nielsmasdorp.sleeply.ui.stream.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -21,10 +22,12 @@ import com.nielsmasdorp.sleeply.ui.stream.MainViewModel
 import com.nielsmasdorp.sleeply.ui.stream.MainViewModel.Companion.EMPTY_ERROR
 import com.nielsmasdorp.sleeply.ui.stream.MainViewModel.Event.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.common.util.UnstableApi
 import com.nielsmasdorp.sleeply.domain.stream.StreamingError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@UnstableApi
 @Composable
 fun StreamsScreen(
     modifier: Modifier = Modifier,
@@ -44,12 +47,23 @@ fun StreamsScreen(
     var showMenu by remember { mutableStateOf(false) }
 
     Scaffold(modifier = modifier, scaffoldState = scaffoldState) {
-        CurrentStreamView(
-            modifier = modifier,
-            playerControls = playerControls,
-            viewData = viewData,
-            sleepTimer = sleepTimer
-        )
+        BoxWithConstraints {
+            if (maxWidth < maxHeight) {
+                CurrentStreamViewPortrait(
+                    modifier = modifier,
+                    playerControls = playerControls,
+                    viewData = viewData,
+                    sleepTimer = sleepTimer
+                )
+            } else {
+                CurrentStreamViewLand(
+                    modifier = modifier,
+                    playerControls = playerControls,
+                    viewData = viewData,
+                    sleepTimer = sleepTimer
+                )
+            }
+        }
         TopAppBar(
             modifier = Modifier.statusBarsPadding(),
             elevation = 0.dp,

@@ -37,7 +37,7 @@ import com.nielsmasdorp.sleeply.ui.stream.SleeplyPlayerControlsView
 
 @UnstableApi
 @Composable
-fun CurrentStreamView(
+fun CurrentStreamViewPortrait(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel(),
     playerControls: PlayerControls,
