@@ -1,5 +1,6 @@
 package com.nielsmasdorp.sleeply.ui.stream.components
 
+import android.view.View
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -40,7 +41,7 @@ import com.nielsmasdorp.sleeply.ui.stream.SleeplyPlayerControlsView
 fun CurrentStreamViewLand(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel(),
-    playerControls: PlayerControls,
+    playerControls: PlayerControls<View>,
     viewData: State<Stream?>,
     sleepTimer: State<String?>
 ) {

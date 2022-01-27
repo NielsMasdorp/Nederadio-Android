@@ -28,7 +28,7 @@ interface StreamManager {
      * @param startIndex index of the stream that should be active
      * @param controls the controls used to manipulate the streams
      */
-    fun initialize(streams: List<Stream>, startIndex: Int, controls: PlayerControls)
+    fun initialize(streams: List<Stream>, startIndex: Int, controls: PlayerControls<*>)
 
     /**
      * Release all stream related memory

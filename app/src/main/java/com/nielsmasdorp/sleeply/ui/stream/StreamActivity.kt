@@ -1,6 +1,7 @@
 package com.nielsmasdorp.sleeply.ui.stream
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.util.UnstableApi
@@ -20,7 +21,7 @@ class StreamActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val playerControls: PlayerControls = SleeplyPlayerControlsView(this)
+        val playerControls: PlayerControls<View> = SleeplyPlayerControlsView(this)
         setContent {
             AppTheme {
                 ProvideWindowInsets {

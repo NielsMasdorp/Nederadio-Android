@@ -1,5 +1,6 @@
 package com.nielsmasdorp.sleeply.ui.stream
 
+import android.view.View
 import androidx.lifecycle.*
 import com.nielsmasdorp.sleeply.domain.settings.GetLastPlayedIndex
 import com.nielsmasdorp.sleeply.domain.stream.*
@@ -35,7 +36,7 @@ class MainViewModel(
     private val errorChannel = Channel<StreamingError>(Channel.BUFFERED)
     val errorFlow = errorChannel.receiveAsFlow()
 
-    fun onStarted(controls: PlayerControls) {
+    fun onStarted(controls: PlayerControls<*>) {
         viewModelScope.launch(Dispatchers.IO) {
             val streams = getAllStreams()
             streamManager.initialize(

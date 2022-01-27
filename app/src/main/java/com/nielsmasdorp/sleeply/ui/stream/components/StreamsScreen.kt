@@ -1,5 +1,6 @@
 package com.nielsmasdorp.sleeply.ui.stream.components
 
+import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material.*
@@ -32,7 +33,7 @@ import kotlinx.coroutines.launch
 fun StreamsScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = viewModel(),
-    playerControls: PlayerControls
+    playerControls: PlayerControls<View>
 ) {
 
     val coroutineScope = rememberCoroutineScope()

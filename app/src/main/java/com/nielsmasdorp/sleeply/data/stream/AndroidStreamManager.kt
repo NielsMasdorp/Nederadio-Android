@@ -59,7 +59,7 @@ class AndroidStreamManager(
     override val errorFlow: MutableStateFlow<StreamingError> =
         MutableStateFlow(StreamingError.Empty)
 
-    override fun initialize(streams: List<Stream>, startIndex: Int, controls: PlayerControls) {
+    override fun initialize(streams: List<Stream>, startIndex: Int, controls: PlayerControls<*>) {
         this.streams = streams
         controllerFuture = MediaController.Builder(
             application,
@@ -131,7 +131,7 @@ class AndroidStreamManager(
         }
     }
 
-    private fun initController(streams: List<Stream>, startIndex: Int, controls: PlayerControls) {
+    private fun initController(streams: List<Stream>, startIndex: Int, controls: PlayerControls<*>) {
         controls.view().player = requireController()
         requireController().addListener(this)
         if (requireController().mediaItemCount == 0) {
@@ -171,5 +171,5 @@ class AndroidStreamManager(
         errorFlow.value = StreamingError.Filled(error = error)
     }
 
-    private fun PlayerControls.view(): PlayerControlView = this as PlayerControlView
+    private fun PlayerControls<*>.view(): PlayerControlView = this as PlayerControlView
 }

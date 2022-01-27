@@ -18,7 +18,7 @@ class SleeplyPlayerControlsView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
-) : PlayerControlView(context, attrs, defStyle), PlayerControls {
+) : PlayerControlView(context, attrs, defStyle), PlayerControls<View> {
 
     init {
         showTimeoutMs = 0 // always show
