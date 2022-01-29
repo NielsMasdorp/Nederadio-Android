@@ -1,14 +1,13 @@
 package com.nielsmasdorp.sleeply.ui.stream
 
-import android.view.View
 import androidx.lifecycle.*
+import com.nielsmasdorp.sleeply.domain.DefaultDispatcherProvider
+import com.nielsmasdorp.sleeply.domain.DispatcherProvider
 import com.nielsmasdorp.sleeply.domain.settings.GetLastPlayedIndex
 import com.nielsmasdorp.sleeply.domain.stream.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -18,7 +17,8 @@ import java.util.concurrent.TimeUnit
 class MainViewModel(
     private val getAllStreams: GetAllStreams,
     private val streamManager: StreamManager,
-    private val getLastPlayedIndex: GetLastPlayedIndex
+    private val getLastPlayedIndex: GetLastPlayedIndex,
+    private val dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 ) : ViewModel() {
 
     val viewData: LiveData<Stream> = streamManager.stateFlow
@@ -37,7 +37,7 @@ class MainViewModel(
     val errorFlow = errorChannel.receiveAsFlow()
 
     fun onStarted(controls: PlayerControls<*>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatchers.main()) {
             val streams = getAllStreams()
             streamManager.initialize(
                 streams = streams,
@@ -45,7 +45,7 @@ class MainViewModel(
                 controls = controls
             )
         }
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main()) {
             streamManager.errorFlow
                 .filterNotNull()
                 .collect { errorChannel.send(it) }
@@ -57,16 +57,14 @@ class MainViewModel(
     fun onStreamPicked(index: Int) = streamManager.streamPicked(index)
 
     fun onPickStreams() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatchers.main()) {
             val streams = getAllStreams()
-            withContext(Dispatchers.Main) {
-                eventChannel.send(Event.ShowStreams(streams))
-            }
+            eventChannel.send(Event.ShowStreams(streams))
         }
     }
 
     fun onTimerPicked() {
-        viewModelScope.launch { eventChannel.send(Event.ShowTimer) }
+        viewModelScope.launch(dispatchers.main()) { eventChannel.send(Event.ShowTimer) }
     }
 
     fun setSleepTimer(index: Int) {
@@ -74,27 +72,27 @@ class MainViewModel(
     }
 
     fun onAboutPicked() {
-        viewModelScope.launch { eventChannel.send(Event.ShowAbout) }
+        viewModelScope.launch(dispatchers.main()) { eventChannel.send(Event.ShowAbout) }
     }
 
     fun onAboutDismissed() {
-        viewModelScope.launch { eventChannel.send(Event.Empty) }
+        viewModelScope.launch(dispatchers.main()) { eventChannel.send(Event.Empty) }
     }
 
     fun onTimerDismissed() {
-        viewModelScope.launch { eventChannel.send(Event.Empty) }
+        viewModelScope.launch(dispatchers.main()) { eventChannel.send(Event.Empty) }
     }
 
     fun onStreamsDismissed() {
-        viewModelScope.launch { eventChannel.send(Event.Empty) }
+        viewModelScope.launch(dispatchers.main()) { eventChannel.send(Event.Empty) }
     }
 
     fun onEmailDeveloperPicked() {
-        viewModelScope.launch { eventChannel.send(Event.EmailDeveloper) }
+        viewModelScope.launch(dispatchers.main()) { eventChannel.send(Event.EmailDeveloper) }
     }
 
     fun onErrorShown() {
-        viewModelScope.launch { errorChannel.send(StreamingError.Empty) }
+        viewModelScope.launch(dispatchers.main()) { errorChannel.send(StreamingError.Empty) }
     }
 
     private fun calculateMs(option: Int): Long {

@@ -131,7 +131,11 @@ class AndroidStreamManager(
         }
     }
 
-    private fun initController(streams: List<Stream>, startIndex: Int, controls: PlayerControls<*>) {
+    private fun initController(
+        streams: List<Stream>,
+        startIndex: Int,
+        controls: PlayerControls<*>
+    ) {
         controls.view().player = requireController()
         requireController().addListener(this)
         if (requireController().mediaItemCount == 0) {
