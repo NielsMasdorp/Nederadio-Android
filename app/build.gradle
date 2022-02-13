@@ -38,7 +38,7 @@ dependencies {
     implementation project(':domain')
 
     //cast
-    //implementation "com.google.android.gms:play-services-cast-framework:$cast_framework_version"
+    implementation "com.google.android.gms:play-services-cast-framework:$cast_framework_version"
 
     //androidx
     implementation "androidx.appcompat:appcompat:$androidx_app_compat_version"
