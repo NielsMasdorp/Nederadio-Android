@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">Nederadio</string>
+
+    <string name="settings_content_description">Instellingen</string>
+    <string name="search_content_description">Zoeken</string>
+
+    <string name="sleep_timer_button">slaap timer</string>
+
+    <string name="sleep_timer_title">Uitgaan over</string>
+    <string-array name="sleep_timer">
+        <item>Uit</item>
+        <item>10 minuten</item>
+        <item>15 minuten</item>
+        <item>20 minuten</item>
+        <item>30 minuten</item>
+        <item>40 minuten</item>
+        <item>50 minuten</item>
+        <item>1 uur</item>
+        <item>2 uur</item>
+        <item>3 uur</item>
+    </string-array>
+    <string name="sleep_timer_not_allowed">Er moet eerst iets afspelen</string>
+
+    <string name="about_title">Over Nederadio</string>
+    <string name="action_about">Over</string>
+    <string name="about_message"><![CDATA[
+        Huidige versie: 2.0.0, gemaakt door:<br/><br/>
+        <b>Niels Masdorp</b><br/>
+        <a href=\'https://github.com/NielsMasdorp\'>GitHub</a>&nbsp;&nbsp;
+        <a href=\'https://www.linkedin.com/in/nielsmasdorp/\'>LinkedIn</a>&nbsp;&nbsp;<br/><br/>
+        <b>Gebruikte libraries:</b><br/>
+        <a href=\'https://github.com/InsertKoinIO/koin\'>Koin</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/androidx/media\'>Jetpack Media3</a>&nbsp;&nbsp;
+        <a href=\'https://developer.android.com/jetpack/compose\'>Jetpack Compose</a>&nbsp;&nbsp;<br/><br/>
+        <b>Met dank aan:</b><br/>
+        <a href=\'www.freepik.com\'>Freepik</a>&nbsp;&nbsp;
+    ]]></string>
+    <string name="about_positive">Sluiten</string>
+
+    <string name="stream_error_toast">Kan radio niet starten, controleer de internetverbinding. Als dit blijft aanhouden, neem contact met me op</string>
+    <string name="streams_fetch_error_general">Er is iets fout gegaan</string>
+    <string name="streams_fetch_error_no_internet">Geen internetverbinding</string>
+    <string name="streams_fetch_error_retry">Opnieuw</string>
+
+    <string name="streams_overview_no_streams_found">Geen stations gevonden</string>
+
+    <string name="stations_tab">Stations</string>
+    <string name="favorites_tab">Favorieten</string>
+
+    <string name="small_player_no_station_chosen">Kies een radio station</string>
+
+    <string name="player_add_to_favorites">Toevoegen aan favorieten</string>
+    <string name="player_remove_from_favorites">Verwijderen uit favorieten</string>
+
+    <string name="search_close_content_description">Zoeken afsluiten</string>
+    <string name="search_hint">Zoek een radio station</string>
+    <string name="search_clear_content_description">Verwijder zoekterm</string>
+</resources>

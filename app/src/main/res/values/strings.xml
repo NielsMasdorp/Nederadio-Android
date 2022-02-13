@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Sleeply</string>
+    <string name="app_name">Nederadio</string>
 
     <string name="settings_content_description">Settings</string>
+    <string name="search_content_description">Search</string>
 
     <string name="sleep_timer_button">sleep timer</string>
-    <string name="all_streams_button">all streams</string>
 
-    <string name="sleep_timer_title">Set sleep timer</string>
+    <string name="sleep_timer_title">Stop after</string>
     <string-array name="sleep_timer">
         <item>Off</item>
         <item>10 minutes</item>
@@ -21,52 +21,38 @@
     </string-array>
     <string name="sleep_timer_not_allowed">There needs to be a stream playing first.</string>
 
-    <string name="about_title">About Sleeply</string>
+    <string name="about_title">About Nederadio</string>
     <string name="action_about">About</string>
     <string name="about_message"><![CDATA[
         Current version: 2.0.0, made by:<br/><br/>
         <b>Niels Masdorp</b><br/>
         <a href=\'https://github.com/NielsMasdorp\'>GitHub</a>&nbsp;&nbsp;
-        <a href=\'https://www.linkedin.com/profile/view?id=257462649\'>LinkedIn</a>&nbsp;&nbsp;<br/><br/>
+        <a href=\'https://www.linkedin.com/in/nielsmasdorp/\'>LinkedIn</a>&nbsp;&nbsp;<br/><br/>
         <b>Libraries:</b><br/>
         <a href=\'https://github.com/InsertKoinIO/koin\'>Koin</a>&nbsp;&nbsp;
         <a href=\'https://github.com/androidx/media\'>Jetpack Media3</a>&nbsp;&nbsp;
         <a href=\'https://developer.android.com/jetpack/compose\'>Jetpack Compose</a>&nbsp;&nbsp;<br/><br/>
         <b>Thanks to:</b><br/>
         <a href=\'www.freepik.com\'>Freepik</a>&nbsp;&nbsp;
-        <a href=\'https://soundcloud.com/tauqeer-ahmad-waheedi\'>Tauqeer Waheedi</a>&nbsp;&nbsp;
-        <a href=\'https://soundcloud.com/cosmomedia\'>Cosmomedia</a>&nbsp;&nbsp;
-        <a href=\'https://soundcloud.com/hend-abdelhamed\'>Hend Abdelhamed</a>&nbsp;&nbsp;
-        <a href=\'https://soundcloud.com/user9175165\'>User9175165</a>&nbsp;&nbsp;
-        <a href=\'https://soundcloud.com/dave-smith-173\'>SybokTHS</a>&nbsp;&nbsp;
-        <a href=\'https://soundcloud.com/dave-smith-173\'>SybokTHS</a>&nbsp;&nbsp;
-        <a href=\'https://soundcloud.com/avesource\'>Wavesource</a>&nbsp;&nbsp;
-        <a href=\'http://soundcloud.com/mark-aria\'>Mark Aria</a>&nbsp;&nbsp;
-        <a href=\'https://soundcloud.com/ryanm1994\'>Ryan M</a>&nbsp;&nbsp;
     ]]></string>
     <string name="about_positive">Close</string>
 
-    <string name="action_email_dev">Email developer</string>
-    <string name="email_subject">Feedback Sleeply</string>
-    <string name="email_intent_title">Anything to add?</string>
-    <string name="dev_email_address">nielsmasdorp+sleeply@gmail.com</string>
-    <string name="email_intent_type">mailto</string>
+    <string name="stream_error_toast">Couldn\'t start radio station, Check your internet connection. If this continues to fail please contact me.</string>
+    <string name="streams_fetch_error_general">Something went wrong</string>
+    <string name="streams_fetch_error_no_internet">No internet connection</string>
+    <string name="streams_fetch_error_retry">Retry</string>
 
-    <string name="rainy_stream_title">It is a rainy day</string>
-    <string name="ocean_stream_title">Floating in the ocean</string>
-    <string name="forest_stream_title">Sounds of the forest</string>
-    <string name="meditation_stream_title">Shamanic meditation</string>
-    <string name="rainy_stream_desc">Better stay inside and relax while listening to the rain</string>
-    <string name="ocean_stream_desc">Fall asleep and drift away listening to the waves</string>
-    <string name="forest_stream_desc">Lay back in bed and listen to a calm creek and birds</string>
-    <string name="meditation_stream_desc">Meditate and enter a state of deep relaxation</string>
-    <string name="stream_error_toast">Couldn\'t open stream, Check your internet connection. If this continues to fail please contact me.</string>
-    <string name="delta_waves_stream_title">Delta waves</string>
-    <string name="delta_waves_stream_desc">Relaxing music to help you sleep and meditate</string>
-    <string name="lucid_stream_title">Lucid dreaming</string>
-    <string name="lucid_stream_desc">Listen to bi-natural beats and control your sleep</string>
-    <string name="autumn_stream_title">Autumn wind</string>
-    <string name="autumn_stream_desc">Must be nice to stay inside when its cold out</string>
-    <string name="void_stream_title">Into the void</string>
-    <string name="void_stream_desc">Zoom past the event horizon into a new dimension</string>
+    <string name="streams_overview_no_streams_found">No radio stations found</string>
+
+    <string name="stations_tab">Stations</string>
+    <string name="favorites_tab">Favorites</string>
+
+    <string name="small_player_no_station_chosen">Choose a radio station</string>
+
+    <string name="player_add_to_favorites">Add to favorites</string>
+    <string name="player_remove_from_favorites">Remove from favorites</string>
+
+    <string name="search_close_content_description">Close search</string>
+    <string name="search_hint">Search a radio station</string>
+    <string name="search_clear_content_description">Clear input</string>
 </resources>
