@@ -116,10 +116,9 @@ class AndroidStreamManager(
         // TODO this doesn't work when [CastPlayer] is active
         // https://github.com/androidx/media/issues/25
         mediaItem ?: return
-        val id = if (mediaItem == MediaItem.EMPTY) "0" else mediaItem.mediaId
         updateCurrentStream(
-            id = id,
-            currentTrack = null
+            id = mediaItem.mediaId,
+            currentTrack = mediaItem.mediaMetadata.title?.toString()
         )
     }
 

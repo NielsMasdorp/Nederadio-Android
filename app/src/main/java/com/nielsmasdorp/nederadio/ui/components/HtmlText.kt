@@ -20,7 +20,7 @@ fun HtmlText(
     modifier: Modifier = Modifier,
     html: String
 ) {
-    val linkColor = MaterialTheme.colorScheme.onSurface
+    val color = MaterialTheme.colorScheme.onSurface
     AndroidView(
         modifier = modifier,
         factory = { context -> TextView(context) },
@@ -28,7 +28,8 @@ fun HtmlText(
             it.apply {
                 text = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
                 movementMethod = LinkMovementMethod.getInstance()
-                setLinkTextColor(linkColor.toArgb())
+                setLinkTextColor(color.toArgb())
+                setTextColor(color.toArgb())
             }
         }
     )

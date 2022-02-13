@@ -41,6 +41,7 @@ class StreamService : MediaSessionService(),
     private lateinit var localPlayer: ExoPlayer
     private lateinit var castPlayer: CastPlayer
     private lateinit var currentPlayer: Player
+
     private lateinit var mediaSession: MediaSession
 
     private var countDownTimer: CountDownTimer? = null
@@ -150,6 +151,8 @@ class StreamService : MediaSessionService(),
     private fun switchCurrentPlayerTo(newPlayer: Player) {
         if (currentPlayer == newPlayer) return
 
+        // TODO this doesn't work when [CastPlayer] is active
+        // https://github.com/androidx/media/issues/25
         currentPlayer.currentMediaItem?.let { current ->
             // Get media state from old player
             val playWhenReady = currentPlayer.playWhenReady
