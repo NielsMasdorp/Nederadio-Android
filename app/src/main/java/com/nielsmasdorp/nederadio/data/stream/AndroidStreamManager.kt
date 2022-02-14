@@ -113,8 +113,6 @@ class AndroidStreamManager(
      * @param reason the reason for the change
      */
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-        // TODO this doesn't work when [CastPlayer] is active
-        // https://github.com/androidx/media/issues/25
         mediaItem ?: return
         updateCurrentStream(
             id = mediaItem.mediaId,
@@ -126,8 +124,6 @@ class AndroidStreamManager(
      * Called when new track happens on the stream
      */
     override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
-        // TODO this doesn't work when [CastPlayer] is active
-        // https://github.com/androidx/media/issues/26
         if (cache.currentStream !is CurrentStream.Filled) return
         val current = cache.currentStream as CurrentStream.Filled
 
