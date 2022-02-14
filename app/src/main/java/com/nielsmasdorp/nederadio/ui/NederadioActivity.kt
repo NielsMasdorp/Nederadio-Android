@@ -23,9 +23,6 @@ class NederadioActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // TODO casting is turned off until media3 implements it correctly
-        val castButton = null // MediaRouteButton(this)
-        //CastButtonFactory.setUpMediaRouteButton(this, castButton)
         setContent {
             AppTheme {
                 ProvideWindowInsets {
@@ -41,7 +38,6 @@ class NederadioActivity : AppCompatActivity() {
                         NederadioApp(
                             smallPlayerControls = controlViews[0],
                             largePlayerControls = controlViews[1],
-                            castButton = castButton
                         )
                     }
                 }

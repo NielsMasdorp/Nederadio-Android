@@ -49,8 +49,7 @@ fun NederadioApp(
     modifier: Modifier = Modifier,
     viewModel: AppViewModel = getViewModel(),
     smallPlayerControls: PlayerControls<View>,
-    largePlayerControls: PlayerControls<View>,
-    castButton: View? = null,
+    largePlayerControls: PlayerControls<View>
 ) {
 
     DisposableEffect(key1 = viewModel) {
@@ -140,7 +139,6 @@ fun NederadioApp(
             composable("home") {
                 HomeScreen(
                     modifier = modifier,
-                    castButton = castButton,
                     streams = currentStreams,
                     favorites = currentFavorites,
                     onStreamSelected = viewModel::onStreamPicked,

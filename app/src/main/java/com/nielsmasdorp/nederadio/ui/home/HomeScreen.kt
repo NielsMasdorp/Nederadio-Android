@@ -21,7 +21,6 @@ import com.nielsmasdorp.nederadio.ui.components.StreamsErrorView
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    castButton: View? = null,
     streams: CurrentStreams,
     favorites: List<Stream>,
     onStreamSelected: (String) -> Unit = {},
@@ -34,7 +33,6 @@ fun HomeScreen(
 
     Column(modifier = modifier.fillMaxSize()) {
         TopBar(
-            castButton = castButton,
             onAboutClicked = onAbout,
             onSearchClicked = onSearch,
         )

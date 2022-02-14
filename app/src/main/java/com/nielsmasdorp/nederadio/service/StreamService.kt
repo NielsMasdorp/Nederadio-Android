@@ -8,8 +8,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import androidx.media3.cast.CastPlayer
-import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.*
 import androidx.media3.common.Player.*
 import androidx.media3.common.util.UnstableApi
@@ -17,7 +15,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.*
 import androidx.media3.session.SessionCommand.*
 import androidx.media3.session.SessionResult.RESULT_SUCCESS
-import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.ui.NederadioActivity
@@ -35,13 +32,9 @@ import java.util.concurrent.TimeUnit
 @UnstableApi
 class StreamService : MediaSessionService(),
     Listener,
-    MediaSession.SessionCallback,
-    SessionAvailabilityListener {
+    MediaSession.SessionCallback {
 
-    private lateinit var localPlayer: ExoPlayer
-    private lateinit var castPlayer: CastPlayer
-    private lateinit var currentPlayer: Player
-
+    private lateinit var player: ExoPlayer
     private lateinit var mediaSession: MediaSession
 
     private var countDownTimer: CountDownTimer? = null
@@ -52,9 +45,7 @@ class StreamService : MediaSessionService(),
     }
 
     override fun onDestroy() {
-        castPlayer.setSessionAvailabilityListener(null)
-        castPlayer.release()
-        localPlayer.release()
+        player.release()
         mediaSession.release()
         stopSleepTimer()
         super.onDestroy()
@@ -64,16 +55,6 @@ class StreamService : MediaSessionService(),
      * Connect [MediaSession] to this [MediaSessionService]
      */
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo) = mediaSession
-
-    /**
-     * Casting has started, switch to [CastPlayer]
-     */
-    override fun onCastSessionAvailable() = switchCurrentPlayerTo(newPlayer = castPlayer)
-
-    /**
-     * Casting has been stopped, switch to [ExoPlayer]
-     */
-    override fun onCastSessionUnavailable() = switchCurrentPlayerTo(newPlayer = localPlayer)
 
     /**
      * Called when [Player] events happen
@@ -148,31 +129,6 @@ class StreamService : MediaSessionService(),
         return super.onUpdateNotification(session)
     }
 
-    private fun switchCurrentPlayerTo(newPlayer: Player) {
-        if (currentPlayer == newPlayer) return
-
-        // TODO this doesn't work when [CastPlayer] is active
-        // https://github.com/androidx/media/issues/25
-        currentPlayer.currentMediaItem?.let { current ->
-            // Get media state from old player
-            val playWhenReady = currentPlayer.playWhenReady
-
-            currentPlayer.stop()
-            currentPlayer.clearMediaItems()
-
-            currentPlayer = newPlayer
-            mediaSession.player = newPlayer
-
-            // init new player with old media state
-            currentPlayer.setMediaItem(current)
-            currentPlayer.playWhenReady = playWhenReady
-            currentPlayer.prepare()
-        } ?: run {
-            currentPlayer = newPlayer
-            mediaSession.player = newPlayer
-        }
-    }
-
     private fun startStream(mediaItem: MediaItem) {
         // The [MediaController] delegates creating [MediaItem]s to the service
         // Needed because for some reason the uri gets stripped when a [MediaItem]
@@ -183,7 +139,7 @@ class StreamService : MediaSessionService(),
             .setUri(mediaItem.mediaMetadata.mediaUri)
             .setMimeType(MimeTypes.AUDIO_AAC)
             .build()
-        with(currentPlayer) {
+        with(player) {
             setMediaItem(item)
             prepare()
         }
@@ -191,7 +147,7 @@ class StreamService : MediaSessionService(),
 
     @SuppressLint("ObsoleteSdkInt")
     private fun initialize() {
-        localPlayer = ExoPlayer.Builder(this)
+        player = ExoPlayer.Builder(this)
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
@@ -211,14 +167,7 @@ class StreamService : MediaSessionService(),
             immutableFlag or FLAG_UPDATE_CURRENT
         )
 
-        val castContext = CastContext.getSharedInstance(this)
-        castPlayer = CastPlayer(castContext).apply {
-            setSessionAvailabilityListener(this@StreamService)
-
-        }
-        currentPlayer = if (castPlayer.isCastSessionAvailable) castPlayer else localPlayer
-
-        mediaSession = MediaSession.Builder(this, currentPlayer)
+        mediaSession = MediaSession.Builder(this, player)
             .setSessionActivity(pendingIntent)
             .setSessionCallback(this)
             .build()
@@ -231,14 +180,14 @@ class StreamService : MediaSessionService(),
                 sendSleepTimerCommand(msLeft)
                 if (msLeft < TimeUnit.SECONDS.toMillis(LOWER_VOLUME_CUTOFF.toLong())) {
                     // gently lower volume by the second
-                    currentPlayer.volume =
+                    player.volume =
                         (msLeft / TimeUnit.SECONDS.toMillis(1)) / LOWER_VOLUME_CUTOFF
                 }
             }
 
             override fun onFinish() {
                 sendSleepTimerCommand(msLeft = 0L)
-                currentPlayer.pause()
+                player.pause()
             }
         }.start()
     }
@@ -259,7 +208,7 @@ class StreamService : MediaSessionService(),
         sendSleepTimerCommand(msLeft = 0L)
         countDownTimer?.cancel()
         countDownTimer = null
-        currentPlayer.volume = MAX_VOLUME
+        player.volume = MAX_VOLUME
     }
 
     companion object {

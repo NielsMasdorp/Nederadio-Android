@@ -31,7 +31,6 @@ import com.nielsmasdorp.nederadio.R
  */
 @Composable
 fun TopBar(
-    castButton: View? = null,
     onAboutClicked: () -> Unit = {},
     onSearchClicked: () -> Unit = {},
 ) {
@@ -59,7 +58,6 @@ fun TopBar(
             }
         },
         actions = {
-            castButton?.let { view -> AndroidView(factory = { view }) } // TODO color tint
             IconButton(onClick = onSearchClicked) {
                 Icon(
                     Icons.Default.Search,

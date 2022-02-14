@@ -2,9 +2,6 @@
 
 buildscript {
 
-    //cast
-    ext.cast_framework_version = '21.0.1'
-
     //kotlin
     ext.kotlin_version = '1.6.10'
     ext.kotlinx_coroutines_android_version = '1.6.0-RC2'
