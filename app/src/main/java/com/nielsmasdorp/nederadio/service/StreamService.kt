@@ -25,9 +25,6 @@ import java.util.concurrent.TimeUnit
  *
  * Service responsible for hosting the [MediaSession]
  * Handles media notification and switching from foreground to background service whenever appropriate
- * Also switches from local playback to cast playback whenever appropriate
- * But alas, casting in media3 is not pretty much broken since the [CastPlayer]
- * does not implement the [Player] interface correctly.
  */
 @UnstableApi
 class StreamService : MediaSessionService(),
