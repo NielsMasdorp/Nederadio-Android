@@ -19,14 +19,17 @@ import org.koin.android.ext.koin.androidContext
  */
 class NederadioActivity : AppCompatActivity() {
 
-    private val controlViews by lazy {
-        PlayerControlsView.createViews(layoutInflater = layoutInflater)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Cast button setup
         val castButton = MediaRouteButton(this)
         CastButtonFactory.setUpMediaRouteButton(this, castButton)
+
+        // Media playback controls setup
+        val controlViews = PlayerControlsView.createViews(
+            layoutInflater = layoutInflater
+        )
         setContent {
             AppTheme {
                 ProvideWindowInsets {

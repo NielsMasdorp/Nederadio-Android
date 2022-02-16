@@ -9,17 +9,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.tooling.preview.Preview
-import com.nielsmasdorp.nederadio.di.networkModule
-import com.nielsmasdorp.nederadio.di.settingsModule
-import com.nielsmasdorp.nederadio.di.streamModule
-import com.nielsmasdorp.nederadio.di.uiModule
 import com.nielsmasdorp.nederadio.ui.components.StreamsGrid
-import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.viewmodel.getViewModel
-import org.koin.android.ext.koin.androidContext
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -60,23 +52,5 @@ fun SearchScreen(
                 viewModel.onStreamPicked(it)
             })
         }
-    }
-}
-
-@Preview
-@Composable
-fun SearchScreenPreview() {
-    // TODO fix preview
-    val context = LocalContext.current
-    Koin(appDeclaration = {
-        androidContext(context)
-        modules(
-            streamModule,
-            settingsModule,
-            networkModule,
-            uiModule
-        )
-    }) {
-        SearchScreen(viewModel = getViewModel())
     }
 }

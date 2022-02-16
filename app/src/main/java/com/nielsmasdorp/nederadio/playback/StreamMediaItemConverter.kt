@@ -1,6 +1,5 @@
 package com.nielsmasdorp.nederadio.playback
 
-import android.content.Context
 import androidx.media3.cast.MediaItemConverter
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaItem.EMPTY
@@ -10,7 +9,6 @@ import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaMetadata.MEDIA_TYPE_MUSIC_TRACK
 import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.common.images.WebImage
-import com.nielsmasdorp.nederadio.R
 
 /**
  * @author Niels Masdorp (NielsMasdorp)

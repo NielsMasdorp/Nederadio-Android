@@ -1,6 +1,5 @@
 package com.nielsmasdorp.nederadio.playback
 
-import android.content.Context
 import android.os.Looper
 import android.view.Surface
 import android.view.SurfaceHolder
@@ -13,7 +12,6 @@ import androidx.media3.common.Player.MEDIA_ITEM_TRANSITION_REASON_PLAYLIST_CHANG
 import androidx.media3.common.text.Cue
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import com.nielsmasdorp.nederadio.R
 import java.util.concurrent.CopyOnWriteArraySet
 
 /**
