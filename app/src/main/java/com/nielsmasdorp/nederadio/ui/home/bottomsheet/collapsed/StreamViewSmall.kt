@@ -128,7 +128,7 @@ fun StreamScreenSmall(
                 AndroidView(
                     factory = { playerControls.getView() as PlayerControlView },
                     update = { view ->
-                        view.setColors(controlColor, controlColor)
+                        view.setColors(controlColor)
                     }
                 )
             }

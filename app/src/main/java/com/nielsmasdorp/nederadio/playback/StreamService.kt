@@ -1,4 +1,4 @@
-package com.nielsmasdorp.nederadio.service
+package com.nielsmasdorp.nederadio.playback
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -8,6 +8,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import androidx.media3.cast.CastPlayer
+import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.*
 import androidx.media3.common.Player.*
 import androidx.media3.common.util.UnstableApi
@@ -15,9 +17,12 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.*
 import androidx.media3.session.SessionCommand.*
 import androidx.media3.session.SessionResult.RESULT_SUCCESS
+import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
+import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.ui.NederadioActivity
+import com.nielsmasdorp.nederadio.util.sendCommandToController
 import java.util.concurrent.TimeUnit
 
 /**
@@ -25,13 +30,13 @@ import java.util.concurrent.TimeUnit
  *
  * Service responsible for hosting the [MediaSession]
  * Handles media notification and switching from foreground to background service whenever appropriate
+ * Also switches from local playback to cast playback whenever appropriate
  */
 @UnstableApi
 class StreamService : MediaSessionService(),
-    Listener,
-    MediaSession.SessionCallback {
+    Listener, MediaSession.SessionCallback, SessionAvailabilityListener {
 
-    private lateinit var player: ExoPlayer
+    private lateinit var player: CompositePlayer
     private lateinit var mediaSession: MediaSession
 
     private var countDownTimer: CountDownTimer? = null
@@ -42,6 +47,7 @@ class StreamService : MediaSessionService(),
     }
 
     override fun onDestroy() {
+        player.removeListener(this)
         player.release()
         mediaSession.release()
         stopSleepTimer()
@@ -52,6 +58,48 @@ class StreamService : MediaSessionService(),
      * Connect [MediaSession] to this [MediaSessionService]
      */
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo) = mediaSession
+
+    /**
+     * Casting has started, switch to [CastPlayer]
+     */
+    override fun onCastSessionAvailable() = player.switchToCast()
+
+    /**
+     * Casting has been stopped, switch to [ExoPlayer]
+     */
+    override fun onCastSessionUnavailable() = player.switchToLocal()
+
+    /**
+     * [MediaItem] has been updated
+     */
+    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        mediaItem ?: return
+        mediaSession.sendCommandToController(
+            key = MEDIA_ITEM_UPDATED_COMMAND,
+            value = mediaItem.toBundle()
+        )
+    }
+
+    /**
+     * Track has been updates
+     */
+    override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+        mediaSession.sendCommandToController(
+            key = TRACK_UPDATED_COMMAND,
+            value = Bundle().apply {
+                putString(
+                    TRACK_UPDATED_COMMAND_VALUE_KEY, mediaMetadata.title?.toString()
+                )
+            }
+        )
+    }
+
+    /**
+     * Called when [Player] encounters an error
+     */
+    override fun onPlayerError(error: PlaybackException) {
+        mediaSession.sendCommandToController(key = PLAYER_STREAM_ERROR_COMMAND)
+    }
 
     /**
      * Called when [Player] events happen
@@ -89,6 +137,10 @@ class StreamService : MediaSessionService(),
         return MediaSession.ConnectionResult.accept(commands, playerCommands)
     }
 
+    override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
+        player.notifyCurrentMediaItem(listener = this)
+    }
+
     /**
      * Called when [MediaController] uses [MediaController.sendCustomCommand]
      * Used to notify this session that a sleep timer should be started
@@ -116,25 +168,15 @@ class StreamService : MediaSessionService(),
         }
     }
 
-    override fun onUpdateNotification(session: MediaSession): MediaNotification? {
-        // This is to ensure everytime a media notification is present the player is prepared
-        // to accept commands from said notifications
-        // its probably a bug in media3 notifications though
-        if (session.player.mediaItemCount > 0 && !session.player.isPlaying) {
-            session.player.prepare()
-        }
-        return super.onUpdateNotification(session)
-    }
-
     private fun startStream(mediaItem: MediaItem) {
         // The [MediaController] delegates creating [MediaItem]s to the service
-        // Needed because for some reason the uri gets stripped when a [MediaItem]
+        // This is needed because for some reason the uri gets stripped when a [MediaItem]
         // is created from the [MediaController]
         // see https://github.com/androidx/media/issues/8
         // and https://stackoverflow.com/questions/70096715/adding-mediaitem-when-using-the-media3-library-caused-an-error
         val item = mediaItem.buildUpon()
             .setUri(mediaItem.mediaMetadata.mediaUri)
-            .setMimeType(MimeTypes.AUDIO_AAC)
+            .setMimeType(MimeTypes.AUDIO_UNKNOWN)
             .build()
         with(player) {
             setMediaItem(item)
@@ -144,7 +186,7 @@ class StreamService : MediaSessionService(),
 
     @SuppressLint("ObsoleteSdkInt")
     private fun initialize() {
-        player = ExoPlayer.Builder(this)
+        val localPlayer = ExoPlayer.Builder(this)
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
@@ -153,7 +195,7 @@ class StreamService : MediaSessionService(),
             )
             .setHandleAudioBecomingNoisy(true) // Handle headphones disconnect
             .setWakeMode(C.WAKE_MODE_NETWORK) // Wake+WiFi lock while playing
-            .build().apply { addListener(this@StreamService) }
+            .build()
 
         val intent = Intent(this, NederadioActivity::class.java)
         val immutableFlag = if (Build.VERSION.SDK_INT >= 23) FLAG_IMMUTABLE else 0
@@ -163,6 +205,21 @@ class StreamService : MediaSessionService(),
             intent,
             immutableFlag or FLAG_UPDATE_CURRENT
         )
+
+        val castPlayer = CastPlayer(
+            CastContext.getSharedInstance(this),
+            StreamMediaItemConverter(
+                staticTitle = applicationContext.getString(R.string.stream_subtitle_streaming)
+            )
+        )
+        player = CompositePlayer(
+            staticTitle = applicationContext.getString(R.string.stream_title_casting),
+            localPlayer = localPlayer,
+            castPlayer = castPlayer
+        ).apply {
+            setSessionAvailabilityListener(this@StreamService)
+            addListener(this@StreamService)
+        }
 
         mediaSession = MediaSession.Builder(this, player)
             .setSessionActivity(pendingIntent)
@@ -190,15 +247,10 @@ class StreamService : MediaSessionService(),
     }
 
     private fun sendSleepTimerCommand(msLeft: Long) {
-        mediaSession.connectedControllers.firstOrNull()?.let { controller ->
-            mediaSession.sendCustomCommand(
-                controller,
-                SessionCommand(
-                    TIMER_UPDATED_COMMAND,
-                    Bundle().apply { putLong(TIMER_UPDATED_COMMAND_VALUE_KEY, msLeft) }),
-                Bundle()
-            )
-        }
+        mediaSession.sendCommandToController(
+            key = TIMER_UPDATED_COMMAND,
+            value = Bundle().apply { putLong(TIMER_UPDATED_COMMAND_VALUE_KEY, msLeft) }
+        )
     }
 
     private fun stopSleepTimer() {
@@ -215,6 +267,11 @@ class StreamService : MediaSessionService(),
         const val START_STREAM_COMMAND = "start_stream"
         const val TIMER_UPDATED_COMMAND = "timer_updated"
         const val TIMER_UPDATED_COMMAND_VALUE_KEY = "timer_updated_value"
+        const val MEDIA_ITEM_UPDATED_COMMAND = "media_item_updated"
+        const val TRACK_UPDATED_COMMAND = "track_updated"
+        const val TRACK_UPDATED_COMMAND_VALUE_KEY = "track_updated_value"
+        const val PLAYER_STREAM_ERROR_COMMAND = "player_error"
+
         private const val SLEEP_TIMER_INTERVAL = 1000L
         private const val LOWER_VOLUME_CUTOFF = 30f
         private const val MAX_VOLUME = 1.0f

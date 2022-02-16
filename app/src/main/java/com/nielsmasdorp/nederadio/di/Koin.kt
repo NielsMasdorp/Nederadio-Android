@@ -2,6 +2,7 @@ package com.nielsmasdorp.nederadio.di
 
 import android.content.Context
 import android.net.ConnectivityManager
+import androidx.media3.common.util.UnstableApi
 import com.nielsmasdorp.nederadio.data.network.AndroidNetworkManager
 import com.nielsmasdorp.nederadio.data.network.StreamApi
 import com.nielsmasdorp.nederadio.data.network.ktorHttpClient
@@ -24,6 +25,7 @@ import org.koin.dsl.module
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
+@UnstableApi
 val streamModule = module {
     single<StreamRepository> { ApiStreamRepository(androidContext(), get(), get(), get()) }
     single { GetAllStreams(get()) }

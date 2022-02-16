@@ -3,7 +3,9 @@ package com.nielsmasdorp.nederadio.ui
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.mediarouter.app.MediaRouteButton
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.android.gms.cast.framework.CastButtonFactory
 import com.nielsmasdorp.nederadio.di.networkModule
 import com.nielsmasdorp.nederadio.di.settingsModule
 import com.nielsmasdorp.nederadio.di.streamModule
@@ -23,6 +25,8 @@ class NederadioActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val castButton = MediaRouteButton(this)
+        CastButtonFactory.setUpMediaRouteButton(this, castButton)
         setContent {
             AppTheme {
                 ProvideWindowInsets {
@@ -38,6 +42,7 @@ class NederadioActivity : AppCompatActivity() {
                         NederadioApp(
                             smallPlayerControls = controlViews[0],
                             largePlayerControls = controlViews[1],
+                            castButton = castButton
                         )
                     }
                 }

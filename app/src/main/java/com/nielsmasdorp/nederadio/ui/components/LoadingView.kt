@@ -24,7 +24,6 @@ import com.nielsmasdorp.nederadio.R
 fun LoadingView(
     modifier: Modifier = Modifier,
     backgroundColor: Color,
-    foregroundColor: Color // TODO fix animation color
 ) {
     Box(
         modifier = modifier
@@ -33,7 +32,11 @@ fun LoadingView(
             .wrapContentSize(Alignment.Center)
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
-        val progress by animateLottieCompositionAsState(composition)
+        val progress by animateLottieCompositionAsState(
+            composition = composition,
+            iterations = Int.MAX_VALUE
+        )
+
         LottieAnimation(
             modifier = Modifier
                 .size(192.dp)
@@ -47,5 +50,5 @@ fun LoadingView(
 @Composable
 @Preview
 fun LoadingViewPreview() {
-    LoadingView(backgroundColor = Color.Black, foregroundColor = Color.White)
+    LoadingView(backgroundColor = Color.Black)
 }

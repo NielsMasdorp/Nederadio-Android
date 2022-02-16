@@ -1,7 +1,6 @@
 package com.nielsmasdorp.nederadio.ui
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentScope
@@ -12,16 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.nielsmasdorp.nederadio.di.networkModule
-import com.nielsmasdorp.nederadio.di.settingsModule
-import com.nielsmasdorp.nederadio.di.streamModule
-import com.nielsmasdorp.nederadio.di.uiModule
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.ui.components.EventHandler
 import com.nielsmasdorp.nederadio.ui.home.HomeScreen
@@ -35,10 +28,8 @@ import com.nielsmasdorp.nederadio.ui.components.dialog.AboutAppDialog
 import com.nielsmasdorp.nederadio.ui.components.dialog.SleepTimerDialog
 import com.nielsmasdorp.nederadio.ui.extension.currentFraction
 import com.nielsmasdorp.nederadio.ui.search.SearchViewModel
-import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.viewmodel.getViewModel
 import kotlinx.coroutines.launch
-import org.koin.android.ext.koin.androidContext
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -49,7 +40,8 @@ fun NederadioApp(
     modifier: Modifier = Modifier,
     viewModel: AppViewModel = getViewModel(),
     smallPlayerControls: PlayerControls<View>,
-    largePlayerControls: PlayerControls<View>
+    largePlayerControls: PlayerControls<View>,
+    castButton: View
 ) {
 
     DisposableEffect(key1 = viewModel) {
@@ -139,7 +131,9 @@ fun NederadioApp(
             composable("home") {
                 HomeScreen(
                     modifier = modifier,
+                    castButton = castButton,
                     streams = currentStreams,
+                    currentStream = currentStream,
                     favorites = currentFavorites,
                     onStreamSelected = viewModel::onStreamPicked,
                     onRetryStreams = viewModel::onRetryStreams,
@@ -174,29 +168,5 @@ fun NederadioApp(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun NederadioAppPreview() {
-    // TODO fix preview
-    val context = LocalContext.current
-    Koin(appDeclaration = {
-        androidContext(context)
-        modules(
-            streamModule,
-            settingsModule,
-            networkModule,
-            uiModule
-        )
-    }) {
-        val playerControls = PlayerControlsView.createViews(
-            (LocalContext.current as Activity).layoutInflater
-        )
-        NederadioApp(
-            smallPlayerControls = playerControls[0],
-            largePlayerControls = playerControls[1],
-        )
     }
 }

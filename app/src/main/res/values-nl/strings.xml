@@ -55,4 +55,7 @@
     <string name="search_close_content_description">Zoeken afsluiten</string>
     <string name="search_hint">Zoek een radio station</string>
     <string name="search_clear_content_description">Verwijder zoekterm</string>
+
+    <string name="stream_subtitle_streaming">Streamen..</string>
+    <string name="stream_title_casting">Casting..</string>
 </resources>

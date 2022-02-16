@@ -16,14 +16,19 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
-import com.nielsmasdorp.nederadio.service.StreamService
+import com.nielsmasdorp.nederadio.playback.StreamService
 import com.nielsmasdorp.nederadio.domain.settings.SetLastPlayedId
 import com.nielsmasdorp.nederadio.domain.stream.*
-import com.nielsmasdorp.nederadio.service.StreamService.Companion.START_STREAM_COMMAND
-import com.nielsmasdorp.nederadio.service.StreamService.Companion.START_TIMER_COMMAND
-import com.nielsmasdorp.nederadio.service.StreamService.Companion.START_TIMER_COMMAND_VALUE_KEY
-import com.nielsmasdorp.nederadio.service.StreamService.Companion.TIMER_UPDATED_COMMAND
-import com.nielsmasdorp.nederadio.service.StreamService.Companion.TIMER_UPDATED_COMMAND_VALUE_KEY
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.MEDIA_ITEM_UPDATED_COMMAND
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.PLAYER_STREAM_ERROR_COMMAND
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_STREAM_COMMAND
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_TIMER_COMMAND
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_TIMER_COMMAND_VALUE_KEY
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TIMER_UPDATED_COMMAND
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TIMER_UPDATED_COMMAND_VALUE_KEY
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TRACK_UPDATED_COMMAND
+import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TRACK_UPDATED_COMMAND_VALUE_KEY
+import com.nielsmasdorp.nederadio.util.sendCommandToService
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -36,7 +41,7 @@ class AndroidStreamManager(
     private val getLastPlayedId: GetLastPlayedId,
     private val setLastPlayedId: SetLastPlayedId,
     private val getAllStreams: GetAllStreams,
-) : StreamManager, MediaController.Listener, Player.Listener {
+) : StreamManager, MediaController.Listener {
 
     private var isInitialized: Boolean = false
 
@@ -92,56 +97,34 @@ class AndroidStreamManager(
 
     /**
      * Called when [MediaSession] uses [MediaSession.sendCustomCommand]
-     * Used to notify this [MediaController] that the sleep timer time left is changing
      */
     override fun onCustomCommand(
         controller: MediaController,
         command: SessionCommand,
         args: Bundle
     ): ListenableFuture<SessionResult> {
-        return if (command.customAction == TIMER_UPDATED_COMMAND) {
-            sleepTimerFlow.value = command.customExtras.getLong(TIMER_UPDATED_COMMAND_VALUE_KEY)
-            Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
-        } else {
-            super.onCustomCommand(controller, command, args)
+        return when (command.customAction) {
+            TIMER_UPDATED_COMMAND -> {
+                sleepTimerFlow.value = command.customExtras.getLong(TIMER_UPDATED_COMMAND_VALUE_KEY)
+                Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+            }
+            MEDIA_ITEM_UPDATED_COMMAND -> {
+                onMediaItemUpdated(MediaItem.CREATOR.fromBundle(command.customExtras))
+                Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+            }
+            TRACK_UPDATED_COMMAND -> {
+                onTrackChanged(command.customExtras.getString(TRACK_UPDATED_COMMAND_VALUE_KEY))
+                Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+            }
+            PLAYER_STREAM_ERROR_COMMAND -> {
+                onStreamError()
+                Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+            }
+            else -> super.onCustomCommand(controller, command, args)
         }
     }
 
-    /**
-     * Called when the current [Stream] changes
-     * @param mediaItem the new media item
-     * @param reason the reason for the change
-     */
-    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-        mediaItem ?: return
-        updateCurrentStream(
-            id = mediaItem.mediaId,
-            currentTrack = mediaItem.mediaMetadata.title?.toString()
-        )
-    }
-
-    /**
-     * Called when new track happens on the stream
-     */
-    override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
-        if (cache.currentStream !is CurrentStream.Filled) return
-        val current = cache.currentStream as CurrentStream.Filled
-
-        val new = current.copy(
-            stream = current.stream.copy(track = mediaMetadata.title?.toString())
-        )
-        sendCurrentStream(new)
-    }
-
-    /**
-     * Called when [Player] encounters an error
-     */
-    override fun onPlayerError(error: PlaybackException) {
-        sendError(error = context.getString(R.string.stream_error_toast))
-    }
-
     override fun release() {
-        controller?.removeListener(this)
         MediaController.releaseFuture(controllerFuture)
         isInitialized = false
     }
@@ -158,18 +141,16 @@ class AndroidStreamManager(
         if (ms > 0 && !requireController().isPlaying) {
             sendError(error = context.getString(R.string.sleep_timer_not_allowed))
         } else {
-            requireController().sendCustomCommand(
-                SessionCommand(
-                    START_TIMER_COMMAND,
-                    Bundle().apply { putLong(START_TIMER_COMMAND_VALUE_KEY, ms) }),
-                Bundle()
+            requireController().sendCommandToService(
+                key = START_TIMER_COMMAND,
+                value = Bundle().apply { putLong(START_TIMER_COMMAND_VALUE_KEY, ms) }
             )
         }
     }
 
     private fun initController(controls: List<PlayerControls<*>>) {
         controls.forEach { it.view().player = requireController() }
-        requireController().addListener(this)
+        sleepTimerFlow.value = null // sleep timer might have completed in background
     }
 
     private fun initStream(stream: Stream, force: Boolean) {
@@ -177,7 +158,7 @@ class AndroidStreamManager(
             sendStreamToSession(stream = stream, start = force)
         } else if (requireController().mediaItemCount > 0) {
             updateCurrentStream(
-                id = requireController().currentMediaItem!!.mediaId,
+                id = stream.id,
                 // track might have changed while app was in the background
                 currentTrack = requireController().mediaMetadata.title?.toString()
             )
@@ -188,7 +169,7 @@ class AndroidStreamManager(
         // Delegate starting the stream to the [MediaSession] and not the controller
         // see https://github.com/androidx/media/issues/8
         // and https://stackoverflow.com/questions/70096715/adding-mediaitem-when-using-the-media3-library-caused-an-error
-        MediaItem.Builder()
+        val item = MediaItem.Builder()
             .setMediaId(stream.id)
             .setMediaMetadata(
                 MediaMetadata.Builder()
@@ -197,23 +178,52 @@ class AndroidStreamManager(
                         stream.imageBytes,
                         MediaMetadata.PICTURE_TYPE_OTHER
                     )
+                    .setArtworkUri(Uri.parse(stream.imageUrl))
                     .setMediaUri(Uri.parse(stream.url))
                     .build()
             )
-            .build().also {
-                requireController().sendCustomCommand(
-                    SessionCommand(
-                        START_STREAM_COMMAND,
-                        it.toBundle()
-                    ), Bundle()
-                ).addListener({
-                    if (start) requireController().play()
-                }, MoreExecutors.directExecutor())
-            }
+            .build()
+
+        requireController().sendCommandToService(
+            key = START_STREAM_COMMAND, value = item.toBundle()
+        ).addListener({
+            if (start) requireController().play()
+        }, MoreExecutors.directExecutor())
     }
 
-    private fun sendError(error: String) {
+    private fun onMediaItemUpdated(mediaItem: MediaItem) {
+        updateCurrentStream(
+            id = mediaItem.mediaId,
+            currentTrack = mediaItem.mediaMetadata.title?.toString()
+        )
+    }
+
+    private fun onTrackChanged(track: String?) {
+        if (cache.currentStream !is CurrentStream.Filled) return
+        val current = cache.currentStream as CurrentStream.Filled
+
+        val new = current.copy(
+            stream = current.stream.copy(track = track)
+        )
+        sendCurrentStream(new)
+    }
+
+    /**
+     * Called when [Player] encounters an streaming error
+     */
+    private fun onStreamError() {
+        sendError(error = context.getString(R.string.stream_error_toast))
+    }
+
+    /**
+     * Send error to subscribers
+     * @param error the error to send
+     * @param persistent whether the error should not be followed by an empty error
+     * i.e. it is not a one shot error
+     */
+    private fun sendError(error: String, persistent: Boolean = false) {
         errorFlow.value = StreamingError.Filled(error = error)
+        if (!persistent) errorFlow.value = StreamingError.Empty
     }
 
     private suspend fun handleStreamsUpdate(streams: List<Stream>) {

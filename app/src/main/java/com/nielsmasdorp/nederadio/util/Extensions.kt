@@ -1,6 +1,14 @@
 package com.nielsmasdorp.nederadio.util
 
 import android.content.res.Resources
+import android.os.Bundle
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.MediaController
+import androidx.media3.session.MediaSession
+import androidx.media3.session.SessionCommand
+import androidx.media3.session.SessionResult
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.Failure
 import io.ktor.client.features.*
@@ -19,3 +27,20 @@ fun Exception.toFailure(resources: Resources): Failure = when (this) {
     else -> Failure.GenericError(resources.getString(R.string.streams_fetch_error_general))
 }
 
+@UnstableApi
+fun MediaSession.sendCommandToController(
+    key: String,
+    value: Bundle = Bundle()
+): ListenableFuture<SessionResult> {
+    return connectedControllers.firstOrNull()?.let { controller ->
+        sendCustomCommand(controller, SessionCommand(key, value), Bundle())
+    } ?: Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+}
+
+@UnstableApi
+fun MediaController.sendCommandToService(
+    key: String,
+    value: Bundle
+): ListenableFuture<SessionResult> {
+    return sendCustomCommand(SessionCommand(key, value), Bundle())
+}

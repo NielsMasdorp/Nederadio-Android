@@ -7,9 +7,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.rememberPagerState
 import com.nielsmasdorp.nederadio.R
+import com.nielsmasdorp.nederadio.domain.stream.CurrentStream
 import com.nielsmasdorp.nederadio.domain.stream.CurrentStreams
 import com.nielsmasdorp.nederadio.domain.stream.Stream
 import com.nielsmasdorp.nederadio.ui.components.LoadingView
@@ -21,7 +21,9 @@ import com.nielsmasdorp.nederadio.ui.components.StreamsErrorView
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    castButton: View,
     streams: CurrentStreams,
+    currentStream: CurrentStream,
     favorites: List<Stream>,
     onStreamSelected: (String) -> Unit = {},
     onRetryStreams: () -> Unit = {},
@@ -33,13 +35,14 @@ fun HomeScreen(
 
     Column(modifier = modifier.fillMaxSize()) {
         TopBar(
+            castButton = castButton,
+            showCastButton = currentStream is CurrentStream.Filled,
             onAboutClicked = onAbout,
             onSearchClicked = onSearch,
         )
         when (streams) {
             is CurrentStreams.Loading -> LoadingView(
-                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                foregroundColor = MaterialTheme.colorScheme.onPrimaryContainer
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer
             )
             is CurrentStreams.Success -> {
                 val tabs = listOf(
@@ -62,10 +65,4 @@ fun HomeScreen(
             else -> StreamsErrorView { onRetryStreams() }
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen(streams = CurrentStreams.Success(emptyList()), favorites = emptyList())
 }

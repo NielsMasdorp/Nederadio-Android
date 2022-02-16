@@ -45,7 +45,7 @@ fun StreamsGrid(
             }
         } else {
             LazyVerticalGrid(
-                cells = GridCells.Adaptive(minSize = 176.dp),
+                cells = GridCells.Adaptive(minSize = 100.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
                 items(streams.size) { index ->

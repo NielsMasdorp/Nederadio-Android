@@ -10,7 +10,7 @@ import androidx.media3.ui.PlayerControlView
  *
  * Set colors for the relevant controls
  */
-fun PlayerControlView.setColors(playPauseColor: Int, controlColor: Int) {
+fun PlayerControlView.setColors(playPauseColor: Int) {
     children.first().findViewWithTag<AppCompatImageView>("play")?.apply {
         backgroundTintList = ColorStateList.valueOf(playPauseColor)
         imageTintList = ColorStateList.valueOf(playPauseColor)
@@ -19,10 +19,4 @@ fun PlayerControlView.setColors(playPauseColor: Int, controlColor: Int) {
         backgroundTintList = ColorStateList.valueOf(playPauseColor)
         imageTintList = ColorStateList.valueOf(playPauseColor)
     }
-    children.first().findViewWithTag<AppCompatImageView>("prev")?.backgroundTintList =
-        ColorStateList.valueOf(controlColor)
-    children.first().findViewWithTag<AppCompatImageView>("next")?.backgroundTintList =
-        ColorStateList.valueOf(controlColor)
-    children.first().findViewWithTag<AppCompatImageView>("shuffle")?.imageTintList =
-        ColorStateList.valueOf(controlColor)
 }

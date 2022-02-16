@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -89,8 +90,8 @@ fun StreamViewLarge(
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
+                Spacer(modifier = Modifier.height(8.dp))
                 if (!stream.track.isNullOrEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge,
@@ -98,11 +99,12 @@ fun StreamViewLarge(
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     textAlign = TextAlign.Center,
                     text = sleepTimer.orEmpty(),
                     style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 Spacer(modifier = Modifier.weight(1.0f))
@@ -147,7 +149,7 @@ fun StreamViewLarge(
                             .fillMaxWidth()
                             .align(Alignment.Center),
                         update = { view ->
-                            view.setColors(playPauseColor, controlColor)
+                            view.setColors(playPauseColor)
                         }
                     )
                 }
