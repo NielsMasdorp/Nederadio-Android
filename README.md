@@ -13,15 +13,16 @@ Nederadio is built using all the latest practices in Android development:
  - Dark/Light mode
  - Cast support
  - Live song updates
+ - Sleep timer
 
 ## Screenshots
 
 <p float="left">
-  <img src="/screenshots/screenshot1.png" width="100" />
-  <img src="/screenshots/screenshot2.png" width="100" />
-  <img src="/screenshots/screenshot3.png" width="100" />
-  <img src="/screenshots/screenshot4.png" width="100" />
-  <img src="/screenshots/screenshot5.png" width="100" />
+  <img src="/app/screenshots/screenshot1.png" width="190" />
+  <img src="/app/screenshots/screenshot2.png" width="190" />
+  <img src="/app/screenshots/screenshot3.png" width="190" />
+  <img src="/app/screenshots/screenshot4.png" width="190" />
+  <img src="/app/screenshots/screenshot5.png" width="190" />
 </p>
 
 ## Used libraries
