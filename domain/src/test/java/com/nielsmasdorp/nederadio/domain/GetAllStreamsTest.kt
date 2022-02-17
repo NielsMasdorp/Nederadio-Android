@@ -1,39 +1,106 @@
 package com.nielsmasdorp.nederadio.domain
 
-import com.nielsmasdorp.nederadio.domain.stream.GetAllStreams
-import com.nielsmasdorp.nederadio.domain.stream.Stream
-import com.nielsmasdorp.nederadio.domain.stream.StreamRepository
-import com.nielsmasdorp.nederadio.domain.util.CoroutineTestRule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.nielsmasdorp.nederadio.domain.stream.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
-import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
 
-@ExperimentalCoroutinesApi
+/**
+ * @author Niels Masdorp (NielsMasdorp)
+ */
 class GetAllStreamsTest {
 
-    @get:Rule
-    val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
-
     @Test
-    fun `streams should be returned by repository`() = runBlocking {
-        // given
-        val streams = listOf(
-            Stream(id = "id", title = "title", desc = "desc", smallImgRes = -1, url = "url"),
-            Stream(id = "id2", title = "title", desc = "desc", smallImgRes = -1, url = "url")
-        )
-        val settingsRepository = mock<StreamRepository> {
-            onBlocking { getStreams() } doReturn streams
+    fun `when successful streams is returned by repository then return from subject`() =
+        runBlocking {
+            // given
+            val streams = CurrentStreams.Success(
+                listOf(
+                    Stream(
+                        id = "id",
+                        title = "title",
+                        imageUrl = "desc",
+                        imageBytes = byteArrayOf(),
+                        url = "url"
+                    ),
+                    Stream(
+                        id = "id2",
+                        title = "title",
+                        imageUrl = "desc",
+                        imageBytes = byteArrayOf(),
+                        url = "url"
+                    ),
+                )
+            )
+            val settingsRepository = FakeStreamRepository(listOf(streams))
+
+            // when
+            val subject = GetAllStreams(settingsRepository)
+
+            // then
+            Assert.assertEquals(subject.streams.first(), streams)
         }
 
+    @Test
+    fun `when loading streams is returned by repository then return from subject`() = runBlocking {
+        // given
+        val settingsRepository = FakeStreamRepository(listOf(CurrentStreams.Loading))
+
         // when
-        val subject = GetAllStreams(settingsRepository, coroutineTestRule.testDispatcherProvider)
-        val output = subject.invoke()
+        val subject = GetAllStreams(settingsRepository)
 
         // then
-        Assert.assertEquals(streams, output)
+        Assert.assertEquals(subject.streams.first(), CurrentStreams.Loading)
     }
+
+    @Test
+    fun `when unsuccessful streams is returned by repository then return from subject`() =
+        runBlocking {
+            // given
+            val error = CurrentStreams.Error(Failure.GenericError("error"))
+            val settingsRepository = FakeStreamRepository(listOf(error))
+
+            // when
+            val subject = GetAllStreams(settingsRepository)
+
+            // then
+            Assert.assertEquals(subject.streams.first(), error)
+        }
+
+    @Test
+    fun `when repository emits values then subject should emit values in same order`() =
+        runBlocking {
+            // given
+            val streams = listOf(
+                CurrentStreams.Loading,
+                CurrentStreams.Success(
+                    listOf(
+                        Stream(
+                            id = "id",
+                            title = "title",
+                            imageUrl = "desc",
+                            imageBytes = byteArrayOf(),
+                            url = "url"
+                        ),
+                        Stream(
+                            id = "id2",
+                            title = "title",
+                            imageUrl = "desc",
+                            imageBytes = byteArrayOf(),
+                            url = "url"
+                        ),
+                    )
+                )
+            )
+            val settingsRepository = FakeStreamRepository(streams)
+
+            // when
+            val subject = GetAllStreams(settingsRepository)
+
+            // then
+            Assert.assertEquals(subject.streams.take(2).toList(), streams)
+        }
 }

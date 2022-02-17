@@ -8,20 +8,22 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-@ExperimentalCoroutinesApi
+/**
+ * @author Niels Masdorp (NielsMasdorp)
+ */
 class SetLastPlayedIdTest {
 
     @Test
     fun `index should be set in repository`() = runBlocking {
         // given
-        val index = 80085
+        val id = "id"
         val settingsRepository: SettingsRepository = mock()
 
         // when
         val subject = SetLastPlayedId(settingsRepository)
-        subject.invoke(index)
+        subject.invoke(id)
 
         // then
-        verify(settingsRepository).setLastPlayedIndex(index)
+        verify(settingsRepository).setLastPlayedId(id)
     }
 }

@@ -7,6 +7,9 @@ import kotlinx.coroutines.test.*
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
+/**
+ * @author Niels Masdorp (NielsMasdorp)
+ */
 class CoroutineTestRule(
     val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 ) : TestWatcher() {

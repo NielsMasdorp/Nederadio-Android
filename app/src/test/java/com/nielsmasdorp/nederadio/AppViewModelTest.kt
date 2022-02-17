@@ -1,11 +1,8 @@
 package com.nielsmasdorp.nederadio
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
-import com.nielsmasdorp.nederadio.domain.stream.GetAllStreams
-import com.nielsmasdorp.nederadio.domain.stream.StreamManager
 import com.nielsmasdorp.nederadio.domain.util.CoroutineTestRule
-import com.nielsmasdorp.nederadio.ui.AppViewModel
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,19 +19,19 @@ class AppViewModelTest {
 
     @Test
     fun `test`() {
-        // TODO
+        Assert.assertTrue(true)
     }
 
-    private fun createViewModel(
-        getAllStreams: GetAllStreams,
-        streamManager: StreamManager,
-        getLastPlayedId: GetLastPlayedId
-    ): AppViewModel {
-        return AppViewModel(
-            getAllStreams = getAllStreams,
-            streamManager = streamManager,
-            getLastPlayedIndex = getLastPlayedId,
-            dispatchers = coroutineTestRule.testDispatcherProvider
-        )
-    }
+//    private fun createViewModel(
+//        getAllStreams: GetAllStreams,
+//        streamManager: StreamManager,
+//        getLastPlayedId: GetLastPlayedId
+//    ): AppViewModel {
+//        return AppViewModel(
+//            getAllStreams = getAllStreams,
+//            streamManager = streamManager,
+//            getLastPlayedIndex = getLastPlayedId,
+//            dispatchers = coroutineTestRule.testDispatcherProvider
+//        )
+//    }
 }
