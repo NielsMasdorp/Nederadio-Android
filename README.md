@@ -1,10 +1,8 @@
 ## Nederadio
 
-TODO
+Stream popular dutch radio stations.
 
-## Used libraries
-
-Nederadio all the latest practices in Android development:
+Nederadio is built using all the latest practices in Android development:
 
  - 100%  Kotlin
  - MVVM
@@ -14,8 +12,19 @@ Nederadio all the latest practices in Android development:
  - Material You on Android 12 and higher
  - Dark/Light mode
  - Cast support
+ - Live song updates
 
- It uses these OS libraries
+## Screenshots
+
+<p float="left">
+  <img src="/screenshots/screenshot1.png" width="100" />
+  <img src="/screenshots/screenshot2.png" width="100" />
+  <img src="/screenshots/screenshot3.png" width="100" />
+  <img src="/screenshots/screenshot4.png" width="100" />
+  <img src="/screenshots/screenshot5.png" width="100" />
+</p>
+
+## Used libraries
 
 * [Koin](https://github.com/InsertKoinIO/koin)
 * [Cokoin](https://github.com/burnoo/cokoin)
