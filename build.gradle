@@ -1,19 +1,86 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+
+    //google
+    ext.google_cast_version = '21.0.1'
+    ext.material_version = '1.5.0'
+
+    //kotlin
+    ext.kotlin_version = '1.6.10'
+    ext.kotlinx_coroutines_android_version = '1.6.0-RC2'
+    ext.kotlinx_coroutines_core_version = '1.6.0'
+    ext.kotlinx_serialization_version = '1.3.2'
+
+    //androidx
+    ext.androidx_media_router_version = '1.2.6'
+    ext.androidx_app_compat_version = '1.4.1'
+    ext.androidx_activity_version = '1.5.0-alpha02'
+    ext.androidx_core_version = '1.8.0-alpha04'
+    ext.androidx_lifecycle_version = '2.5.0-alpha02'
+    ext.androidx_navigation_version = '2.5.0-alpha02'
+    ext.androidx_media3_version = '1.0.0-alpha01'
+    ext.androidx_compose_version = '1.2.0-alpha03'
+    ext.androidx_compose_material3_version = '1.0.0-alpha05'
+
+    //koin
+    ext.koin_version = '3.1.5'
+    ext.cokoin_version = '0.3.3'
+
+    //ktor
+    ext.ktor_version = '1.5.0'
+
+    //accompanist
+    ext.accompanist_version = '0.24.2-alpha'
+
+    //misc
+    ext.landscapist_glide_version = '1.4.5'
+    ext.lottie_version = '4.2.2'
+
+    //test
+    ext.junit_version = "4.13.2"
+    ext.mockk_version = "1.11.0"
+    ext.coroutines_test_version = "1.3.7"
+    ext.coroutines_test_jvm_version = "1.6.0-RC2"
+    ext.mockito_core_version = "4.3.1"
+    ext.mockito_kotlin_version = "4.0.0"
+    ext.androidx_espresso_version = "3.4.0"
+    ext.androidx_lifecycle_testing_version = "2.1.0"
+    ext.androidx_test_ext_junit_version = "1.1.3"
+
     repositories {
-        jcenter()
+        google()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:7.1.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
+        google()
+        mavenCentral()
         maven { url "https://jitpack.io" }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            freeCompilerArgs += [
+                    "-Xopt-in=kotlin.ExperimentalUnsignedTypes",
+                    "-Xopt-in=kotlinx.coroutines.InternalCoroutinesApi",
+                    "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                    "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+                    "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
+                    "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+                    "-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                    "-Xopt-in=androidx.compose.runtime.ExperimentalComposeApi",
+                    "-Xopt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                    "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi"
+            ]
+        }
     }
 }
 

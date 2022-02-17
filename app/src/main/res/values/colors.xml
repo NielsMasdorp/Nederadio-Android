@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#009688</color>
-    <color name="secondaryText">#727272</color>
-    <color name="primaryText">#212121</color>
-    <color name="greyTransparent">#99727272</color>
+    <!--    unused-->
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#000000</color>
+
+    <color name="cast_button_tint">@android:color/white</color>
 
 </resources>

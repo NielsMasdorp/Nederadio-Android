@@ -1,34 +1,21 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.4'
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
 
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 31
 
     defaultConfig {
-        applicationId "com.nielsmasdorp.sleeply"
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 18
-        versionName "0.3.1"
+        applicationId "com.nielsmasdorp.nederadio"
+        minSdkVersion 26
+        //noinspection OldTargetApi
+        targetSdkVersion 31
+        versionCode 189
+        versionName "2.0.0"
     }
     buildTypes {
         release {
@@ -37,24 +24,76 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    buildFeatures {
+        viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.2.0-alpha01'
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    apt 'com.google.dagger:dagger-compiler:2.1'
-    compile 'com.google.dagger:dagger:2.1'
-    provided 'javax.annotation:jsr250-api:1.0'
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
-        transitive = true
-    }
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true;
-    }
+    implementation project(':domain')
+
+    // google
+    implementation "com.google.android.gms:play-services-cast-framework:$google_cast_version"
+    implementation "com.google.android.material:material:$material_version"
+
+    //androidx
+    implementation "androidx.mediarouter:mediarouter:$androidx_media_router_version"
+    implementation "androidx.appcompat:appcompat:$androidx_app_compat_version"
+    implementation "androidx.core:core-ktx:$androidx_core_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$androidx_lifecycle_version"
+    implementation "androidx.navigation:navigation-compose:$androidx_navigation_version"
+    implementation "androidx.activity:activity-compose:$androidx_activity_version"
+    implementation "androidx.media3:media3-exoplayer:$androidx_media3_version"
+    implementation "androidx.media3:media3-session:$androidx_media3_version"
+    implementation "androidx.media3:media3-common:$androidx_media3_version"
+    implementation "androidx.media3:media3-ui:$androidx_media3_version"
+    implementation "androidx.media3:media3-cast:$androidx_media3_version"
+    implementation "androidx.compose.ui:ui:$androidx_compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$androidx_compose_version"
+    implementation "androidx.compose.foundation:foundation:$androidx_compose_version"
+    implementation "androidx.compose.material:material:$androidx_compose_version"
+    implementation "androidx.compose.material:material-icons-core:$androidx_compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$androidx_compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$androidx_compose_version"
+    implementation "androidx.compose.material3:material3:$androidx_compose_material3_version"
+
+    //kotlin
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_android_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
+
+    // Koin
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "dev.burnoo:cokoin:$cokoin_version"
+    implementation "dev.burnoo:cokoin-android-viewmodel:$cokoin_version"
+    implementation "dev.burnoo:cokoin-android-navigation:$cokoin_version"
+
+    //Ktor
+    implementation "io.ktor:ktor-client-android:$ktor_version"
+    implementation "io.ktor:ktor-client-serialization:$ktor_version"
+    implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
+
+    // accompanist
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-placeholder:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
+
+    // misc
+    implementation "com.github.skydoves:landscapist-glide:$landscapist_glide_version"
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+    implementation "com.airbnb.android:lottie-compose:$lottie_version"
+
+    //test
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version"
+    testImplementation "androidx.arch.core:core-testing:$androidx_lifecycle_testing_version"
 }
