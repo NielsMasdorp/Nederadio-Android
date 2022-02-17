@@ -1,7 +1,5 @@
-package com.nielsmasdorp.nederadio.domain
+package com.nielsmasdorp.nederadio.domain.settings
 
-import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
-import com.nielsmasdorp.nederadio.domain.settings.SettingsRepository
 import com.nielsmasdorp.nederadio.domain.util.CoroutineTestRule
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert

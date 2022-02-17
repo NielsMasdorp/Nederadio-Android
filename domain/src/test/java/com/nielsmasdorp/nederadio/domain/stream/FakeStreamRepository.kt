@@ -1,4 +1,4 @@
-package com.nielsmasdorp.nederadio.domain
+package com.nielsmasdorp.nederadio.domain.stream
 
 import com.nielsmasdorp.nederadio.domain.stream.CurrentStreams
 import com.nielsmasdorp.nederadio.domain.stream.StreamRepository

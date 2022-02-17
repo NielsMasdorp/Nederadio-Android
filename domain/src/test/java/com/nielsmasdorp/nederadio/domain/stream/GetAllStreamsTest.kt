@@ -1,6 +1,5 @@
-package com.nielsmasdorp.nederadio.domain
+package com.nielsmasdorp.nederadio.domain.stream
 
-import com.nielsmasdorp.nederadio.domain.stream.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList

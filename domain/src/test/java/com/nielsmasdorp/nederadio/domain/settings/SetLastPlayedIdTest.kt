@@ -1,8 +1,5 @@
-package com.nielsmasdorp.nederadio.domain
+package com.nielsmasdorp.nederadio.domain.settings
 
-import com.nielsmasdorp.nederadio.domain.settings.SetLastPlayedId
-import com.nielsmasdorp.nederadio.domain.settings.SettingsRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -14,7 +11,7 @@ import org.mockito.kotlin.verify
 class SetLastPlayedIdTest {
 
     @Test
-    fun `index should be set in repository`() = runBlocking {
+    fun `id should be set in repository`() = runBlocking {
         // given
         val id = "id"
         val settingsRepository: SettingsRepository = mock()

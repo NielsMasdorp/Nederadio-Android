@@ -1,7 +1,5 @@
-package com.nielsmasdorp.nederadio.domain
+package com.nielsmasdorp.nederadio.domain.stream
 
-import com.nielsmasdorp.nederadio.domain.stream.StreamRepository
-import com.nielsmasdorp.nederadio.domain.stream.UpdateStreams
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.kotlin.mock
