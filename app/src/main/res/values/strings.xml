@@ -24,16 +24,20 @@
     <string name="about_title">About Nederadio</string>
     <string name="action_about">About</string>
     <string name="about_message"><![CDATA[
-        Current version: 2.0.0, made by:<br/><br/>
+        Current version: %s, made by:<br/><br/>
         <b>Niels Masdorp</b><br/>
         <a href=\'https://github.com/NielsMasdorp\'>GitHub</a>&nbsp;&nbsp;
         <a href=\'https://www.linkedin.com/in/nielsmasdorp/\'>LinkedIn</a>&nbsp;&nbsp;<br/><br/>
         <b>Libraries:</b><br/>
         <a href=\'https://github.com/InsertKoinIO/koin\'>Koin</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/burnoo/cokoin\'>Cokoin</a>&nbsp;&nbsp;
         <a href=\'https://github.com/androidx/media\'>Jetpack Media3</a>&nbsp;&nbsp;
-        <a href=\'https://developer.android.com/jetpack/compose\'>Jetpack Compose</a>&nbsp;&nbsp;<br/><br/>
-        <b>Thanks to:</b><br/>
-        <a href=\'www.freepik.com\'>Freepik</a>&nbsp;&nbsp;
+        <a href=\'https://developer.android.com/jetpack/compose\'>Jetpack Compose</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/ktorio/ktor\'>Ktor</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/google/accompanist\'>Accompanist</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/bumptech/glide\'>Glide</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/skydoves/landscapist\'>Landscapist</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/airbnb/lottie-android\'>Lottie</a>&nbsp;&nbsp;
     ]]></string>
     <string name="about_positive">Close</string>
 
