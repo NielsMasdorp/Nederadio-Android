@@ -9,5 +9,5 @@ import io.ktor.client.request.*
  */
 class StreamApi(private val client: HttpClient) {
 
-    suspend fun getStreams(): List<StreamResponse> = client.get("data.json")
+    suspend fun getStreams(): List<StreamResponse> = client.get("/data.json")
 }

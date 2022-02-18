@@ -22,9 +22,9 @@ private const val TIME_OUT = 60_000
 val ktorHttpClient = HttpClient(Android) {
 
     defaultRequest {
-        host = "http://nielsmasdorp.com:8000/nederadio"
+        host = "nielsmasdorp.com:8000/nederadio"
         url {
-            protocol = URLProtocol.HTTPS
+            protocol = URLProtocol.HTTP
         }
     }
 
