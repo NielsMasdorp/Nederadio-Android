@@ -1,0 +1,218 @@
+[
+  {
+    "id": "0",
+    "url": "https://22343.live.streamtheworld.com/100PNL_MP3_SC",
+    "name": "100% NL",
+    "image": "https://digitenne.kpn.com/uploads/img/zenders/radio-zenders-icons-png/1001radio100nl.png"
+  },
+  {
+    "id": "1",
+    "url": "https://stream.100p.nl/web01_mp3",
+    "name": "100% NL Feest",
+    "image": "https://luisteren.nl/app/uploads/2018/12/100_nl_feest_fm.png"
+  },
+  {
+    "id": "2",
+    "url": "https://stream.100p.nl/web04_mp3",
+    "name": "100% NL Nederpop",
+    "image": "https://cdn-profiles.tunein.com/s304614/images/logog.jpg?t=162406"
+  },
+  {
+    "id": "3",
+    "url": "https://23553.live.streamtheworld.com/RADIO538AAC.aac",
+    "name": "Radio 538",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Logo_538_Nederland.png"
+  },
+  {
+    "id": "4",
+    "url": "https://22713.live.streamtheworld.com/TLPSTR01AAC.aac",
+    "name": "Radio 538 Dance Dep.",
+    "image": "https://pbs.twimg.com/profile_images/727062009850793984/toOxK7JZ_400x400.jpg"
+  },
+  {
+    "id": "5",
+    "url": "https://25323.live.streamtheworld.com/TLPSTR11AAC.aac",
+    "name": "Radio 538 Hitzone",
+    "image": "https://cdn-profiles.tunein.com/s74980/images/logog.jpg?t=636219"
+  },
+  {
+    "id": "6",
+    "url": "https://25343.live.streamtheworld.com/TLPSTR19AAC.aac",
+    "name": "Radio 538 Ibiza",
+    "image": "https://cdn-profiles.tunein.com/s168807/images/logod.jpg?t=636219"
+  },
+  {
+    "id": "7",
+    "url": "https://22613.live.streamtheworld.com/TLPSTR09AAC.aac",
+    "name": "Radio 538 Non-Stop",
+    "image": "https://cdn-profiles.tunein.com/s252020/images/logog.png"
+  },
+  {
+    "id": "8",
+    "url": "https://25343.live.streamtheworld.com/TLPSTR21AAC.aac",
+    "name": "Radio Die Verrückte",
+    "image": "https://cdn-profiles.tunein.com/s98498/images/logog.jpg?t=636219"
+  },
+  {
+    "id": "9",
+    "url": "https://stream.arrowcaz.nl/arrowrockradio",
+    "name": "Arrow Rock Radio",
+    "image": "https://d3kle7qwymxpcy.cloudfront.net/images/broadcasts/d6/9c/10834/c300.png"
+  },
+  {
+    "id": "10",
+    "url": "https://23943.live.streamtheworld.com/QMUSICNLAAC_96.aac",
+    "name": "Q music",
+    "image": "https://cdn-profiles.tunein.com/s87683/images/logod.png?t=1"
+  },
+  {
+    "id": "11",
+    "url": "https://23943.live.streamtheworld.com/QMUSICNL_THEMA.mp3",
+    "name": "Q music Non-Stop",
+    "image": "https://static1.qmusic.medialaancdn.be/3/76/93/cf/23/Site_logo__220x220_.png"
+  },
+  {
+    "id": "12",
+    "url": "https://23903.live.streamtheworld.com/QMUSICNL_TOP40.mp3",
+    "name": "Q music Top 40",
+    "image": "https://i.scdn.co/image/ab67706c0000bebb513ab59cccfcf9bef6cabe2f"
+  },
+  {
+    "id": "13",
+    "url": "https://23853.live.streamtheworld.com/QMUSICNL_FOUTE_UUR.mp3",
+    "name": "Q music Het foute Uur",
+    "image": "https://bdbookings.nl/wp-content/uploads/2020/01/Het-Foute-uur-boeken.png"
+  },
+  {
+    "id": "14",
+    "url": "https://25533.live.streamtheworld.com/RADIO10.mp3",
+    "name": "Radio 10",
+    "image": "https://cdn-profiles.tunein.com/s16793/images/logog.png?t=1"
+  },
+  {
+    "id": "15",
+    "url": "https://25303.live.streamtheworld.com/TLPSTR15.mp3",
+    "name": "Radio 10 Non-Stop",
+    "image": "https://cdn-profiles.tunein.com/s298425/images/logog.png?t=156897"
+  },
+  {
+    "id": "16",
+    "url": "https://22343.live.streamtheworld.com/TLPSTR18.mp3",
+    "name": "Radio 10 60's & 70's",
+    "image": "https://cdn-profiles.tunein.com/s74981/images/logod.png?t=156897"
+  },
+  {
+    "id": "17",
+    "url": "https://25253.live.streamtheworld.com/TLPSTR20.mp3",
+    "name": "Radio 10 80's",
+    "image": "https://www.radiozenders.fm/media/images/stations-large/radio-10-80s-hits.png?v=1"
+  },
+  {
+    "id": "18",
+    "url": "https://22663.live.streamtheworld.com/VERONICA.mp3",
+    "name": "Radio Veronica",
+    "image": "https://cdn-profiles.tunein.com/s6717/images/logod.jpg?t=2"
+  },
+  {
+    "id": "19",
+    "url": "https://25273.live.streamtheworld.com/SRGSTR09.mp3",
+    "name": "Radio Veronica Non-Stop",
+    "image": "https://static.mytuner.mobi/media/tvos_radios/wgxdk9y9jvdd.png"
+  },
+  {
+    "id": "20",
+    "url": "https://22723.live.streamtheworld.com/SRGSTR11.mp3",
+    "name": "Veronica Rock Radio",
+    "image": "https://cdn-profiles.tunein.com/s108043/images/logog.png"
+  },
+  {
+    "id": "21",
+    "url": "https://25293.live.streamtheworld.com/SRGSTR10.mp3",
+    "name": "Veronica Top 1000",
+    "image": "https://cdn-profiles.tunein.com/s90509/images/logod.png?t=155119"
+  },
+  {
+    "id": "22",
+    "url": "https://19993.live.streamtheworld.com/SKYRADIO.mp3",
+    "name": "Skyradio",
+    "image": "https://images.ctfassets.net/avx85g85supt/6nomzxzS7LHHy5S5f70PBt/88a2dc0e338af4fb548775dde126073a/Sky-Station-Tiles_SKY.jpg?f=center&fit=fill&fit=thumb&w=600&h=600&fm=jpg"
+  },
+  {
+    "id": "23",
+    "url": "https://25253.live.streamtheworld.com/SRGSTR01.mp3",
+    "name": "Skyradio Hits",
+    "image": "https://luisteren.nl/app/uploads/2018/12/SKY_RADIO_HITS.png"
+  },
+  {
+    "id": "24",
+    "url": "https://22723.live.streamtheworld.com/SRGSTR24.mp3",
+    "name": "Skyradio Non-Stop@Work",
+    "image": "https://cdn-profiles.tunein.com/s272433/images/logog.png?t=1"
+  },
+  {
+    "id": "25",
+    "url": "https://22723.live.streamtheworld.com/SRGSTR15.mp3",
+    "name": "Skyradio Smooth Hits",
+    "image": "https://cdn-profiles.tunein.com/s115725/images/logog.png?t=157105"
+  },
+  {
+    "id": "26",
+    "url": "https://25303.live.streamtheworld.com/WEB14_MP3_SC",
+    "name": "Slam!",
+    "image": "https://i.scdn.co/image/ab67706c0000bebb57311625ec92f8057733bc34"
+  },
+  {
+    "id": "27",
+    "url": "https://22543.live.streamtheworld.com/WEB10_MP3_SC",
+    "name": "Slam Non-Stop",
+    "image": "https://nl.radio.net/images/broadcasts/90/86/37582/1/c300.png"
+  },
+  {
+    "id": "28",
+    "url": "https://25303.live.streamtheworld.com/WEB13_MP3_SC",
+    "name": "Slam MixMarathon",
+    "image": "https://api.my-radios.com/images/thumb.php?countryCode=NL&name=29097-965043.png&size=200"
+  },
+  {
+    "id": "29",
+    "url": "https://22343.live.streamtheworld.com/SUNLITE_MP3_SC",
+    "name": "Sunlite",
+    "image": "https://i.ibb.co/GVccLdR/Schermafbeelding-2021-10-07-om-14-33-20.png"
+  },
+  {
+    "id": "30",
+    "url": "https://icecast.omroep.nl/radio1-bb-aac",
+    "name": "NPO Radio 1",
+    "image": "https://yt3.ggpht.com/Djbj9Z5gdAwEhdUctcQxh04cGFrXb-ubGGb-0pNwtZZFw837Rs_qKDgeejIAqkJC8yVnKpXoqg=s900-c-k-c0x00ffffff-no-rj"
+  },
+  {
+    "id": "31",
+    "url": "https://icecast.omroep.nl/radio2-bb-aac",
+    "name": "NPO Radio 2",
+    "image": "https://radioonlineluisteren.nl/wp-content/uploads/2021/05/NPO-Radio-2.jpeg"
+  },
+  {
+    "id": "32",
+    "url": "https://icecast.omroep.nl/3fm-bb-aac",
+    "name": "NPO 3FM",
+    "image": "https://yt3.ggpht.com/ytc/AKedOLSvUTv9kuW3-hDp8n5uhLvHGrkU5hwYEpSw2MoSBg=s900-c-k-c0x00ffffff-no-rj"
+  },
+  {
+    "id": "33",
+    "url": "https://icecast.omroep.nl/radio4-bb-aac",
+    "name": "NPO Radio 4",
+    "image": "https://static.mytuner.mobi/media/tvos_radios/pU4F5RWC7g.png"
+  },
+  {
+    "id": "34",
+    "url": "https://icecast.omroep.nl/radio5-bb-aac",
+    "name": "NPO Radio 5",
+    "image": "https://nl.radio.net/images/broadcasts/0f/6c/36730/c300.png"
+  },
+  {
+    "id": "35",
+    "url": "https://icecast.omroep.nl/funx-sb-aac",
+    "name": "NPO FunX",
+    "image": "https://i1.sndcdn.com/avatars-000147640894-e6uvf9-t500x500.jpg"
+  }
+]
