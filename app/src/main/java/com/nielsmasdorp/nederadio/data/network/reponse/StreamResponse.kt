@@ -25,6 +25,6 @@ data class StreamResponse(
         url = url,
         title = name,
         imageUrl = imageUrl,
-        imageBytes = URL(imageUrl).readBytes()
+        imageBytes = URL(imageUrl).readBytes() // TODO remove once exoplayer supports uri
     )
 }

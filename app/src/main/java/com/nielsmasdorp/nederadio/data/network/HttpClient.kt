@@ -38,6 +38,7 @@ val ktorHttpClient = HttpClient(Android) {
         engine {
             connectTimeout = TIME_OUT
             socketTimeout = TIME_OUT
+
         }
     }
 

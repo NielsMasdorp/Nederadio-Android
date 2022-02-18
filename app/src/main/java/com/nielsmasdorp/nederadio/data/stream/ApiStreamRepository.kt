@@ -8,6 +8,7 @@ import com.nielsmasdorp.nederadio.domain.settings.SettingsRepository
 import com.nielsmasdorp.nederadio.domain.stream.CurrentStreams
 import com.nielsmasdorp.nederadio.domain.stream.Failure
 import com.nielsmasdorp.nederadio.domain.stream.StreamRepository
+import com.nielsmasdorp.nederadio.util.pMap
 import com.nielsmasdorp.nederadio.util.toFailure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +53,8 @@ class ApiStreamRepository(
                 )
             } else {
                 try {
-                    val streams = streamApi.getStreams().map { it.toDomain() }
+                    // parallel map because toDomain is an expensive operation
+                    val streams = streamApi.getStreams().pMap { it.toDomain() }
                     settingsRepository.favoritesFlow.collectLatest { favorites ->
                         streamsFlow.value = CurrentStreams.Success(streams = streams.map { stream ->
                             stream.copy(isFavorite = favorites.contains(stream.id))

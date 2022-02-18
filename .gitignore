@@ -32,7 +32,4 @@ proguard/
 *.iml
 
 #Private Keys
-app/src/main/res/values/keys.xml
-app/fabric.properties
-sleeplykeystore.jks
 signing.properties
