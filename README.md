@@ -20,16 +20,16 @@ Nederadio is built using all the latest practices in Android development:
 ## Screenshots
 
 <p float="left">
-  <img src="/app/screenshots/screenshot1.png" width="190" />
-  <img src="/app/screenshots/screenshot2.png" width="190" />
-  <img src="/app/screenshots/screenshot3.png" width="190" />
-  <img src="/app/screenshots/screenshot4.png" width="190" />
-  <img src="/app/screenshots/screenshot5.png" width="190" />
+  <img src="/app/screenshots/screenshot1.png" width="175" />
+  <img src="/app/screenshots/screenshot2.png" width="175" />
+  <img src="/app/screenshots/screenshot3.png" width="175" />
+  <img src="/app/screenshots/screenshot4.png" width="175" />
+  <img src="/app/screenshots/screenshot5.png" width="175" />
 </p>
 
 ## Change data
 
-You could easily use your own streams in this app, the data set is located in `backend/public/data.json`. It is currently served on my own server but you could change the endpoint in `StreamApi` to whatever you like.
+You could easily use your own streams in this app, the data set is located in `backend/public/nederadio/data.json`. It is currently served on my own server but you could change the endpoint in `StreamApi` to whatever you like.
 
 ## Used libraries
 
