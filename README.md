@@ -27,6 +27,10 @@ Nederadio is built using all the latest practices in Android development:
   <img src="/app/screenshots/screenshot5.png" width="190" />
 </p>
 
+## Change data
+
+You could easily use your own streams in this app, the data set is located in `backend/public/data.json`. It is currently served on my own server but you could change the endpoint in `StreamApi` to whatever you like.
+
 ## Used libraries
 
 * [Koin](https://github.com/InsertKoinIO/koin)
