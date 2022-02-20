@@ -15,6 +15,5 @@ dependencies {
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:$coroutines_test_jvm_version"
-    testImplementation "org.mockito:mockito-core:$mockito_core_version"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
 }

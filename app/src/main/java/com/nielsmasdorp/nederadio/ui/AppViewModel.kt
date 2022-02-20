@@ -107,7 +107,7 @@ class AppViewModel(
     private fun calculateMs(option: Int): Long {
         return when (option) {
             0 -> 0
-            1 -> TimeUnit.SECONDS.toMillis(30)
+            1 -> TimeUnit.MINUTES.toMillis(10)
             2 -> TimeUnit.MINUTES.toMillis(15)
             3 -> TimeUnit.MINUTES.toMillis(20)
             4 -> TimeUnit.MINUTES.toMillis(30)

@@ -2,6 +2,8 @@
 
 Stream popular dutch radio stations.
 
+This is mostly a pet project created to learn Jetpack Compose and the new Jetpack Media3 API's.
+
 Nederadio is built using all the latest practices in Android development:
 
  - 100%  Kotlin

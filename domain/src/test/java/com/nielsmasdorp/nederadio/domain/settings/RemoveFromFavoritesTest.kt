@@ -1,11 +1,12 @@
 package com.nielsmasdorp.nederadio.domain.settings
 
 import com.nielsmasdorp.nederadio.domain.util.CoroutineTestRule
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -19,14 +20,16 @@ class RemoveFromFavoritesTest {
     fun `id should be set removed from repository`() = runBlocking {
         // given
         val id = "id"
-        val settingsRepository: SettingsRepository = mock()
+        val settingsRepository: SettingsRepository = mockk()
+        coEvery { settingsRepository.removeFromFavorite(id) } returns Unit
 
         // when
-        val subject = RemoveFromFavorites(settingsRepository, coroutineTestRule.testDispatcherProvider)
+        val subject =
+            RemoveFromFavorites(settingsRepository, coroutineTestRule.testDispatcherProvider)
         subject.invoke(id)
 
         // then
-        verify(settingsRepository).removeFromFavorite(id)
+        coVerify { settingsRepository.removeFromFavorite(id) }
     }
 
 }
