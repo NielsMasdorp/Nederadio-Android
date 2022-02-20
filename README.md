@@ -20,11 +20,11 @@ Nederadio is built using all the latest practices in Android development:
 ## Screenshots
 
 <p float="left">
-  <img src="/app/screenshots/screenshot1.png" width="175" />
-  <img src="/app/screenshots/screenshot2.png" width="175" />
-  <img src="/app/screenshots/screenshot3.png" width="175" />
-  <img src="/app/screenshots/screenshot4.png" width="175" />
-  <img src="/app/screenshots/screenshot5.png" width="175" />
+  <img src="/app/screenshots/screenshot1.png" width="150" />
+  <img src="/app/screenshots/screenshot2.png" width="150" />
+  <img src="/app/screenshots/screenshot3.png" width="150" />
+  <img src="/app/screenshots/screenshot4.png" width="150" />
+  <img src="/app/screenshots/screenshot5.png" width="150" />
 </p>
 
 ## Change data
