@@ -1,11 +1,12 @@
 package com.nielsmasdorp.nederadio.domain.settings
 
 import com.nielsmasdorp.nederadio.domain.util.CoroutineTestRule
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -19,14 +20,15 @@ class AddToFavoritesTest {
     fun `id should be set in repository`() = runBlocking {
         // given
         val id = "id"
-        val settingsRepository: SettingsRepository = mock()
+        val settingsRepository: SettingsRepository = mockk()
+        coEvery { settingsRepository.addToFavorite(id) } returns Unit
 
         // when
         val subject = AddToFavorites(settingsRepository, coroutineTestRule.testDispatcherProvider)
         subject.invoke(id)
 
         // then
-        verify(settingsRepository).addToFavorite(id)
+        coVerify { settingsRepository.addToFavorite(id) }
     }
 
 }

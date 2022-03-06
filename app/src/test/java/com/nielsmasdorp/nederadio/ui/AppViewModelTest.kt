@@ -3,19 +3,20 @@ package com.nielsmasdorp.nederadio.ui
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nielsmasdorp.nederadio.domain.settings.AddToFavorites
 import com.nielsmasdorp.nederadio.domain.settings.RemoveFromFavorites
-import com.nielsmasdorp.nederadio.domain.stream.GetAllStreams
-import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
-import com.nielsmasdorp.nederadio.domain.stream.StreamManager
-import com.nielsmasdorp.nederadio.domain.stream.UpdateStreams
+import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.util.CoroutineTestRule
+import com.nielsmasdorp.nederadio.util.getOrAwaitValue
+import io.mockk.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
+/**
+ * @author Niels Masdorp (NielsMasdorp)
+ */
 class AppViewModelTest {
 
     @get:Rule
@@ -27,7 +28,8 @@ class AppViewModelTest {
     @Test
     fun `when on started with controls, initialise manager with controls`() {
         // given
-        val manager = mock(StreamManager::class.java)
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
         val controls: List<PlayerControls<*>> = listOf(object : PlayerControls<String> {
             override fun getView(): String {
                 return "first control"
@@ -39,19 +41,447 @@ class AppViewModelTest {
                 }
             }
         )
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+        every { manager.initialize(controls = controls) } returns Unit
 
         // when
         val vm = createViewModel(
-            getAllStreams = mock(GetAllStreams::class.java),
-            addToFavorites = mock(AddToFavorites::class.java),
-            removeFromFavorites = mock(RemoveFromFavorites::class.java),
-            updateStreams = mock(UpdateStreams::class.java),
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
             streamManager = manager
         )
         vm.onStarted(controls = controls)
 
         // then
-        verify(manager).initialize(controls = controls)
+        verify { manager.initialize(controls = controls) }
+    }
+
+    @Test
+    fun `when on stopped, release manager`() {
+        // given
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+        every { manager.release() } returns Unit
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+        vm.onStopped()
+
+        // then
+        verify { manager.release() }
+    }
+
+    @Test
+    fun `when on stream picked, pick stream in manager`() {
+        // given
+        val id = "id"
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+        every { manager.streamPicked(id = id) } returns Unit
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+        vm.onStreamPicked(id = id)
+
+        // then
+        verify { manager.streamPicked(id = id) }
+    }
+
+    @Test
+    fun `when sleep timer picked, propagate event to show sleep timer`() = runBlocking {
+        // given
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+        vm.onTimerPicked()
+
+        // then
+        Assert.assertEquals(vm.showSleepTimer.first(), true)
+    }
+
+    @Test
+    fun `when sleep timer set then set in manager and hide sleep timer`() = runBlocking {
+        // given
+        val index = 0
+        val ms = 0L
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+        every { manager.sleepTimerSet(ms = ms) } returns Unit
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+        vm.setSleepTimer(index = index)
+
+        // then
+        verify { manager.sleepTimerSet(ms = ms) }
+        Assert.assertEquals(vm.showSleepTimer.first(), false)
+    }
+
+    @Test
+    fun `when about picked, propagate event to show about`() = runBlocking {
+        // given
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+        vm.onAboutPicked()
+
+        // then
+        Assert.assertEquals(vm.showAboutApp.first(), true)
+    }
+
+    @Test
+    fun `when dialog is dismissed, propagate event to hide all dialogs`() = runBlocking {
+        // given
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+        vm.onAlertDismissed()
+
+        // then
+        Assert.assertEquals(vm.showAboutApp.first(), false)
+        Assert.assertEquals(vm.showSleepTimer.first(), false)
+    }
+
+    @Test
+    fun `when stream is added to favorites, execute correct usecase`() {
+        // given
+        val id = "id"
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        val addToFavorites = mockk<AddToFavorites>()
+        val removeFromFavorites = mockk<RemoveFromFavorites>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = addToFavorites,
+            removeFromFavorites = removeFromFavorites,
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+        vm.onStreamFavoriteChanged(id = id, isFavorite = true)
+
+        // then
+        coVerify { addToFavorites.invoke(id = id) }
+        coVerify(exactly = 0) { removeFromFavorites(id = id) }
+    }
+
+    @Test
+    fun `when stream is removed from favorites, execute correct usecase`() {
+        // given
+        val id = "id"
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        val addToFavorites = mockk<AddToFavorites>()
+        val removeFromFavorites = mockk<RemoveFromFavorites>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+        coEvery { removeFromFavorites(id = id) } returns Unit
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = addToFavorites,
+            removeFromFavorites = removeFromFavorites,
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+        vm.onStreamFavoriteChanged(id = id, isFavorite = false)
+
+        // then
+        coVerify { removeFromFavorites.invoke(id = id) }
+        coVerify(exactly = 0) { addToFavorites(id = id) }
+    }
+
+    @Test
+    fun `when streams need to be retried, execute correct usecase`() {
+        // given
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        val updateStreams = mockk<UpdateStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+        every { updateStreams() } returns Unit
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = updateStreams,
+            streamManager = manager
+        )
+        vm.onRetryStreams()
+
+        // then
+        coVerify { updateStreams() }
+    }
+
+    @Test
+    fun `when zero sleep timer is updated by manager, propagate formatted event`() {
+        // given
+        val ms = 0L
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(ms) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+
+        // then
+        Assert.assertEquals("", vm.sleepTimer.getOrAwaitValue())
+    }
+
+    @Test
+    fun `when second sleep timer is updated by manager, propagate formatted event`() {
+        // given
+        val ms = 1_000L
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(ms) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+
+        // then
+        Assert.assertEquals("00:01", vm.sleepTimer.getOrAwaitValue())
+    }
+
+    @Test
+    fun `when minute sleep timer is updated by manager, propagate formatted event`() {
+        // given
+        val ms = 1_00_000L
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(ms) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+
+        // then
+        Assert.assertEquals("01:40", vm.sleepTimer.getOrAwaitValue())
+    }
+
+    @Test
+    fun `when hour sleep timer is updated by manager, propagate formatted event`() {
+        // given
+        val ms = 3_600_0000L
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(ms) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+
+        // then
+        Assert.assertEquals("10:00:00", vm.sleepTimer.getOrAwaitValue())
+    }
+
+    @Test
+    fun `when streams are updated by manager, send streams to livedata`() {
+        // given
+        val streams = CurrentStreams.Loading
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(streams) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+
+        // then
+        Assert.assertEquals(streams, vm.streams.getOrAwaitValue())
+    }
+
+    @Test
+    fun `when streams are updated by manager, send favorites according to favorite status to livedata`() {
+        // given
+        val streams = CurrentStreams.Success(
+            listOf(
+                Stream(
+                    id = "1",
+                    url = "url",
+                    title = "title",
+                    imageUrl = "imageUrl",
+                    imageBytes = byteArrayOf(),
+                    isFavorite = true
+                ),
+                Stream(
+                    id = "2",
+                    url = "url",
+                    title = "title",
+                    imageUrl = "imageUrl",
+                    imageBytes = byteArrayOf(),
+                    isFavorite = false
+                ),
+            )
+        )
+        val favorites = streams.streams.filter { it.isFavorite }
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(streams) }
+        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+
+        // then
+        Assert.assertEquals(favorites, vm.favorites.getOrAwaitValue())
+    }
+
+    @Test
+    fun `when current stream is updated by manager, send stream to livedata`() {
+        // given
+        val stream = CurrentStream.Empty
+        val manager = mockk<StreamManager>()
+        val getAllStreams = mockk<GetAllStreams>()
+        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { manager.currentStreamFlow } returns flow { emit(stream) }
+        every { manager.sleepTimerFlow } returns flow { emit(null) }
+        every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+
+        // when
+        val vm = createViewModel(
+            getAllStreams = getAllStreams,
+            addToFavorites = mockk(),
+            removeFromFavorites = mockk(),
+            updateStreams = mockk(),
+            streamManager = manager
+        )
+
+        // then
+        Assert.assertEquals(stream, vm.currentStream.getOrAwaitValue())
     }
 
     private fun createViewModel(

@@ -13,6 +13,9 @@ import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.Failure
 import io.ktor.client.features.*
 
+/**
+ * @author Niels Masdorp
+ */
 fun Exception.toFailure(resources: Resources): Failure = when (this) {
     is ServerResponseException -> Failure.HttpErrorInternalServerError(resources.getString(R.string.streams_fetch_error_general))
     is ClientRequestException ->
