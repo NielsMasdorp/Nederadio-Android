@@ -11,10 +11,7 @@ import com.nielsmasdorp.nederadio.data.stream.ApiStreamRepository
 import com.nielsmasdorp.nederadio.data.settings.SharedPreferencesSettingsRepository
 import com.nielsmasdorp.nederadio.domain.connectivity.NetworkManager
 import com.nielsmasdorp.nederadio.domain.settings.*
-import com.nielsmasdorp.nederadio.domain.stream.GetAllStreams
-import com.nielsmasdorp.nederadio.domain.stream.StreamManager
-import com.nielsmasdorp.nederadio.domain.stream.StreamRepository
-import com.nielsmasdorp.nederadio.domain.stream.UpdateStreams
+import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.ui.AppViewModel
 import com.nielsmasdorp.nederadio.ui.search.SearchViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -29,8 +26,11 @@ import org.koin.dsl.module
 val streamModule = module {
     single<StreamRepository> { ApiStreamRepository(androidContext(), get(), get(), get()) }
     single { GetAllStreams(get()) }
+    single { GetActiveStream(get()) }
     single { AddToFavorites(get()) }
     single { UpdateStreams(get()) }
+    single { SetStreamTrack(get()) }
+    single { SetActiveStream(get(), get()) }
     single { RemoveFromFavorites(get()) }
     single<StreamManager> { AndroidStreamManager(get(), get(), get(), get()) }
 }
@@ -48,6 +48,6 @@ val networkModule = module {
 }
 
 val uiModule = module {
-    viewModel { AppViewModel(get(), get(), get(), get(), get()) }
+    viewModel { AppViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get()) }
 }

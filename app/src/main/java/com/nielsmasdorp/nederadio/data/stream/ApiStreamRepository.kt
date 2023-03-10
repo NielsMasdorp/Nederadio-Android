@@ -5,16 +5,14 @@ import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.data.network.StreamApi
 import com.nielsmasdorp.nederadio.domain.connectivity.NetworkManager
 import com.nielsmasdorp.nederadio.domain.settings.SettingsRepository
-import com.nielsmasdorp.nederadio.domain.stream.CurrentStreams
+import com.nielsmasdorp.nederadio.domain.stream.Streams
 import com.nielsmasdorp.nederadio.domain.stream.Failure
 import com.nielsmasdorp.nederadio.domain.stream.StreamRepository
-import com.nielsmasdorp.nederadio.util.pMap
 import com.nielsmasdorp.nederadio.util.toFailure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -25,44 +23,81 @@ class ApiStreamRepository(
     private val context: Context,
     private val networkManager: NetworkManager,
     private val streamApi: StreamApi,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
 ) : StreamRepository {
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
-    override val streamsFlow: MutableStateFlow<CurrentStreams> =
-        MutableStateFlow(CurrentStreams.Loading)
+    override val streamsFlow: MutableStateFlow<Streams> =
+        MutableStateFlow(Streams.Loading)
 
     init {
         loadStreams()
+        scope.launch {
+            settingsRepository.favoritesFlow.collect { favorites ->
+                streamsFlow.value = when (val current = streamsFlow.value) {
+                    is Streams.Success -> current.copy(streams = current.streams.map { stream ->
+                        stream.copy(isFavorite = favorites.contains(stream.id))
+                    })
+                    else -> streamsFlow.value
+                }
+            }
+        }
     }
 
-    override fun forceUpdate() {
-        streamsFlow.value = CurrentStreams.Loading
+    override suspend fun forceUpdate() {
+        streamsFlow.value = Streams.Loading
         loadStreams()
+    }
+
+    override suspend fun updateTrack(track: String) {
+        streamsFlow.value = when (val current = streamsFlow.value) {
+            is Streams.Success -> current.copy(streams = current.streams.map { stream ->
+                if (stream.isActive) {
+                    if (stream.track == track) return
+                    stream.copy(track = track)
+                } else {
+                    stream
+                }
+            })
+            else -> streamsFlow.value
+        }
+    }
+
+    override suspend fun updateActive(id: String) {
+        streamsFlow.value = when (val current = streamsFlow.value) {
+            is Streams.Success -> {
+                if (current.streams.find { it.isActive }?.id == id) return
+                current.copy(streams = current.streams.map { stream ->
+                    stream.copy(isActive = stream.id == id)
+                })
+            }
+            else -> streamsFlow.value
+        }
     }
 
     private fun loadStreams() {
         scope.launch {
             if (!networkManager.isConnected()) {
-                streamsFlow.value = CurrentStreams.Error(
+                streamsFlow.value = Streams.Error(
                     Failure.NoNetworkConnection(
                         context.getString(R.string.streams_fetch_error_no_internet)
                     )
                 )
             } else {
                 try {
-                    // parallel map because toDomain is an expensive operation
-                    val streams = streamApi.getStreams().pMap { it.toDomain() }
-                    settingsRepository.favoritesFlow.collectLatest { favorites ->
-                        streamsFlow.value = CurrentStreams.Success(streams = streams.map { stream ->
-                            stream.copy(isFavorite = favorites.contains(stream.id))
-                        })
-                    }
+                    val streams = streamApi.getStreams()
+                        .map {
+                            it.toDomain(
+                                isCurrent = settingsRepository.getLastPlayedId() == it.id,
+                                isFavorite = settingsRepository.isFavorite(id = it.id)
+                            )
+                        }
+                    streamsFlow.value = Streams.Success(streams = streams)
                 } catch (ex: Exception) {
                     streamsFlow.value =
-                        CurrentStreams.Error(failure = ex.toFailure(context.resources))
+                        Streams.Error(failure = ex.toFailure(context.resources))
                 }
             }
         }

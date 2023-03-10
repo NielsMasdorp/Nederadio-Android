@@ -18,7 +18,7 @@ class SearchViewModel(
     val searchedStreams: LiveData<List<Stream>> =
         getAllStreams.streams.combine(searchQuery) { streams, query ->
             when (streams) {
-                is CurrentStreams.Success -> streams.streams.filter {
+                is Streams.Success -> streams.streams.filter {
                     it.title.contains(
                         query,
                         ignoreCase = true

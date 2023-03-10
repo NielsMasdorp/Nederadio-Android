@@ -8,5 +8,5 @@ package com.nielsmasdorp.nederadio.domain.stream
  */
 class UpdateStreams(private val repository: StreamRepository) {
 
-    operator fun invoke() = repository.forceUpdate()
+    suspend operator fun invoke() = repository.forceUpdate()
 }

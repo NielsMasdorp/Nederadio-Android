@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.pager.rememberPagerState
 import com.nielsmasdorp.nederadio.R
-import com.nielsmasdorp.nederadio.domain.stream.CurrentStream
-import com.nielsmasdorp.nederadio.domain.stream.CurrentStreams
+import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
+import com.nielsmasdorp.nederadio.domain.stream.Streams
 import com.nielsmasdorp.nederadio.domain.stream.Stream
 import com.nielsmasdorp.nederadio.ui.components.LoadingView
 import com.nielsmasdorp.nederadio.ui.components.StreamsErrorView
@@ -22,8 +22,8 @@ import com.nielsmasdorp.nederadio.ui.components.StreamsErrorView
 fun HomeScreen(
     modifier: Modifier = Modifier,
     castButton: View,
-    streams: CurrentStreams,
-    currentStream: CurrentStream,
+    streams: Streams,
+    activeStream: ActiveStream,
     favorites: List<Stream>,
     onStreamSelected: (String) -> Unit = {},
     onRetryStreams: () -> Unit = {},
@@ -36,15 +36,15 @@ fun HomeScreen(
     Column(modifier = modifier.fillMaxSize()) {
         TopBar(
             castButton = castButton,
-            showCastButton = currentStream is CurrentStream.Filled,
+            showCastButton = activeStream is ActiveStream.Filled,
             onAboutClicked = onAbout,
             onSearchClicked = onSearch,
         )
         when (streams) {
-            is CurrentStreams.Loading -> LoadingView(
+            is Streams.Loading -> LoadingView(
                 backgroundColor = MaterialTheme.colorScheme.primaryContainer
             )
-            is CurrentStreams.Success -> {
+            is Streams.Success -> {
                 val tabs = listOf(
                     TabItem.Stations(
                         title = stringResource(id = R.string.stations_tab),

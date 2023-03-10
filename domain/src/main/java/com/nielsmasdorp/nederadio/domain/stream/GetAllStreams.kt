@@ -10,5 +10,5 @@ import kotlinx.coroutines.flow.Flow
  */
 class GetAllStreams(private val repository: StreamRepository) {
 
-    val streams: Flow<CurrentStreams> = repository.streamsFlow
+    val streams: Flow<Streams> = repository.streamsFlow
 }

@@ -9,25 +9,56 @@ import kotlinx.coroutines.flow.flow
  *
  * @author Niels Masdorp (NielsMasdorp)
  */
-class FakeStreamRepository(private val values: List<CurrentStreams>) : StreamRepository {
+class FakeStreamRepository(private var streams: List<Streams>) : StreamRepository {
 
     private var update = false
 
-    override val streamsFlow: Flow<CurrentStreams>
+    override val streamsFlow: Flow<Streams>
         get() = flow {
-            for (value in values) {
-                emit(value)
+            for (item in streams) {
+                emit(item)
             }
             while (!update) {
                 delay(100L)
             }
-            for (value in values) {
-                emit(value)
+            for (item in streams) {
+                emit(item)
             }
             update = false
         }
 
-    override fun forceUpdate() {
+    override suspend fun forceUpdate() {
+        update = true
+    }
+
+    override suspend fun updateTrack(track: String) {
+        when (val current = streams.first()) {
+            is Streams.Success -> {
+                streams = listOf(current.copy(
+                    streams = current.streams.map { stream ->
+                        if (stream.isActive) {
+                            stream.copy(track = track)
+                        } else stream
+
+                    }
+                ))
+            }
+            else -> {}
+        }
+        update = true
+    }
+
+    override suspend fun updateActive(id: String) {
+        when (val current = streams.first()) {
+            is Streams.Success -> {
+                streams = listOf(current.copy(
+                    streams = current.streams.map { stream ->
+                        stream.copy(isActive = stream.id == id)
+                    }
+                ))
+            }
+            else -> {}
+        }
         update = true
     }
 }

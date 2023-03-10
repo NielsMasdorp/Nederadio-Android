@@ -22,6 +22,7 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.ui.NederadioActivity
+import com.nielsmasdorp.nederadio.util.connectedDeviceName
 import com.nielsmasdorp.nederadio.util.sendCommandToController
 import java.util.concurrent.TimeUnit
 
@@ -34,10 +35,13 @@ import java.util.concurrent.TimeUnit
  */
 @UnstableApi
 class StreamService : MediaSessionService(),
-    Listener, MediaSession.SessionCallback, SessionAvailabilityListener {
+    Listener, MediaSession.Callback, SessionAvailabilityListener {
 
-    private lateinit var player: CompositePlayer
+    private lateinit var localPlayer: Player
+    private lateinit var castPlayer: CastPlayer
+    private lateinit var player: ReplaceableForwardingPlayer
     private lateinit var mediaSession: MediaSession
+    private lateinit var castContext: CastContext
 
     private var countDownTimer: CountDownTimer? = null
 
@@ -46,12 +50,16 @@ class StreamService : MediaSessionService(),
         initialize()
     }
 
+    override fun onTaskRemoved(rootIntent: Intent) {
+        super.onTaskRemoved(rootIntent)
+        releaseMediaSession()
+        stopSelf()
+    }
+
     override fun onDestroy() {
-        player.removeListener(this)
-        player.release()
-        mediaSession.release()
-        stopSleepTimer()
         super.onDestroy()
+        releaseMediaSession()
+        stopSleepTimer()
     }
 
     /**
@@ -62,12 +70,12 @@ class StreamService : MediaSessionService(),
     /**
      * Casting has started, switch to [CastPlayer]
      */
-    override fun onCastSessionAvailable() = player.switchToCast()
+    override fun onCastSessionAvailable() = player.setPlayer(newPlayer = castPlayer)
 
     /**
      * Casting has been stopped, switch to [ExoPlayer]
      */
-    override fun onCastSessionUnavailable() = player.switchToLocal()
+    override fun onCastSessionUnavailable() = player.setPlayer(newPlayer = localPlayer)
 
     /**
      * [MediaItem] has been updated
@@ -76,7 +84,15 @@ class StreamService : MediaSessionService(),
         mediaItem ?: return
         mediaSession.sendCommandToController(
             key = MEDIA_ITEM_UPDATED_COMMAND,
-            value = mediaItem.toBundle()
+            value = mediaItem
+                .buildUpon()
+                .setMediaMetadata(
+                    mediaItem
+                        .mediaMetadata
+                        .buildUpon()
+                        .setTitle(getTrackInfo(mediaMetadata = mediaItem.mediaMetadata))
+                        .build()
+                ).build().toBundle()
         )
     }
 
@@ -87,9 +103,7 @@ class StreamService : MediaSessionService(),
         mediaSession.sendCommandToController(
             key = TRACK_UPDATED_COMMAND,
             value = Bundle().apply {
-                putString(
-                    TRACK_UPDATED_COMMAND_VALUE_KEY, mediaMetadata.title?.toString()
-                )
+                putString(TRACK_UPDATED_COMMAND_VALUE_KEY, getTrackInfo(mediaMetadata))
             }
         )
     }
@@ -124,9 +138,7 @@ class StreamService : MediaSessionService(),
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
         val commands = SessionCommands.Builder()
-            .add(SessionCommand(START_STREAM_COMMAND, Bundle()))
             .add(SessionCommand(START_TIMER_COMMAND, Bundle()))
-            .add(COMMAND_CODE_SESSION_SET_MEDIA_URI)
             .build()
         val playerCommands = Commands.Builder().addAllCommands().build()
         session.setAvailableCommands(
@@ -135,10 +147,6 @@ class StreamService : MediaSessionService(),
             playerCommands
         )
         return MediaSession.ConnectionResult.accept(commands, playerCommands)
-    }
-
-    override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
-        player.notifyCurrentMediaItem(listener = this)
     }
 
     /**
@@ -158,39 +166,33 @@ class StreamService : MediaSessionService(),
                 if (ms > 0) startSleepTimer(ms) else stopSleepTimer()
                 Futures.immediateFuture(SessionResult(RESULT_SUCCESS))
             }
-            START_STREAM_COMMAND -> {
-                startStream(mediaItem = MediaItem.CREATOR.fromBundle(customCommand.customExtras))
-                Futures.immediateFuture(SessionResult(RESULT_SUCCESS))
-            }
-            else -> {
-                super.onCustomCommand(session, controller, customCommand, args)
-            }
+            else -> super.onCustomCommand(session, controller, customCommand, args)
         }
     }
 
-    private fun startStream(mediaItem: MediaItem) {
-        // The [MediaController] delegates creating [MediaItem]s to the service
-        // This is needed because for some reason the uri gets stripped when a [MediaItem]
-        // is created from the [MediaController]
-        // see https://github.com/androidx/media/issues/8
-        // and https://stackoverflow.com/questions/70096715/adding-mediaitem-when-using-the-media3-library-caused-an-error
-        val item = mediaItem.buildUpon()
-            .setUri(mediaItem.mediaMetadata.mediaUri)
-            .setMimeType(MimeTypes.AUDIO_UNKNOWN)
-            .build()
-        with(player) {
-            setMediaItem(item)
-            prepare()
-        }
+    override fun onAddMediaItems(
+        mediaSession: MediaSession,
+        controller: MediaSession.ControllerInfo,
+        mediaItems: MutableList<MediaItem>
+    ): ListenableFuture<MutableList<MediaItem>> {
+        // content uris get stripped as a safety manner for optional IPC communication
+        // but since we do not care about IPC safety we can use the request metadata which
+        // does not get stripped and use that info to set the content urls again on the items
+        val updatedMediaItems = mediaItems.map { mediaItem ->
+            mediaItem.buildUpon()
+                .setUri(mediaItem.requestMetadata.mediaUri)
+                .build()
+        }.toMutableList()
+        return Futures.immediateFuture(updatedMediaItems)
     }
 
     @SuppressLint("ObsoleteSdkInt")
     private fun initialize() {
-        val localPlayer = ExoPlayer.Builder(this)
+        localPlayer = ExoPlayer.Builder(this)
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
-                    .setContentType(C.CONTENT_TYPE_MUSIC)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
                     .build(), true // Automatic requesting and dropping audio focus
             )
             .setHandleAudioBecomingNoisy(true) // Handle headphones disconnect
@@ -206,25 +208,48 @@ class StreamService : MediaSessionService(),
             immutableFlag or FLAG_UPDATE_CURRENT
         )
 
-        val castPlayer = CastPlayer(
-            CastContext.getSharedInstance(this),
-            StreamMediaItemConverter(
-                staticTitle = applicationContext.getString(R.string.stream_subtitle_streaming)
-            )
-        )
-        player = CompositePlayer(
-            staticTitle = applicationContext.getString(R.string.stream_title_casting),
-            localPlayer = localPlayer,
-            castPlayer = castPlayer
-        ).apply {
+        castContext = CastContext.getSharedInstance(this)
+        castPlayer = CastPlayer(castContext, StreamMediaItemConverter()).apply {
             setSessionAvailabilityListener(this@StreamService)
+        }
+
+        player = ReplaceableForwardingPlayer(
+            player = if (castPlayer.isCastSessionAvailable) {
+                castPlayer
+            } else {
+                localPlayer
+            }
+        ).apply {
             addListener(this@StreamService)
         }
 
         mediaSession = MediaSession.Builder(this, player)
             .setSessionActivity(pendingIntent)
-            .setSessionCallback(this)
+            .setCallback(this)
             .build()
+    }
+
+    private fun getTrackInfo(mediaMetadata: MediaMetadata): String {
+        val trackInfo = mediaMetadata.title?.toString()
+        return if (castPlayer.isCastSessionAvailable) {
+            castContext.connectedDeviceName()?.let { name ->
+                getString(R.string.stream_subtitle_casting_device, name)
+            } ?: getString(R.string.stream_subtitle_casting)
+        } else if (trackInfo.isNullOrBlank()) {
+            getString(R.string.stream_subtitle_unknown_song)
+        } else {
+            trackInfo
+        }
+    }
+
+    private fun releaseMediaSession() {
+        mediaSession.run {
+            release()
+            if (player.playbackState != STATE_IDLE) {
+                player.removeListener(this@StreamService)
+                player.release()
+            }
+        }
     }
 
     private fun startSleepTimer(ms: Long) {
@@ -234,14 +259,14 @@ class StreamService : MediaSessionService(),
                 sendSleepTimerCommand(msLeft)
                 if (msLeft < TimeUnit.SECONDS.toMillis(LOWER_VOLUME_CUTOFF.toLong())) {
                     // gently lower volume by the second
-                    player.volume =
+                    mediaSession.player.volume =
                         (msLeft / TimeUnit.SECONDS.toMillis(1)) / LOWER_VOLUME_CUTOFF
                 }
             }
 
             override fun onFinish() {
                 sendSleepTimerCommand(msLeft = 0L)
-                player.pause()
+                mediaSession.player.pause()
             }
         }.start()
     }
@@ -257,14 +282,13 @@ class StreamService : MediaSessionService(),
         sendSleepTimerCommand(msLeft = 0L)
         countDownTimer?.cancel()
         countDownTimer = null
-        player.volume = MAX_VOLUME
+        mediaSession.player.volume = MAX_VOLUME
     }
 
     companion object {
 
         const val START_TIMER_COMMAND = "start_timer"
         const val START_TIMER_COMMAND_VALUE_KEY = "start_timer_value"
-        const val START_STREAM_COMMAND = "start_stream"
         const val TIMER_UPDATED_COMMAND = "timer_updated"
         const val TIMER_UPDATED_COMMAND_VALUE_KEY = "timer_updated_value"
         const val MEDIA_ITEM_UPDATED_COMMAND = "media_item_updated"

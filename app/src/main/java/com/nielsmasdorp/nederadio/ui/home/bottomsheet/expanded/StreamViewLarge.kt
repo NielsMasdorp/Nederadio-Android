@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
@@ -25,9 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.ui.PlayerControlView
-import com.google.accompanist.insets.statusBarsHeight
 import com.nielsmasdorp.nederadio.R
-import com.nielsmasdorp.nederadio.domain.stream.CurrentStream
+import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
 import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
 import com.nielsmasdorp.nederadio.ui.extension.setColors
 import com.skydoves.landscapist.glide.GlideImage
@@ -39,31 +39,36 @@ import com.skydoves.landscapist.glide.GlideImage
 fun StreamViewLarge(
     modifier: Modifier = Modifier,
     playerControls: PlayerControls<View>,
-    currentStream: CurrentStream,
+    activeStream: ActiveStream,
     sleepTimer: String?,
     onCollapseClick: () -> Unit,
     onTimerClicked: () -> Unit,
-    onStreamFavoriteStatusChanged: (String, Boolean) -> Unit
+    onStreamFavoriteStatusChanged: (String, Boolean) -> Unit,
+    currentFraction: Float
 ) {
 
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.primaryContainer
+        color = MaterialTheme.colorScheme.primary
     ) {
-        if (currentStream is CurrentStream.Filled) { // should not be visible to user when stream is not filled
-            val stream = currentStream.stream
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.statusBarsHeight())
-                IconButton(onClick = { onCollapseClick() }) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 32.dp)
+                .systemBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (activeStream is ActiveStream.Filled) { // should not be visible to user when stream is not filled
+                val stream = activeStream.stream
+                Spacer(modifier = Modifier.height(16.dp))
+                IconButton(
+                    modifier = Modifier.graphicsLayer(alpha = 0f + currentFraction),
+                    onClick = { onCollapseClick() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.chevron_down),
                         contentDescription = stringResource(id = R.string.settings_content_description),
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
                 Spacer(modifier = Modifier.height(32.dp))
@@ -88,7 +93,7 @@ fun StreamViewLarge(
                         .padding(top = 16.dp),
                     text = stream.title,
                     style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 if (!stream.track.isNullOrEmpty()) {
@@ -96,7 +101,7 @@ fun StreamViewLarge(
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge,
                         text = stream.track.orEmpty(),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -105,7 +110,7 @@ fun StreamViewLarge(
                     text = sleepTimer.orEmpty(),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
                 Spacer(modifier = Modifier.weight(1.0f))
                 IconButton(onClick = {
@@ -126,7 +131,7 @@ fun StreamViewLarge(
                         } else {
                             stringResource(id = R.string.player_add_to_favorites)
                         },
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -134,14 +139,13 @@ fun StreamViewLarge(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    val controlColor = MaterialTheme.colorScheme.onPrimaryContainer.toArgb()
-                    val playPauseColor = MaterialTheme.colorScheme.onPrimary.toArgb()
+                    val playPauseColor = MaterialTheme.colorScheme.onPrimaryContainer.toArgb()
                     Box(
                         modifier = Modifier
                             .size(72.dp)
                             .align(Alignment.Center)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary)
+                            .background(MaterialTheme.colorScheme.primaryContainer)
                     )
                     AndroidView(
                         factory = { playerControls.getView() as PlayerControlView },
@@ -156,7 +160,7 @@ fun StreamViewLarge(
                 Spacer(modifier = Modifier.height(8.dp))
                 TextButton(onClick = { onTimerClicked() }) {
                     Text(
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         text = stringResource(id = R.string.sleep_timer_button),
                         style = MaterialTheme.typography.titleLarge,
                     )

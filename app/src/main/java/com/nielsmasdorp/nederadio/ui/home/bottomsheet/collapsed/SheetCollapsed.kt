@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.nielsmasdorp.nederadio.domain.stream.CurrentStream
+import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -20,13 +20,13 @@ import com.nielsmasdorp.nederadio.domain.stream.CurrentStream
 @Composable
 fun SheetCollapsed(
     modifier: Modifier = Modifier,
-    currentStream: CurrentStream,
+    activeStream: ActiveStream,
     isEnabled: Boolean,
     currentFraction: Float,
     onSheetClick: () -> Unit,
-    content: @Composable RowScope.(CurrentStream) -> Unit
+    content: @Composable RowScope.(ActiveStream) -> Unit
 ) {
-    val background = if (currentStream is CurrentStream.Unknown) {
+    val background = if (activeStream is ActiveStream.Unknown) {
         MaterialTheme.colorScheme.primaryContainer
     } else {
         MaterialTheme.colorScheme.primary
@@ -43,6 +43,6 @@ fun SheetCollapsed(
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        content(currentStream)
+        content(activeStream)
     }
 }

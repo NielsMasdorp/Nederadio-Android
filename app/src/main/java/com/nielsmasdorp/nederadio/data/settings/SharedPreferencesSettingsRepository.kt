@@ -39,6 +39,8 @@ class SharedPreferencesSettingsRepository(context: Context) : SettingsRepository
         prefs.edit().putStringSet(FAVORITES, new).apply()
     }
 
+    override suspend fun isFavorite(id: String): Boolean = getFavorites().contains(id)
+
     companion object {
         const val PREF_KEY = "settings"
         const val LAST_PLAYED_INDEX = "last_played_id"

@@ -18,7 +18,7 @@ class PlayerControlsView(private val view: View) : PlayerControls<View> {
         /**
          * Create the control views for controlling playback
          * This is needed because Exoplayer and Media3 do not support Jetpack Compose yet
-         * // TODO remove once jetpack compose support is present in media3
+         * TODO remove once jetpack compose support is present in media3
          */
         @SuppressLint("InflateParams")
         fun createViews(layoutInflater: LayoutInflater): List<PlayerControlsView> {

@@ -60,6 +60,7 @@
     <string name="search_hint">Search a radio station</string>
     <string name="search_clear_content_description">Clear input</string>
 
-    <string name="stream_subtitle_streaming">Streaming..</string>
-    <string name="stream_title_casting">Casting..</string>
+    <string name="stream_subtitle_casting">Casting..</string>
+    <string name="stream_subtitle_casting_device">Casting to %s</string>
+    <string name="stream_subtitle_unknown_song">No information present</string>
 </resources>

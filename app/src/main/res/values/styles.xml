@@ -16,5 +16,4 @@
     <style name="CustomMediaRouteButtonStyle" parent="Widget.MediaRouter.Light.MediaRouteButton">
         <item name="mediaRouteButtonTint">@color/cast_button_tint</item>
     </style>
-
 </resources>

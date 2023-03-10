@@ -60,6 +60,7 @@
     <string name="search_hint">Zoek een radio station</string>
     <string name="search_clear_content_description">Verwijder zoekterm</string>
 
-    <string name="stream_subtitle_streaming">Streamen..</string>
-    <string name="stream_title_casting">Casting..</string>
+    <string name="stream_subtitle_casting">Casten..</string>
+    <string name="stream_subtitle_casting_device">Casten naar %s</string>
+    <string name="stream_subtitle_unknown_song">Geen informatie bekend</string>
 </resources>

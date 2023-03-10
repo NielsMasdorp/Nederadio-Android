@@ -8,11 +8,6 @@ import kotlinx.coroutines.flow.Flow
 interface StreamManager {
 
     /**
-     * [Flow] of stream currently selected
-     */
-    val currentStreamFlow: Flow<CurrentStream>
-
-    /**
      * [Flow] of milliseconds left in the sleep timer
      */
     val sleepTimerFlow: Flow<Long?>

@@ -1,7 +1,6 @@
 package com.nielsmasdorp.nederadio.data.stream
 
 import android.content.*
-import android.net.Uri
 import android.os.Bundle
 import androidx.media3.common.*
 import androidx.media3.common.util.UnstableApi
@@ -10,18 +9,14 @@ import androidx.media3.session.MediaSession
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
 import androidx.media3.session.SessionToken
-import androidx.media3.ui.PlayerControlView
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.nielsmasdorp.nederadio.R
-import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
 import com.nielsmasdorp.nederadio.playback.StreamService
-import com.nielsmasdorp.nederadio.domain.settings.SetLastPlayedId
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.MEDIA_ITEM_UPDATED_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.PLAYER_STREAM_ERROR_COMMAND
-import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_STREAM_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_TIMER_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_TIMER_COMMAND_VALUE_KEY
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TIMER_UPDATED_COMMAND
@@ -29,8 +24,10 @@ import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TIMER_UPDATED
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TRACK_UPDATED_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TRACK_UPDATED_COMMAND_VALUE_KEY
 import com.nielsmasdorp.nederadio.util.sendCommandToService
+import com.nielsmasdorp.nederadio.util.toMediaItem
+import com.nielsmasdorp.nederadio.util.view
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -38,8 +35,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @UnstableApi
 class AndroidStreamManager(
     private val context: Context,
-    private val getLastPlayedId: GetLastPlayedId,
-    private val setLastPlayedId: SetLastPlayedId,
+    private val setActiveStream: SetActiveStream,
+    private val setStreamTrack: SetStreamTrack,
     private val getAllStreams: GetAllStreams,
 ) : StreamManager, MediaController.Listener {
 
@@ -53,28 +50,10 @@ class AndroidStreamManager(
     private val controller: MediaController?
         get() = if (controllerFuture.isDone) controllerFuture.get() else null
 
-    override val currentStreamFlow: MutableStateFlow<CurrentStream> =
-        MutableStateFlow(CurrentStream.Unknown)
-
     override val sleepTimerFlow: MutableStateFlow<Long?> = MutableStateFlow(null)
 
     override val errorFlow: MutableStateFlow<StreamingError> =
         MutableStateFlow(StreamingError.Empty)
-
-    private var cache: StreamsCache = StreamsCache()
-
-    init {
-        managerScope.launch {
-            getAllStreams.streams.collect { streams ->
-                if (streams is CurrentStreams.Success) {
-                    cache = cache.copy(all = streams.streams)
-                    if (isInitialized) {
-                        handleStreamsUpdate(streams = streams.streams)
-                    }
-                }
-            }
-        }
-    }
 
     override fun initialize(
         controls: List<PlayerControls<*>>
@@ -84,15 +63,34 @@ class AndroidStreamManager(
             SessionToken(context, ComponentName(context, StreamService::class.java))
         ).setListener(this).buildAsync()
 
-        controllerFuture.addListener(
-            {
-                isInitialized = true
-                initController(controls)
-                managerScope.launch {
-                    handleStreamsUpdate(streams = cache.all)
+        val executor = MoreExecutors.directExecutor()
+        controllerFuture.addListener({ setupController(controls = controls) }, executor)
+    }
+
+    private fun setupController(controls: List<PlayerControls<*>>) {
+        isInitialized = true
+        initController(controls)
+        managerScope.launch {
+            getAllStreams.streams
+                .filter { it is Streams.Success }
+                .map { toStreamsResult(it as Streams.Success) }
+                .distinctUntilChanged()
+                .collect { result ->
+                    withContext(Dispatchers.Main) {
+                        val (streams, currentStreamIndex) = result
+                        val controller = requireController()
+                        if (currentStreamIndex != -1) {
+                            val currentStream = streams[currentStreamIndex]
+                            val currentStreamInUse = controller.currentMediaItem
+                            if (controller.mediaItemCount == 0) {
+                                controller.setMediaItems(streams, currentStreamIndex, 0L)
+                            } else if (currentStreamInUse?.mediaId != currentStream.mediaId) {
+                                controller.seekTo(currentStreamIndex, 0L)
+                            }
+                        }
+                    }
                 }
-            }, MoreExecutors.directExecutor()
-        )
+        }
     }
 
     /**
@@ -109,11 +107,16 @@ class AndroidStreamManager(
                 Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
             }
             MEDIA_ITEM_UPDATED_COMMAND -> {
-                onMediaItemUpdated(MediaItem.CREATOR.fromBundle(command.customExtras))
+                val mediaItem = MediaItem.CREATOR.fromBundle(command.customExtras)
+                managerScope.launch { setActiveStream(id = mediaItem.mediaId) }
                 Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
             }
             TRACK_UPDATED_COMMAND -> {
-                onTrackChanged(command.customExtras.getString(TRACK_UPDATED_COMMAND_VALUE_KEY))
+                managerScope.launch {
+                    setStreamTrack(
+                        track = command.customExtras.getString(TRACK_UPDATED_COMMAND_VALUE_KEY)!!
+                    )
+                }
                 Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
             }
             PLAYER_STREAM_ERROR_COMMAND -> {
@@ -130,11 +133,7 @@ class AndroidStreamManager(
     }
 
     override fun streamPicked(id: String) {
-        if (!cache.hasCurrentStream() ||
-            (cache.hasCurrentStream() && cache.getCurrentFilledStream().stream.id != id)
-        ) {
-            initStream(stream = cache.findById(id), force = true)
-        }
+        managerScope.launch { setActiveStream(id = id) }
     }
 
     override fun sleepTimerSet(ms: Long) {
@@ -151,61 +150,6 @@ class AndroidStreamManager(
     private fun initController(controls: List<PlayerControls<*>>) {
         controls.forEach { it.view().player = requireController() }
         sleepTimerFlow.value = null // sleep timer might have completed in background
-    }
-
-    private fun initStream(stream: Stream, force: Boolean) {
-        if (requireController().mediaItemCount == 0 || force) {
-            sendStreamToSession(stream = stream, start = force)
-        } else if (requireController().mediaItemCount > 0) {
-            updateCurrentStream(
-                id = stream.id,
-                // track might have changed while app was in the background
-                currentTrack = requireController().mediaMetadata.title?.toString()
-            )
-        }
-    }
-
-    private fun sendStreamToSession(stream: Stream, start: Boolean) {
-        // Delegate starting the stream to the [MediaSession] and not the controller
-        // see https://github.com/androidx/media/issues/8
-        // and https://stackoverflow.com/questions/70096715/adding-mediaitem-when-using-the-media3-library-caused-an-error
-        val item = MediaItem.Builder()
-            .setMediaId(stream.id)
-            .setMediaMetadata(
-                MediaMetadata.Builder()
-                    .setArtist(stream.title)
-                    .setArtworkData(
-                        stream.imageBytes,
-                        MediaMetadata.PICTURE_TYPE_OTHER
-                    )
-                    .setArtworkUri(Uri.parse(stream.imageUrl))
-                    .setMediaUri(Uri.parse(stream.url))
-                    .build()
-            )
-            .build()
-
-        requireController().sendCommandToService(
-            key = START_STREAM_COMMAND, value = item.toBundle()
-        ).addListener({
-            if (start) requireController().play()
-        }, MoreExecutors.directExecutor())
-    }
-
-    private fun onMediaItemUpdated(mediaItem: MediaItem) {
-        updateCurrentStream(
-            id = mediaItem.mediaId,
-            currentTrack = mediaItem.mediaMetadata.title?.toString()
-        )
-    }
-
-    private fun onTrackChanged(track: String?) {
-        if (cache.currentStream !is CurrentStream.Filled) return
-        val current = cache.currentStream as CurrentStream.Filled
-
-        val new = current.copy(
-            stream = current.stream.copy(track = track)
-        )
-        sendCurrentStream(new)
     }
 
     /**
@@ -226,52 +170,12 @@ class AndroidStreamManager(
         if (!persistent) errorFlow.value = StreamingError.Empty
     }
 
-    private suspend fun handleStreamsUpdate(streams: List<Stream>) {
-        if (streams.isEmpty()) return
-        val current = if (cache.hasCurrentStream()) cache.getCurrentFilledStream() else null
-        val lastPlayed = getLastPlayedId()?.let { cache.findById(it) }
-        val stream = current?.stream ?: lastPlayed
-        stream?.let {
-            val updated = cache.findById(it.id)
-            val new = it.copy(isFavorite = updated.isFavorite)
-            sendCurrentStream(stream = CurrentStream.Filled(stream = new))
-            withContext(Dispatchers.Main) {
-                initStream(new, force = false)
-            }
-        } ?: sendCurrentStream(stream = CurrentStream.Empty)
-    }
-
-    private fun updateCurrentStream(id: String, currentTrack: String?) {
-        managerScope.launch {
-            val new = CurrentStream.Filled(
-                stream = cache.findById(id = id).copy(
-                    track = currentTrack
-                )
-            )
-            setLastPlayedId(new.stream.id)
-            sendCurrentStream(stream = new)
-        }
-    }
-
-    private fun sendCurrentStream(stream: CurrentStream) {
-        currentStreamFlow.value = stream.also {
-            cache = cache.copy(currentStream = it)
-        }
+    private fun toStreamsResult(streamSuccess: Streams.Success): Pair<List<MediaItem>, Int> {
+        return Pair(
+            streamSuccess.streams.map { stream -> stream.toMediaItem() },
+            streamSuccess.streams.indexOfFirst { stream -> stream.isActive }
+        )
     }
 
     private fun requireController(): MediaController = controller!!
-
-    private fun PlayerControls<*>.view(): PlayerControlView = getView() as PlayerControlView
-
-    private data class StreamsCache(
-        val currentStream: CurrentStream = CurrentStream.Unknown,
-        val all: List<Stream> = emptyList()
-    ) {
-
-        fun findById(id: String): Stream = all.first { it.id == id }
-
-        fun hasCurrentStream(): Boolean = currentStream is CurrentStream.Filled
-
-        fun getCurrentFilledStream(): CurrentStream.Filled = currentStream as CurrentStream.Filled
-    }
 }

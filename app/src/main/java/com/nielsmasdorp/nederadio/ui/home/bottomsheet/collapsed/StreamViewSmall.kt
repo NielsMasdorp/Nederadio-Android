@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.ui.PlayerControlView
 import com.nielsmasdorp.nederadio.R
-import com.nielsmasdorp.nederadio.domain.stream.CurrentStream
+import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
 import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
 import com.nielsmasdorp.nederadio.ui.extension.setColors
 import com.skydoves.landscapist.glide.GlideImage
@@ -32,14 +32,14 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun StreamScreenSmall(
     modifier: Modifier = Modifier,
-    currentStream: CurrentStream,
+    activeStream: ActiveStream,
     playerControls: PlayerControls<View>,
     onStreamFavoriteStatusChanged: (String, Boolean) -> Unit,
 ) {
     val controlColor = MaterialTheme.colorScheme.onPrimary.toArgb()
-    when (currentStream) {
-        is CurrentStream.Unknown -> return
-        is CurrentStream.Empty -> {
+    when (activeStream) {
+        is ActiveStream.Unknown -> return
+        is ActiveStream.Empty -> {
             Row(
                 modifier = modifier
                     .fillMaxWidth()
@@ -62,7 +62,7 @@ fun StreamScreenSmall(
             }
         }
         else -> {
-            val stream = (currentStream as CurrentStream.Filled).stream
+            val stream = (activeStream as ActiveStream.Filled).stream
             Row(
                 modifier = modifier
                     .fillMaxSize()

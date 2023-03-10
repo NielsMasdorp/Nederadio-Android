@@ -7,15 +7,15 @@ repositories {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.nielsmasdorp.nederadio"
         minSdkVersion 26
         //noinspection OldTargetApi
-        targetSdkVersion 31
-        versionCode 189
-        versionName "2.0.0"
+        targetSdkVersion 33
+        versionCode 190
+        versionName "2.1.0"
     }
     buildTypes {
         release {
@@ -30,7 +30,16 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.2.0-alpha01'
+        kotlinCompilerExtensionVersion "1.3.0-rc02"
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -70,7 +79,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
 
     // Koin
-    implementation "io.insert-koin:koin-android:$koin_version"
     implementation "dev.burnoo:cokoin:$cokoin_version"
     implementation "dev.burnoo:cokoin-android-viewmodel:$cokoin_version"
     implementation "dev.burnoo:cokoin-android-navigation:$cokoin_version"
@@ -81,7 +89,8 @@ dependencies {
     implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
 
     // accompanist
-    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
     implementation "com.google.accompanist:accompanist-placeholder:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"

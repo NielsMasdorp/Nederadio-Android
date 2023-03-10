@@ -6,22 +6,11 @@
     tools:background="@color/colorPrimary">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/exo_play"
+        android:id="@+id/exo_play_pause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:foreground="?attr/actionBarItemBackground"
-        android:src="@drawable/ic_play"
-        android:tag="play"
-        android:visibility="gone" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/exo_pause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/ic_pause"
-        android:foreground="?attr/actionBarItemBackground"
-        android:tag="pause" />
+        android:tag="playPause" />
 
 </FrameLayout>

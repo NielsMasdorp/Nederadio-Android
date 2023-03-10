@@ -12,10 +12,22 @@ interface StreamRepository {
     /**
      * Flow of all streams playable by the app
      */
-    val streamsFlow: Flow<CurrentStreams>
+    val streamsFlow: Flow<Streams>
 
     /**
      * Update streams
      */
-    fun forceUpdate()
+    suspend fun forceUpdate()
+
+    /**
+     * Update track for current stream
+     * @param track the new track
+     */
+    suspend fun updateTrack(track: String)
+
+    /**
+     * Update the active stream
+     * @param id the id of the new active stream
+     */
+    suspend fun updateActive(id: String)
 }

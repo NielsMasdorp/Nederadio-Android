@@ -2,15 +2,22 @@ package com.nielsmasdorp.nederadio.util
 
 import android.content.res.Resources
 import android.os.Bundle
+import androidx.core.net.toUri
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.MediaSession
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
+import androidx.media3.ui.PlayerControlView
+import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.Failure
+import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
+import com.nielsmasdorp.nederadio.domain.stream.Stream
 import io.ktor.client.features.*
 
 /**
@@ -35,9 +42,10 @@ fun MediaSession.sendCommandToController(
     key: String,
     value: Bundle = Bundle()
 ): ListenableFuture<SessionResult> {
-    return connectedControllers.firstOrNull()?.let { controller ->
+    connectedControllers.forEach { controller ->
         sendCustomCommand(controller, SessionCommand(key, value), Bundle())
-    } ?: Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+    }
+    return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
 }
 
 @UnstableApi
@@ -47,3 +55,35 @@ fun MediaController.sendCommandToService(
 ): ListenableFuture<SessionResult> {
     return sendCustomCommand(SessionCommand(key, value), Bundle())
 }
+
+@UnstableApi
+fun Stream.toMediaItem(): MediaItem {
+    return MediaItem.Builder()
+        .setMediaId(id)
+        .setRequestMetadata(
+            MediaItem.RequestMetadata.Builder()
+                .setMediaUri(url.toUri())
+                .build()
+        )
+        .setMediaMetadata(
+            MediaMetadata.Builder()
+                .setMediaType(MediaMetadata.MEDIA_TYPE_RADIO_STATION)
+                .setSubtitle(title)
+                .setArtist(title)
+                .setArtworkUri(imageUrl.toUri())
+                .build()
+        )
+        .build()
+}
+
+/**
+ * @return the name of the connected cast device, if any
+ */
+fun CastContext.connectedDeviceName(): String? {
+    return sessionManager
+        .currentCastSession
+        ?.castDevice
+        ?.friendlyName
+}
+
+fun PlayerControls<*>.view(): PlayerControlView = getView() as PlayerControlView

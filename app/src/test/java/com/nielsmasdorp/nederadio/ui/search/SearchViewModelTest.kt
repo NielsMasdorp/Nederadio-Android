@@ -20,13 +20,12 @@ class SearchViewModelTest {
 
     @get:Rule
     val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
-
     @Test
     fun `when search query changes, emit new value`() {
         // given
         val query = "query"
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
 
         // when
         val vm = createViewModel(
@@ -45,7 +44,7 @@ class SearchViewModelTest {
         val id = "id"
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
         every { manager.streamPicked(id = id) } returns Unit
 
         // when
@@ -63,22 +62,22 @@ class SearchViewModelTest {
     fun `when streams are updated without query, then propagate all streams`() {
         // given
         val query = ""
-        val streams = CurrentStreams.Success(
+        val streams = Streams.Success(
             listOf(
                 Stream(
+                    isActive = false,
                     id = "1",
                     url = "url",
                     title = "title",
                     imageUrl = "imageUrl",
-                    imageBytes = byteArrayOf(),
                     isFavorite = true
                 ),
                 Stream(
+                    isActive = false,
                     id = "2",
                     url = "url",
                     title = "title",
                     imageUrl = "imageUrl",
-                    imageBytes = byteArrayOf(),
                     isFavorite = false
                 ),
             )
@@ -102,33 +101,33 @@ class SearchViewModelTest {
     fun `when streams are updated with query, then propagate all streams`() {
         // given
         val query = "lame"
-        val streams = CurrentStreams.Success(
+        val streams = Streams.Success(
             listOf(
                 Stream(
+                    isActive = false,
                     id = "1",
                     url = "url",
                     title = "cool title",
                     imageUrl = "imageUrl",
-                    imageBytes = byteArrayOf(),
                     isFavorite = true
                 ),
                 Stream(
+                    isActive = false,
                     id = "2",
                     url = "url",
                     title = "lame title",
                     imageUrl = "imageUrl",
-                    imageBytes = byteArrayOf(),
                     isFavorite = false
                 ),
             )
         )
         val expected = listOf(
             Stream(
+                isActive = false,
                 id = "2",
                 url = "url",
                 title = "lame title",
                 imageUrl = "imageUrl",
-                imageBytes = byteArrayOf(),
                 isFavorite = false
             )
         )

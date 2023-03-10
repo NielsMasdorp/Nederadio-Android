@@ -13,6 +13,12 @@ interface SettingsRepository {
     val favoritesFlow: Flow<Set<String>>
 
     /**
+     * Return whether a stream is favorited
+     * @param id id to check
+     */
+    suspend fun isFavorite(id: String): Boolean
+
+    /**
      * @return last played stream id
      */
     suspend fun getLastPlayedId(): String

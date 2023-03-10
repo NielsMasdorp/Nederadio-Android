@@ -3,6 +3,7 @@ package com.nielsmasdorp.nederadio.domain.stream
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -16,20 +17,20 @@ class GetAllStreamsTest {
     fun `when successful streams is returned by repository then return from subject`() =
         runBlocking {
             // given
-            val streams = CurrentStreams.Success(
+            val streams = Streams.Success(
                 listOf(
                     Stream(
+                        isActive = true,
                         id = "id",
                         title = "title",
                         imageUrl = "desc",
-                        imageBytes = byteArrayOf(),
                         url = "url"
                     ),
                     Stream(
+                        isActive = false,
                         id = "id2",
                         title = "title",
                         imageUrl = "desc",
-                        imageBytes = byteArrayOf(),
                         url = "url"
                     ),
                 )
@@ -46,20 +47,20 @@ class GetAllStreamsTest {
     @Test
     fun `when loading streams is returned by repository then return from subject`() = runBlocking {
         // given
-        val settingsRepository = FakeStreamRepository(listOf(CurrentStreams.Loading))
+        val settingsRepository = FakeStreamRepository(listOf(Streams.Loading))
 
         // when
         val subject = GetAllStreams(settingsRepository)
 
         // then
-        Assert.assertEquals(subject.streams.first(), CurrentStreams.Loading)
+        Assert.assertEquals(subject.streams.first(), Streams.Loading)
     }
 
     @Test
     fun `when unsuccessful streams is returned by repository then return from subject`() =
         runBlocking {
             // given
-            val error = CurrentStreams.Error(Failure.GenericError("error"))
+            val error = Streams.Error(Failure.GenericError("error"))
             val settingsRepository = FakeStreamRepository(listOf(error))
 
             // when
@@ -74,21 +75,21 @@ class GetAllStreamsTest {
         runBlocking {
             // given
             val streams = listOf(
-                CurrentStreams.Loading,
-                CurrentStreams.Success(
+                Streams.Loading,
+                Streams.Success(
                     listOf(
                         Stream(
+                            isActive = true,
                             id = "id",
                             title = "title",
                             imageUrl = "desc",
-                            imageBytes = byteArrayOf(),
                             url = "url"
                         ),
                         Stream(
+                            isActive = false,
                             id = "id2",
                             title = "title",
                             imageUrl = "desc",
-                            imageBytes = byteArrayOf(),
                             url = "url"
                         ),
                     )

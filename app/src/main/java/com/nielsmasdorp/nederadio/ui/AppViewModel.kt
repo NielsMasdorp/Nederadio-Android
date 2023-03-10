@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit
  */
 class AppViewModel(
     getAllStreams: GetAllStreams,
+    getActiveStream: GetActiveStream,
     private val addToFavorites: AddToFavorites,
     private val removeFromFavorites: RemoveFromFavorites,
     private val updateStreams: UpdateStreams,
@@ -27,19 +28,18 @@ class AppViewModel(
     private val dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 ) : ViewModel() {
 
-    val streams: LiveData<CurrentStreams> = getAllStreams.streams.asLiveData()
+    val streams: LiveData<Streams> = getAllStreams.streams.asLiveData()
+
+    val activeStream: LiveData<ActiveStream> = getActiveStream.stream.asLiveData()
 
     val favorites: LiveData<List<Stream>> = streams
         .map { streams ->
-            if (streams is CurrentStreams.Success) {
+            if (streams is Streams.Success) {
                 streams.streams.filter { stream -> stream.isFavorite }
             } else {
                 emptyList()
             }
         }
-
-    val currentStream: LiveData<CurrentStream> = streamManager.currentStreamFlow
-        .asLiveData()
 
     val sleepTimer: LiveData<String> = streamManager.sleepTimerFlow
         .map { formatTimer(it) }
@@ -102,7 +102,11 @@ class AppViewModel(
         }
     }
 
-    fun onRetryStreams() = updateStreams()
+    fun onRetryStreams() {
+        viewModelScope.launch {
+            updateStreams()
+        }
+    }
 
     private fun calculateMs(option: Int): Long {
         return when (option) {

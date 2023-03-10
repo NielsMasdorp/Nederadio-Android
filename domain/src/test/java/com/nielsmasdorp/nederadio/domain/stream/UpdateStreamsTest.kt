@@ -1,8 +1,6 @@
 package com.nielsmasdorp.nederadio.domain.stream
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
@@ -15,13 +13,13 @@ class UpdateStreamsTest {
     fun `when streams should be updated, update in repository`() = runBlocking {
         // given
         val streamRepository: StreamRepository = mockk()
-        every { streamRepository.forceUpdate() } returns Unit
+        coEvery { streamRepository.forceUpdate() } returns Unit
 
         // when
         val subject = UpdateStreams(streamRepository)
         subject.invoke()
 
         // then
-        verify { streamRepository.forceUpdate() }
+        coVerify { streamRepository.forceUpdate() }
     }
 }

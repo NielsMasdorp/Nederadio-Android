@@ -5,16 +5,21 @@ import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.ui.components.EventHandler
 import com.nielsmasdorp.nederadio.ui.home.HomeScreen
@@ -44,6 +49,16 @@ fun NederadioApp(
     castButton: View
 ) {
 
+    val systemUiController = rememberSystemUiController()
+
+    DisposableEffect(systemUiController) {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = false
+        )
+        onDispose {}
+    }
+
     DisposableEffect(key1 = viewModel) {
         viewModel.onStarted(controls = listOf(smallPlayerControls, largePlayerControls))
         onDispose { viewModel.onStopped() }
@@ -69,9 +84,9 @@ fun NederadioApp(
         sheetToggle()
     }
 
-    val currentStreams: CurrentStreams by viewModel.streams.observeAsState(initial = CurrentStreams.Loading)
+    val streams: Streams by viewModel.streams.observeAsState(initial = Streams.Loading)
     val currentFavorites: List<Stream> by viewModel.favorites.observeAsState(initial = emptyList())
-    val currentStream: CurrentStream by viewModel.currentStream.observeAsState(initial = CurrentStream.Unknown)
+    val activeStream: ActiveStream by viewModel.activeStream.observeAsState(initial = ActiveStream.Unknown)
     val sleepTimer: String? by viewModel.sleepTimer.observeAsState(initial = null)
     val showAboutAppDialog: Boolean by viewModel.showAboutApp.collectAsState(initial = false)
     val showSleepTimerDialog: Boolean by viewModel.showSleepTimer.collectAsState(initial = false)
@@ -92,9 +107,10 @@ fun NederadioApp(
     }
 
     BottomSheetScaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize(),
         scaffoldState = scaffoldState,
-        sheetElevation = if (currentStream is CurrentStream.Filled) 12.dp else 0.dp,
+        sheetElevation = if (activeStream is ActiveStream.Filled) 12.dp else 0.dp,
         backgroundColor = MaterialTheme.colorScheme.primary,
         sheetContent = {
             SheetContent {
@@ -102,38 +118,44 @@ fun NederadioApp(
                     content = {
                         StreamViewLarge(
                             playerControls = largePlayerControls,
-                            currentStream = currentStream,
+                            activeStream = activeStream,
                             sleepTimer = sleepTimer,
                             onCollapseClick = { sheetToggle() },
                             onTimerClicked = viewModel::onTimerPicked,
-                            onStreamFavoriteStatusChanged = viewModel::onStreamFavoriteChanged
+                            onStreamFavoriteStatusChanged = viewModel::onStreamFavoriteChanged,
+                            currentFraction = scaffoldState.currentFraction
                         )
                     }
                 )
                 SheetCollapsed(
-                    isEnabled = scaffoldState.bottomSheetState.isCollapsed && currentStream is CurrentStream.Filled,
+                    isEnabled = scaffoldState.bottomSheetState.isCollapsed && activeStream is ActiveStream.Filled,
                     currentFraction = scaffoldState.currentFraction,
                     onSheetClick = { sheetToggle() },
-                    currentStream = currentStream
+                    activeStream = activeStream
                 ) { currentStream ->
                     StreamScreenSmall(
                         playerControls = smallPlayerControls,
-                        currentStream = currentStream,
+                        activeStream = currentStream,
                         onStreamFavoriteStatusChanged = viewModel::onStreamFavoriteChanged
                     )
                 }
             }
         },
-        sheetPeekHeight = 72.dp,
+        sheetPeekHeight = 72.dp +
+                WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
         sheetGesturesEnabled = false
     ) {
-        AnimatedNavHost(navController = navController, startDestination = "home", route = "route") {
+        AnimatedNavHost(
+            navController = navController,
+            startDestination = "home",
+            route = "route"
+        ) {
             composable("home") {
                 HomeScreen(
-                    modifier = modifier,
+                    modifier = Modifier.statusBarsPadding(),
                     castButton = castButton,
-                    streams = currentStreams,
-                    currentStream = currentStream,
+                    streams = streams,
+                    activeStream = activeStream,
                     favorites = currentFavorites,
                     onStreamSelected = viewModel::onStreamPicked,
                     onRetryStreams = viewModel::onRetryStreams,
@@ -159,7 +181,7 @@ fun NederadioApp(
                     viewModelStoreOwner = navController.getBackStackEntry("route")
                 )
                 SearchScreen(
-                    modifier = modifier,
+                    modifier = Modifier.statusBarsPadding(),
                     viewModel = searchViewModel,
                     onExitSearch = { navController.popBackStack() },
                     backPressHandler = if (scaffoldState.bottomSheetState.isExpanded) {

@@ -6,6 +6,7 @@ import com.nielsmasdorp.nederadio.domain.settings.RemoveFromFavorites
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.util.CoroutineTestRule
 import com.nielsmasdorp.nederadio.util.getOrAwaitValue
+import dev.burnoo.cokoin.get
 import io.mockk.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -30,6 +31,7 @@ class AppViewModelTest {
         // given
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
+        val getActiveStream = mockk<GetActiveStream>()
         val controls: List<PlayerControls<*>> = listOf(object : PlayerControls<String> {
             override fun getView(): String {
                 return "first control"
@@ -41,8 +43,8 @@ class AppViewModelTest {
                 }
             }
         )
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
         every { manager.initialize(controls = controls) } returns Unit
@@ -50,6 +52,7 @@ class AppViewModelTest {
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -66,8 +69,9 @@ class AppViewModelTest {
         // given
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
         every { manager.release() } returns Unit
@@ -75,6 +79,7 @@ class AppViewModelTest {
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -92,8 +97,9 @@ class AppViewModelTest {
         val id = "id"
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
         every { manager.streamPicked(id = id) } returns Unit
@@ -101,6 +107,7 @@ class AppViewModelTest {
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -117,14 +124,16 @@ class AppViewModelTest {
         // given
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -143,8 +152,9 @@ class AppViewModelTest {
         val ms = 0L
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
         every { manager.sleepTimerSet(ms = ms) } returns Unit
@@ -152,6 +162,7 @@ class AppViewModelTest {
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -169,14 +180,16 @@ class AppViewModelTest {
         // given
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -193,14 +206,16 @@ class AppViewModelTest {
         // given
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -219,16 +234,18 @@ class AppViewModelTest {
         val id = "id"
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
+        val getActiveStream = mockk<GetActiveStream>()
         val addToFavorites = mockk<AddToFavorites>()
         val removeFromFavorites = mockk<RemoveFromFavorites>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = addToFavorites,
             removeFromFavorites = removeFromFavorites,
             updateStreams = mockk(),
@@ -247,10 +264,11 @@ class AppViewModelTest {
         val id = "id"
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
+        val getActiveStream = mockk<GetActiveStream>()
         val addToFavorites = mockk<AddToFavorites>()
         val removeFromFavorites = mockk<RemoveFromFavorites>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
         coEvery { removeFromFavorites(id = id) } returns Unit
@@ -258,6 +276,7 @@ class AppViewModelTest {
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = addToFavorites,
             removeFromFavorites = removeFromFavorites,
             updateStreams = mockk(),
@@ -275,16 +294,18 @@ class AppViewModelTest {
         // given
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
+        val getActiveStream = mockk<GetActiveStream>()
         val updateStreams = mockk<UpdateStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
-        every { updateStreams() } returns Unit
+        coEvery { updateStreams() } returns Unit
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = updateStreams,
@@ -302,14 +323,16 @@ class AppViewModelTest {
         val ms = 0L
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(ms) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -326,14 +349,16 @@ class AppViewModelTest {
         val ms = 1_000L
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(ms) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -350,14 +375,16 @@ class AppViewModelTest {
         val ms = 1_00_000L
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(ms) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -374,14 +401,16 @@ class AppViewModelTest {
         val ms = 3_600_0000L
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(ms) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -395,17 +424,19 @@ class AppViewModelTest {
     @Test
     fun `when streams are updated by manager, send streams to livedata`() {
         // given
-        val streams = CurrentStreams.Loading
+        val streams = Streams.Loading
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
+        val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(streams) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -419,22 +450,22 @@ class AppViewModelTest {
     @Test
     fun `when streams are updated by manager, send favorites according to favorite status to livedata`() {
         // given
-        val streams = CurrentStreams.Success(
+        val streams = Streams.Success(
             listOf(
                 Stream(
+                    isActive = false,
                     id = "1",
                     url = "url",
                     title = "title",
                     imageUrl = "imageUrl",
-                    imageBytes = byteArrayOf(),
                     isFavorite = true
                 ),
                 Stream(
+                    isActive = false,
                     id = "2",
                     url = "url",
                     title = "title",
                     imageUrl = "imageUrl",
-                    imageBytes = byteArrayOf(),
                     isFavorite = false
                 ),
             )
@@ -442,14 +473,16 @@ class AppViewModelTest {
         val favorites = streams.streams.filter { it.isFavorite }
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
+        val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(streams) }
-        every { manager.currentStreamFlow } returns flow { emit(CurrentStream.Empty) }
+        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -463,17 +496,19 @@ class AppViewModelTest {
     @Test
     fun `when current stream is updated by manager, send stream to livedata`() {
         // given
-        val stream = CurrentStream.Empty
+        val stream = ActiveStream.Empty
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
-        every { getAllStreams.streams } returns flow { emit(CurrentStreams.Loading) }
-        every { manager.currentStreamFlow } returns flow { emit(stream) }
+        val getActiveStream = mockk<GetActiveStream>()
+        every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
+        every { getActiveStream.stream } returns flow { emit(stream) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
         // when
         val vm = createViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = mockk(),
             removeFromFavorites = mockk(),
             updateStreams = mockk(),
@@ -481,11 +516,12 @@ class AppViewModelTest {
         )
 
         // then
-        Assert.assertEquals(stream, vm.currentStream.getOrAwaitValue())
+        Assert.assertEquals(stream, vm.activeStream.getOrAwaitValue())
     }
 
     private fun createViewModel(
         getAllStreams: GetAllStreams,
+        getActiveStream: GetActiveStream,
         addToFavorites: AddToFavorites,
         removeFromFavorites: RemoveFromFavorites,
         updateStreams: UpdateStreams,
@@ -493,6 +529,7 @@ class AppViewModelTest {
     ): AppViewModel {
         return AppViewModel(
             getAllStreams = getAllStreams,
+            getActiveStream = getActiveStream,
             addToFavorites = addToFavorites,
             removeFromFavorites = removeFromFavorites,
             updateStreams = updateStreams,
