@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.MimeTypes.BASE_TYPE_AUDIO
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.MediaSession
@@ -15,6 +16,7 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.R
+import com.nielsmasdorp.nederadio.data.stream.RadioLogoContentProvider
 import com.nielsmasdorp.nederadio.domain.stream.Failure
 import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
 import com.nielsmasdorp.nederadio.domain.stream.Stream
@@ -59,6 +61,7 @@ fun MediaController.sendCommandToService(
 @UnstableApi
 fun Stream.toMediaItem(): MediaItem {
     return MediaItem.Builder()
+        .setMimeType(BASE_TYPE_AUDIO)
         .setMediaId(id)
         .setRequestMetadata(
             MediaItem.RequestMetadata.Builder()
@@ -70,7 +73,8 @@ fun Stream.toMediaItem(): MediaItem {
                 .setMediaType(MediaMetadata.MEDIA_TYPE_RADIO_STATION)
                 .setSubtitle(title)
                 .setArtist(title)
-                .setArtworkUri(imageUrl.toUri())
+                .setArtworkUri(RadioLogoContentProvider.mapUri(uri = imageUrl.toUri()))
+                .setIsPlayable(true)
                 .build()
         )
         .build()

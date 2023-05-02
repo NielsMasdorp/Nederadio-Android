@@ -15,7 +15,7 @@ import androidx.media3.common.MediaMetadata
  * @author Niels Masdorp (NielsMasdorp)
  */
 @UnstableApi
-class StreamMediaItemConverter : MediaItemConverter {
+class RadioMediaItemConverter(private val castTitle: () -> String) : MediaItemConverter {
 
     override fun toMediaItem(mediaQueueItem: MediaQueueItem): MediaItem {
         val mediaInfo = mediaQueueItem.media!!
@@ -47,7 +47,8 @@ class StreamMediaItemConverter : MediaItemConverter {
     override fun toMediaQueueItem(mediaItem: MediaItem): MediaQueueItem {
         val metadata = CastMetadata(MEDIA_TYPE_GENERIC).apply {
             putString(KEY_MEDIA_ID, mediaItem.mediaId)
-            putString(CastMetadata.KEY_TITLE, mediaItem.mediaMetadata.artist.toString())
+            putString(CastMetadata.KEY_ARTIST, mediaItem.mediaMetadata.artist.toString())
+            putString(CastMetadata.KEY_TITLE, castTitle())
             addImage(WebImage(mediaItem.mediaMetadata.artworkUri!!))
         }
         val mediaInfo = MediaInfo.Builder(mediaItem.mediaId)

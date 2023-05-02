@@ -15,7 +15,7 @@ class SearchViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
-    val searchedStreams: LiveData<List<Stream>> =
+    val searchedStreams: Flow<List<Stream>> =
         getAllStreams.streams.combine(searchQuery) { streams, query ->
             when (streams) {
                 is Streams.Success -> streams.streams.filter {
@@ -26,7 +26,7 @@ class SearchViewModel(
                 }
                 else -> emptyList()
             }
-        }.asLiveData()
+        }
 
 
     fun onSearchQueryChanged(query: String) {

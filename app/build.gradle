@@ -77,11 +77,11 @@ dependencies {
     //kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_android_version"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4"
 
     // Koin
-    implementation "dev.burnoo:cokoin:$cokoin_version"
-    implementation "dev.burnoo:cokoin-android-viewmodel:$cokoin_version"
-    implementation "dev.burnoo:cokoin-android-navigation:$cokoin_version"
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_compose_version"
 
     //Ktor
     implementation "io.ktor:ktor-client-android:$ktor_version"

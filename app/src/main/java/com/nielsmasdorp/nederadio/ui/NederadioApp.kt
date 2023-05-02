@@ -33,8 +33,8 @@ import com.nielsmasdorp.nederadio.ui.components.dialog.AboutAppDialog
 import com.nielsmasdorp.nederadio.ui.components.dialog.SleepTimerDialog
 import com.nielsmasdorp.nederadio.ui.extension.currentFraction
 import com.nielsmasdorp.nederadio.ui.search.SearchViewModel
-import dev.burnoo.cokoin.viewmodel.getViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 
 /**
  * @author Niels Masdorp (NielsMasdorp)

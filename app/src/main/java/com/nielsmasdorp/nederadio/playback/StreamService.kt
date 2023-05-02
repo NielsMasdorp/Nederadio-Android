@@ -8,6 +8,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
+import androidx.media.utils.MediaConstants.*
 import androidx.media3.cast.CastPlayer
 import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.*
@@ -15,32 +17,49 @@ import androidx.media3.common.Player.*
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.*
+import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.SessionCommand.*
 import androidx.media3.session.SessionResult.RESULT_SUCCESS
 import com.google.android.gms.cast.framework.CastContext
+import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.R
+import com.nielsmasdorp.nederadio.domain.stream.GetSuccessfulStreams
 import com.nielsmasdorp.nederadio.ui.NederadioActivity
 import com.nielsmasdorp.nederadio.util.connectedDeviceName
 import com.nielsmasdorp.nederadio.util.sendCommandToController
+import com.nielsmasdorp.nederadio.util.toMediaItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.guava.future
+import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
  *
- * Service responsible for hosting the [MediaSession]
+ * Service responsible for hosting the [MediaLibrarySession]
  * Handles media notification and switching from foreground to background service whenever appropriate
  * Also switches from local playback to cast playback whenever appropriate
  */
 @UnstableApi
-class StreamService : MediaSessionService(),
-    Listener, MediaSession.Callback, SessionAvailabilityListener {
+class StreamService : MediaLibraryService(),
+    Listener, MediaLibrarySession.Callback, SessionAvailabilityListener {
+
+    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private val getStreams: GetSuccessfulStreams by inject()
+
+    private val libraryChildren: Flow<List<MediaItem>> = getStreams.streams
+        .map { it.map { stream -> stream.toMediaItem() } }
 
     private lateinit var localPlayer: Player
     private lateinit var castPlayer: CastPlayer
     private lateinit var player: ReplaceableForwardingPlayer
-    private lateinit var mediaSession: MediaSession
+    private lateinit var mediaSession: MediaLibrarySession
     private lateinit var castContext: CastContext
 
     private var countDownTimer: CountDownTimer? = null
@@ -60,12 +79,76 @@ class StreamService : MediaSessionService(),
         super.onDestroy()
         releaseMediaSession()
         stopSleepTimer()
+        serviceScope.cancel()
     }
 
     /**
-     * Connect [MediaSession] to this [MediaSessionService]
+     * Connect [MediaLibrarySession] to this [MediaLibraryService]
      */
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo) = mediaSession
+
+    override fun onGetLibraryRoot(
+        session: MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        params: LibraryParams?
+    ): ListenableFuture<LibraryResult<MediaItem>> {
+        Log.i("StreamService", "onGetLibraryRoot")
+        val extras = Bundle()
+        extras.putInt(
+            DESCRIPTION_EXTRAS_KEY_CONTENT_STYLE_BROWSABLE,
+            DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM
+        )
+        extras.putInt(
+            DESCRIPTION_EXTRAS_KEY_CONTENT_STYLE_PLAYABLE,
+            DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM
+        )
+        val rootItem = MediaItem.Builder()
+            .setMediaId("[rootId]")
+            .setMediaMetadata(
+                MediaMetadata.Builder()
+                    .setTitle("Root")
+                    .setFolderType(MediaMetadata.FOLDER_TYPE_MIXED)
+                    .setIsPlayable(false)
+                    .setIsBrowsable(true)
+                    .build()
+            )
+            .build()
+        return Futures.immediateFuture(
+            LibraryResult.ofItem(
+                rootItem,
+                LibraryParams.Builder().setExtras(extras).build()
+            )
+        )
+    }
+
+    override fun onGetChildren(
+        session: MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        parentId: String,
+        page: Int,
+        pageSize: Int,
+        params: LibraryParams?
+    ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        Log.i("StreamService", "onGetChildren")
+        return serviceScope.future {
+            val items = libraryChildren.first { it.isNotEmpty() }
+            LibraryResult.ofItemList(items, params)
+        }
+    }
+
+    override fun onGetItem(
+        session: MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        mediaId: String
+    ): ListenableFuture<LibraryResult<MediaItem>> {
+        Log.i("StreamService", "onGetItem")
+        return serviceScope.future {
+            val items = libraryChildren.first { it.isNotEmpty() }
+            val item = items.find { it.mediaId == mediaId }
+            check(item != null)
+            LibraryResult.ofItem(item, null)
+        }
+    }
 
     /**
      * Casting has started, switch to [CastPlayer]
@@ -180,6 +263,7 @@ class StreamService : MediaSessionService(),
         // does not get stripped and use that info to set the content urls again on the items
         val updatedMediaItems = mediaItems.map { mediaItem ->
             mediaItem.buildUpon()
+                .setMimeType(MimeTypes.BASE_TYPE_AUDIO)
                 .setUri(mediaItem.requestMetadata.mediaUri)
                 .build()
         }.toMutableList()
@@ -209,7 +293,10 @@ class StreamService : MediaSessionService(),
         )
 
         castContext = CastContext.getSharedInstance(this)
-        castPlayer = CastPlayer(castContext, StreamMediaItemConverter()).apply {
+        castPlayer = CastPlayer(
+            castContext,
+            RadioMediaItemConverter { getTrackInfo() }
+        ).apply {
             setSessionAvailabilityListener(this@StreamService)
         }
 
@@ -223,14 +310,13 @@ class StreamService : MediaSessionService(),
             addListener(this@StreamService)
         }
 
-        mediaSession = MediaSession.Builder(this, player)
+        mediaSession = MediaLibrarySession.Builder(this, player, this)
             .setSessionActivity(pendingIntent)
-            .setCallback(this)
             .build()
     }
 
-    private fun getTrackInfo(mediaMetadata: MediaMetadata): String {
-        val trackInfo = mediaMetadata.title?.toString()
+    private fun getTrackInfo(mediaMetadata: MediaMetadata? = null): String {
+        val trackInfo = mediaMetadata?.title?.toString()
         return if (castPlayer.isCastSessionAvailable) {
             castContext.connectedDeviceName()?.let { name ->
                 getString(R.string.stream_subtitle_casting_device, name)

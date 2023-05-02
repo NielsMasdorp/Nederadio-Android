@@ -26,6 +26,7 @@ import org.koin.dsl.module
 val streamModule = module {
     single<StreamRepository> { ApiStreamRepository(androidContext(), get(), get(), get()) }
     single { GetAllStreams(get()) }
+    single { GetSuccessfulStreams(get()) }
     single { GetActiveStream(get()) }
     single { AddToFavorites(get()) }
     single { UpdateStreams(get()) }

@@ -1,14 +1,18 @@
 package com.nielsmasdorp.nederadio.domain.stream
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
  *
- * Use case for retrieving all streams of this app
- * @param repository stream repository
+ * Use case for retrieving all successful streams of this app
+ * @param getAllStreams stream use case
  */
-class GetAllStreams(private val repository: StreamRepository) {
+class GetSuccessfulStreams(getAllStreams: GetAllStreams) {
 
-    val streams: Flow<Streams> = repository.streamsFlow
+    // TODO test
+    val streams: Flow<List<Stream>> = getAllStreams.streams
+        .filter { it is Streams.Success }
+        .map { it as Streams.Success }
+        .map { it.streams }
 }
