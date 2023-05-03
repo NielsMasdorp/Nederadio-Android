@@ -1,4 +1,5 @@
 package com.nielsmasdorp.nederadio.playback.library
 
-class MediaItemNode {
-}
+import androidx.media3.common.MediaItem
+
+class MediaItemNode(val mediaItem: MediaItem, val children: List<MediaItemNode> = emptyList())

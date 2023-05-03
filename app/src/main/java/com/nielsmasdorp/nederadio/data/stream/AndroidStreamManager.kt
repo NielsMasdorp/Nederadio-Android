@@ -15,7 +15,7 @@ import com.google.common.util.concurrent.MoreExecutors
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.playback.StreamService
 import com.nielsmasdorp.nederadio.domain.stream.*
-import com.nielsmasdorp.nederadio.playback.StreamService.Companion.MEDIA_ITEM_UPDATED_COMMAND
+import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.PLAYER_STREAM_ERROR_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_TIMER_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_TIMER_COMMAND_VALUE_KEY
@@ -37,7 +37,7 @@ class AndroidStreamManager(
     private val context: Context,
     private val setActiveStream: SetActiveStream,
     private val setStreamTrack: SetStreamTrack,
-    private val getAllStreams: GetAllStreams,
+    private val streamLibrary: StreamLibrary,
 ) : StreamManager, MediaController.Listener {
 
     private var isInitialized: Boolean = false
@@ -71,9 +71,8 @@ class AndroidStreamManager(
         isInitialized = true
         initController(controls)
         managerScope.launch {
-            getAllStreams.streams
-                .filter { it is Streams.Success }
-                .map { toStreamsResult(it as Streams.Success) }
+            streamLibrary.streams
+                .map(::toStreamsResult)
                 .distinctUntilChanged()
                 .collect { result ->
                     withContext(Dispatchers.Main) {
@@ -104,11 +103,6 @@ class AndroidStreamManager(
         return when (command.customAction) {
             TIMER_UPDATED_COMMAND -> {
                 sleepTimerFlow.value = command.customExtras.getLong(TIMER_UPDATED_COMMAND_VALUE_KEY)
-                Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
-            }
-            MEDIA_ITEM_UPDATED_COMMAND -> {
-                val mediaItem = MediaItem.CREATOR.fromBundle(command.customExtras)
-                managerScope.launch { setActiveStream(id = mediaItem.mediaId) }
                 Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
             }
             TRACK_UPDATED_COMMAND -> {
@@ -170,10 +164,10 @@ class AndroidStreamManager(
         if (!persistent) errorFlow.value = StreamingError.Empty
     }
 
-    private fun toStreamsResult(streamSuccess: Streams.Success): Pair<List<MediaItem>, Int> {
+    private fun toStreamsResult(streams: List<Stream>): Pair<List<MediaItem>, Int> {
         return Pair(
-            streamSuccess.streams.map { stream -> stream.toMediaItem() },
-            streamSuccess.streams.indexOfFirst { stream -> stream.isActive }
+            streams.map { stream -> stream.toMediaItem() },
+            streams.indexOfFirst { stream -> stream.isActive }
         )
     }
 

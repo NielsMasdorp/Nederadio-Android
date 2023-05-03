@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.media.utils.MediaConstants.*
 import androidx.media3.cast.CastPlayer
 import androidx.media3.cast.SessionAvailabilityListener
@@ -17,6 +16,7 @@ import androidx.media3.common.Player.*
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.*
+import androidx.media3.session.MediaConstants.*
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.SessionCommand.*
 import androidx.media3.session.SessionResult.RESULT_SUCCESS
@@ -25,15 +25,15 @@ import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.R
-import com.nielsmasdorp.nederadio.domain.stream.GetSuccessfulStreams
+import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
+import com.nielsmasdorp.nederadio.domain.stream.SetActiveStream
+import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
+import com.nielsmasdorp.nederadio.playback.library.StreamLibrary.Companion.STATIONS_ITEM_ID
 import com.nielsmasdorp.nederadio.ui.NederadioActivity
 import com.nielsmasdorp.nederadio.util.connectedDeviceName
+import com.nielsmasdorp.nederadio.util.moveToFront
 import com.nielsmasdorp.nederadio.util.sendCommandToController
-import com.nielsmasdorp.nederadio.util.toMediaItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.guava.future
 import org.koin.android.ext.android.inject
@@ -44,17 +44,17 @@ import java.util.concurrent.TimeUnit
  *
  * Service responsible for hosting the [MediaLibrarySession]
  * Handles media notification and switching from foreground to background service whenever appropriate
- * Also switches from local playback to cast playback whenever appropriate
+ * Also switches from local playback to cast playback and exposes the library to other components
+ * such as Android Auto
  */
 @UnstableApi
 class StreamService : MediaLibraryService(),
     Listener, MediaLibrarySession.Callback, SessionAvailabilityListener {
 
+    private val streamLibrary: StreamLibrary by inject()
+    private val setActiveStream: SetActiveStream by inject()
+    private val getLastPlayedId: GetLastPlayedId by inject()
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    private val getStreams: GetSuccessfulStreams by inject()
-
-    private val libraryChildren: Flow<List<MediaItem>> = getStreams.streams
-        .map { it.map { stream -> stream.toMediaItem() } }
 
     private lateinit var localPlayer: Player
     private lateinit var castPlayer: CastPlayer
@@ -82,9 +82,6 @@ class StreamService : MediaLibraryService(),
         serviceScope.cancel()
     }
 
-    /**
-     * Connect [MediaLibrarySession] to this [MediaLibraryService]
-     */
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo) = mediaSession
 
     override fun onGetLibraryRoot(
@@ -92,33 +89,26 @@ class StreamService : MediaLibraryService(),
         browser: MediaSession.ControllerInfo,
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<MediaItem>> {
-        Log.i("StreamService", "onGetLibraryRoot")
-        val extras = Bundle()
-        extras.putInt(
-            DESCRIPTION_EXTRAS_KEY_CONTENT_STYLE_BROWSABLE,
-            DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM
-        )
-        extras.putInt(
-            DESCRIPTION_EXTRAS_KEY_CONTENT_STYLE_PLAYABLE,
-            DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM
-        )
-        val rootItem = MediaItem.Builder()
-            .setMediaId("[rootId]")
-            .setMediaMetadata(
-                MediaMetadata.Builder()
-                    .setTitle("Root")
-                    .setFolderType(MediaMetadata.FOLDER_TYPE_MIXED)
-                    .setIsPlayable(false)
-                    .setIsBrowsable(true)
-                    .build()
-            )
-            .build()
-        return Futures.immediateFuture(
-            LibraryResult.ofItem(
-                rootItem,
-                LibraryParams.Builder().setExtras(extras).build()
-            )
-        )
+        return serviceScope.future {
+            val isRecentRequest = params?.isRecent ?: false
+            val rootItem = if (!isRecentRequest) {
+                streamLibrary.browsableContent.first().rootNode.mediaItem
+            } else {
+                // Playback resumption
+                streamLibrary.browsableContent.first().recentRootNode.mediaItem
+            }
+            val extras = Bundle().apply {
+                putInt(
+                    EXTRAS_KEY_CONTENT_STYLE_PLAYABLE,
+                    EXTRAS_VALUE_CONTENT_STYLE_CATEGORY_GRID_ITEM
+                )
+            }
+            val newParams = LibraryParams.Builder()
+                .setExtras(extras)
+                .setRecent(isRecentRequest)
+                .build()
+            LibraryResult.ofItem(rootItem, newParams)
+        }
     }
 
     override fun onGetChildren(
@@ -129,10 +119,21 @@ class StreamService : MediaLibraryService(),
         pageSize: Int,
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-        Log.i("StreamService", "onGetChildren")
         return serviceScope.future {
-            val items = libraryChildren.first { it.isNotEmpty() }
-            LibraryResult.ofItemList(items, params)
+            val isRecentRequest = params?.isRecent ?: false
+            val children = if (!isRecentRequest) {
+                streamLibrary
+                    .browsableContent
+                    .first()
+                    .getChildren(nodeId = parentId)
+            } else {
+                // Playback resumption
+                streamLibrary
+                    .browsableContent
+                    .first()
+                    .getRecentChildren(lastPlayedId = getLastPlayedId())
+            }
+            LibraryResult.ofItemList(children, params)
         }
     }
 
@@ -141,11 +142,8 @@ class StreamService : MediaLibraryService(),
         browser: MediaSession.ControllerInfo,
         mediaId: String
     ): ListenableFuture<LibraryResult<MediaItem>> {
-        Log.i("StreamService", "onGetItem")
         return serviceScope.future {
-            val items = libraryChildren.first { it.isNotEmpty() }
-            val item = items.find { it.mediaId == mediaId }
-            check(item != null)
+            val item = streamLibrary.browsableContent.first().getItem(itemId = mediaId)
             LibraryResult.ofItem(item, null)
         }
     }
@@ -165,18 +163,7 @@ class StreamService : MediaLibraryService(),
      */
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         mediaItem ?: return
-        mediaSession.sendCommandToController(
-            key = MEDIA_ITEM_UPDATED_COMMAND,
-            value = mediaItem
-                .buildUpon()
-                .setMediaMetadata(
-                    mediaItem
-                        .mediaMetadata
-                        .buildUpon()
-                        .setTitle(getTrackInfo(mediaMetadata = mediaItem.mediaMetadata))
-                        .build()
-                ).build().toBundle()
-        )
+        serviceScope.launch { setActiveStream(id = mediaItem.mediaId) }
     }
 
     /**
@@ -213,23 +200,21 @@ class StreamService : MediaLibraryService(),
 
     /**
      * Called when a new [MediaController] connects to the current [MediaSession]
-     * Used to add sleep timer and setting url for current
-     * stream commands to the current [MediaSession]
+     * Used to add sleep timer command to the current [MediaSession]
      */
     override fun onConnect(
         session: MediaSession,
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
-        val commands = SessionCommands.Builder()
+        val result = super.onConnect(session, controller)
+
+        val sessionCommands = result.availableSessionCommands
+            .buildUpon()
             .add(SessionCommand(START_TIMER_COMMAND, Bundle()))
             .build()
-        val playerCommands = Commands.Builder().addAllCommands().build()
-        session.setAvailableCommands(
-            controller,
-            commands,
-            playerCommands
-        )
-        return MediaSession.ConnectionResult.accept(commands, playerCommands)
+        val playerCommands = result.availablePlayerCommands
+        session.setAvailableCommands(controller, sessionCommands, playerCommands)
+        return MediaSession.ConnectionResult.accept(sessionCommands, playerCommands)
     }
 
     /**
@@ -258,16 +243,36 @@ class StreamService : MediaLibraryService(),
         controller: MediaSession.ControllerInfo,
         mediaItems: MutableList<MediaItem>
     ): ListenableFuture<MutableList<MediaItem>> {
-        // content uris get stripped as a safety manner for optional IPC communication
-        // but since we do not care about IPC safety we can use the request metadata which
-        // does not get stripped and use that info to set the content urls again on the items
-        val updatedMediaItems = mediaItems.map { mediaItem ->
-            mediaItem.buildUpon()
-                .setMimeType(MimeTypes.BASE_TYPE_AUDIO)
-                .setUri(mediaItem.requestMetadata.mediaUri)
-                .build()
-        }.toMutableList()
-        return Futures.immediateFuture(updatedMediaItems)
+        // There are a couple of issues with media3:
+        // Firstly when the [MediaController] in [AndroidStreamManager] adds media items this
+        // hook gets called. As a security measure content URI's get removed before the [MediaItem]s
+        // reach the [MediaSession]. We have to fill these URI's again.
+        //
+        // Also when the [MediaController] used by Android Auto selects a new track
+        // this method is called with only one item (the selected one), the rest of the queue
+        // is dropped for some reason. his is a known problem,
+        // See: https://github.com/androidx/media/issues/156 and https://github.com/androidx/media/issues/236
+        // To solve both these problems we check the [MediaItems]s here and replace them with the
+        // Known items in our repository. In the case of Android Auto we use the whole list instead
+        // of having a queue with a single item.
+        return serviceScope.future {
+            val streams = streamLibrary
+                .browsableContent
+                .first()
+                .getChildren(nodeId = STATIONS_ITEM_ID)
+            if (mediaItems.size == 1) { // User has selected an item in Android Auto
+                val item = mediaItems[0]
+                // Replace single items by all items with selected item as first item
+                streams
+                    .toMutableList()
+                    .apply { moveToFront { it.mediaId == item.mediaId } }
+            } else {
+                // Just use the [MediaItem] from the content library since the URI exists there
+                mediaItems.map { mediaItem ->
+                    streams.find { it.mediaId == mediaItem.mediaId }!!
+                }.toMutableList()
+            }
+        }
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -295,7 +300,7 @@ class StreamService : MediaLibraryService(),
         castContext = CastContext.getSharedInstance(this)
         castPlayer = CastPlayer(
             castContext,
-            RadioMediaItemConverter { getTrackInfo() }
+            StreamMediaItemConverter { getTrackInfo() }
         ).apply {
             setSessionAvailabilityListener(this@StreamService)
         }
@@ -377,7 +382,6 @@ class StreamService : MediaLibraryService(),
         const val START_TIMER_COMMAND_VALUE_KEY = "start_timer_value"
         const val TIMER_UPDATED_COMMAND = "timer_updated"
         const val TIMER_UPDATED_COMMAND_VALUE_KEY = "timer_updated_value"
-        const val MEDIA_ITEM_UPDATED_COMMAND = "media_item_updated"
         const val TRACK_UPDATED_COMMAND = "track_updated"
         const val TRACK_UPDATED_COMMAND_VALUE_KEY = "track_updated_value"
         const val PLAYER_STREAM_ERROR_COMMAND = "player_error"

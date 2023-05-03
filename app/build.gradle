@@ -77,7 +77,7 @@ dependencies {
     //kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_android_version"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:$kotlinx_guava_version"
 
     // Koin
     implementation "io.insert-koin:koin-android:$koin_version"

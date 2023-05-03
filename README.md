@@ -2,7 +2,7 @@
 
 Stream popular dutch radio stations.
 
-This is mostly a pet project created to learn Jetpack Compose and the new Jetpack Media3 API's.
+This is mostly a pet project created to learn Jetpack Compose and the new Jetpack Media3 API
 
 Nederadio is built using all the latest practices in Android development:
 
@@ -14,7 +14,8 @@ Nederadio is built using all the latest practices in Android development:
  - Material You on Android 12 and higher
  - Dark/Light mode
  - Cast support
- - Live song updates
+ - Android Auto support
+ - Live song updates (except when casting)
  - Sleep timer
 
 ## Screenshots
@@ -34,7 +35,6 @@ You could easily use your own streams in this app, the data set is located in `b
 ## Used libraries
 
 * [Koin](https://github.com/InsertKoinIO/koin)
-* [Cokoin](https://github.com/burnoo/cokoin)
 * [Jetpack Media3](https://github.com/androidx/media)
 * [Jetpack Compose](https://developer.android.com/jetpack/compose)
 * [Ktor](https://github.com/ktorio/ktor)

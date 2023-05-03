@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import androidx.media3.common.MimeTypes.BASE_TYPE_AUDIO
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.MediaSession
@@ -16,7 +15,6 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.R
-import com.nielsmasdorp.nederadio.data.stream.RadioLogoContentProvider
 import com.nielsmasdorp.nederadio.domain.stream.Failure
 import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
 import com.nielsmasdorp.nederadio.domain.stream.Stream
@@ -61,27 +59,23 @@ fun MediaController.sendCommandToService(
 @UnstableApi
 fun Stream.toMediaItem(): MediaItem {
     return MediaItem.Builder()
-        .setMimeType(BASE_TYPE_AUDIO)
         .setMediaId(id)
-        .setRequestMetadata(
-            MediaItem.RequestMetadata.Builder()
-                .setMediaUri(url.toUri())
-                .build()
-        )
+        .setUri(url.toUri())
         .setMediaMetadata(
             MediaMetadata.Builder()
                 .setMediaType(MediaMetadata.MEDIA_TYPE_RADIO_STATION)
                 .setSubtitle(title)
                 .setArtist(title)
-                .setArtworkUri(RadioLogoContentProvider.mapUri(uri = imageUrl.toUri()))
+                .setArtworkUri(imageUrl.toUri())
                 .setIsPlayable(true)
+                .setIsBrowsable(false)
                 .build()
         )
         .build()
 }
 
 /**
- * @return the name of the connected cast device, if any
+ * Return the name of the connected cast device, if any
  */
 fun CastContext.connectedDeviceName(): String? {
     return sessionManager
@@ -91,3 +85,17 @@ fun CastContext.connectedDeviceName(): String? {
 }
 
 fun PlayerControls<*>.view(): PlayerControlView = getView() as PlayerControlView
+
+/**
+ * Move an item that matches a given predicate to the front of the list
+ * If no element is found, the list remains untouched
+ */
+fun <T> MutableList<T>.moveToFront(predicate: (T) -> Boolean): MutableList<T> {
+    return this.apply {
+        val item = find(predicate)
+        item?.let {
+            remove(it)
+            add(0, it)
+        }
+    }
+}

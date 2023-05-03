@@ -15,7 +15,7 @@ import androidx.media3.common.MediaMetadata
  * @author Niels Masdorp (NielsMasdorp)
  */
 @UnstableApi
-class RadioMediaItemConverter(private val castTitle: () -> String) : MediaItemConverter {
+class StreamMediaItemConverter(private val castTitle: () -> String) : MediaItemConverter {
 
     override fun toMediaItem(mediaQueueItem: MediaQueueItem): MediaItem {
         val mediaInfo = mediaQueueItem.media!!

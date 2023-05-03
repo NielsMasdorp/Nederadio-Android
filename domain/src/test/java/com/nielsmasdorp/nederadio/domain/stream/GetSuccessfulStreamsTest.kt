@@ -1,9 +1,8 @@
 package com.nielsmasdorp.nederadio.domain.stream
 
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.isActive
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -11,10 +10,10 @@ import org.junit.Test
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
-class GetAllStreamsTest {
+class GetSuccessfulStreamsTest {
 
     @Test
-    fun `when successful streams is returned by repository then return from subject`() =
+    fun `when successful streams is returned by use case then return from subject`() =
         runBlocking {
             // given
             val streams = Streams.Success(
@@ -35,72 +34,41 @@ class GetAllStreamsTest {
                     ),
                 )
             )
-            val settingsRepository = FakeStreamRepository(listOf(streams))
+            val getAllStreams: GetAllStreams = mockk()
+            coEvery { getAllStreams.streams } returns flowOf(streams)
 
             // when
-            val subject = GetAllStreams(settingsRepository)
+            val subject = GetSuccessfulStreams(getAllStreams = getAllStreams)
 
             // then
-            Assert.assertEquals(subject.streams.first(), streams)
+            Assert.assertEquals(subject.streams.first(), streams.streams)
         }
 
     @Test
-    fun `when loading streams is returned by repository then return from subject`() = runBlocking {
+    fun `when loading streams is returned by use case then emit nothing`() = runBlocking {
         // given
-        val settingsRepository = FakeStreamRepository(listOf(Streams.Loading))
+        val streams = Streams.Loading
+        val getAllStreams: GetAllStreams = mockk()
+        coEvery { getAllStreams.streams } returns emptyFlow()
 
         // when
-        val subject = GetAllStreams(settingsRepository)
+        val subject = GetSuccessfulStreams(getAllStreams = getAllStreams)
 
         // then
-        Assert.assertEquals(subject.streams.first(), Streams.Loading)
+        Assert.assertEquals(subject.streams.count(), 0)
     }
 
     @Test
-    fun `when unsuccessful streams is returned by repository then return from subject`() =
-        runBlocking {
-            // given
-            val error = Streams.Error(Failure.GenericError("error"))
-            val settingsRepository = FakeStreamRepository(listOf(error))
+    fun `when error streams is returned by use case then emit nothing`() = runBlocking {
+        // given
+        val streams = Streams.Error(Failure.GenericError("test"))
+        val getAllStreams: GetAllStreams = mockk()
+        coEvery { getAllStreams.streams } returns emptyFlow()
 
-            // when
-            val subject = GetAllStreams(settingsRepository)
+        // when
+        val subject = GetSuccessfulStreams(getAllStreams = getAllStreams)
 
-            // then
-            Assert.assertEquals(subject.streams.first(), error)
-        }
-
-    @Test
-    fun `when repository emits values then subject should emit values in same order`() =
-        runBlocking {
-            // given
-            val streams = listOf(
-                Streams.Loading,
-                Streams.Success(
-                    listOf(
-                        Stream(
-                            isActive = true,
-                            id = "id",
-                            title = "title",
-                            imageUrl = "desc",
-                            url = "url"
-                        ),
-                        Stream(
-                            isActive = false,
-                            id = "id2",
-                            title = "title",
-                            imageUrl = "desc",
-                            url = "url"
-                        ),
-                    )
-                )
-            )
-            val settingsRepository = FakeStreamRepository(streams)
-
-            // when
-            val subject = GetAllStreams(settingsRepository)
-
-            // then
-            Assert.assertEquals(subject.streams.take(2).toList(), streams)
-        }
+        // then
+        Assert.assertEquals(subject.streams.count(), 0)
+    }
 }

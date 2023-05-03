@@ -28,7 +28,7 @@ class AppViewModel(
     private val dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 ) : ViewModel() {
 
-    val streams: LiveData<Streams> = getAllStreams.streams.asLiveData()
+    val streams: LiveData<Streams> = getAllStreams.streams.asLiveData() // TODO drop livedata
 
     val activeStream: LiveData<ActiveStream> = getActiveStream.stream.asLiveData()
 
