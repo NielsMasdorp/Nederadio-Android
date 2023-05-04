@@ -41,6 +41,7 @@ You could easily use your own streams in this app, the data set is located in `b
 * Playback resumption seems iffy, need to take a better look. See https://android-developers.googleblog.com/2020/08/playing-nicely-with-media-controls.html and the implementation of `onGetLibraryRoot()` and `onGetChildren` in `StreamService`
 * CastPlayer implementation in Media3 does not implement the required API to show live song updates unfortunately. Need to revisit in the future
 * Landscape UI not implemented
+* Search for Google Assistant/Android Auto not implemented, see: https://developer.android.com/training/cars/media#support_voice
 
 Want to help? Open a PR! Be sure to add Detekt via:
 
