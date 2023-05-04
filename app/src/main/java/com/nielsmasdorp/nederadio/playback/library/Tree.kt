@@ -46,6 +46,11 @@ class Tree(val rootNode: MediaItemNode) {
     }
 
     /**
+     * Return all playable items
+     */
+    fun getAllPlayableItems() = getChildren(nodeId = STATIONS_ITEM_ID)
+
+    /**
      * Return a single playable item for a given id
      */
     fun getItem(itemId: String): MediaItem {
