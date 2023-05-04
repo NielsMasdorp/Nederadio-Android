@@ -35,6 +35,15 @@ https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-8
 
 You could easily use your own streams in this app, the data set is located in `backend/public/nederadio/data.json`. And it contains a NodeJS app that can run on on your backend of choosing. It is currently served on my own server but you could change the endpoint in `StreamApi` to whatever you like.
 
+## Current issues and future enhancements
+
+* When switching to cast, the same media session is used as when using Exoplayer, which leads to a media notification that does not adhere to the casting guidelines. See https://github.com/androidx/media/issues/39 and https://github.com/androidx/media/issues/264
+* Playback resumption seems iffy, need to take a better look. See https://android-developers.googleblog.com/2020/08/playing-nicely-with-media-controls.html and the implementation of `onGetLibraryRoot()` and `onGetChildren` in `StreamService`
+* CastPlayer implementation in Media3 does not implement the required API to show live song updates unfortunately. Need to revisit in the future
+* Landscape UI not implemented
+
+Want to help? Open a PR!
+
 ## Used libraries
 
 * [Koin](https://github.com/InsertKoinIO/koin)
