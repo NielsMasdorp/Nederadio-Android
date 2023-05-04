@@ -13,9 +13,8 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.nielsmasdorp.nederadio.R
-import com.nielsmasdorp.nederadio.playback.StreamService
 import com.nielsmasdorp.nederadio.domain.stream.*
-import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
+import com.nielsmasdorp.nederadio.playback.StreamService
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.PLAYER_STREAM_ERROR_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_TIMER_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.START_TIMER_COMMAND_VALUE_KEY
@@ -23,6 +22,7 @@ import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TIMER_UPDATED
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TIMER_UPDATED_COMMAND_VALUE_KEY
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TRACK_UPDATED_COMMAND
 import com.nielsmasdorp.nederadio.playback.StreamService.Companion.TRACK_UPDATED_COMMAND_VALUE_KEY
+import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
 import com.nielsmasdorp.nederadio.util.sendCommandToService
 import com.nielsmasdorp.nederadio.util.toMediaItem
 import com.nielsmasdorp.nederadio.util.view

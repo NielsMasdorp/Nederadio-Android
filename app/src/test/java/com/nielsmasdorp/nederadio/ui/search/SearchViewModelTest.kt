@@ -3,7 +3,6 @@ package com.nielsmasdorp.nederadio.ui.search
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.util.CoroutineTestRule
-import com.nielsmasdorp.nederadio.util.getOrAwaitValue
 import io.mockk.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow

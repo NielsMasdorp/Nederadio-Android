@@ -5,9 +5,9 @@ import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.data.network.StreamApi
 import com.nielsmasdorp.nederadio.domain.connectivity.NetworkManager
 import com.nielsmasdorp.nederadio.domain.settings.SettingsRepository
-import com.nielsmasdorp.nederadio.domain.stream.Streams
 import com.nielsmasdorp.nederadio.domain.stream.Failure
 import com.nielsmasdorp.nederadio.domain.stream.StreamRepository
+import com.nielsmasdorp.nederadio.domain.stream.Streams
 import com.nielsmasdorp.nederadio.util.toFailure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,9 +37,11 @@ class ApiStreamRepository(
         scope.launch {
             settingsRepository.favoritesFlow.collect { favorites ->
                 streamsFlow.value = when (val current = streamsFlow.value) {
-                    is Streams.Success -> current.copy(streams = current.streams.map { stream ->
-                        stream.copy(isFavorite = favorites.contains(stream.id))
-                    })
+                    is Streams.Success -> current.copy(
+                        streams = current.streams.map { stream ->
+                            stream.copy(isFavorite = favorites.contains(stream.id))
+                        }
+                    )
                     else -> streamsFlow.value
                 }
             }
@@ -53,14 +55,16 @@ class ApiStreamRepository(
 
     override suspend fun updateTrack(track: String) {
         streamsFlow.value = when (val current = streamsFlow.value) {
-            is Streams.Success -> current.copy(streams = current.streams.map { stream ->
-                if (stream.isActive) {
-                    if (stream.track == track) return
-                    stream.copy(track = track)
-                } else {
-                    stream
+            is Streams.Success -> current.copy(
+                streams = current.streams.map { stream ->
+                    if (stream.isActive) {
+                        if (stream.track == track) return
+                        stream.copy(track = track)
+                    } else {
+                        stream
+                    }
                 }
-            })
+            )
             else -> streamsFlow.value
         }
     }
@@ -69,14 +73,17 @@ class ApiStreamRepository(
         streamsFlow.value = when (val current = streamsFlow.value) {
             is Streams.Success -> {
                 if (current.streams.find { it.isActive }?.id == id) return
-                current.copy(streams = current.streams.map { stream ->
-                    stream.copy(isActive = stream.id == id)
-                })
+                current.copy(
+                    streams = current.streams.map { stream ->
+                        stream.copy(isActive = stream.id == id)
+                    }
+                )
             }
             else -> streamsFlow.value
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun loadStreams() {
         scope.launch {
             if (!networkManager.isConnected()) {

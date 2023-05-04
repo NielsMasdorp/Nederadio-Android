@@ -10,10 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.compose.*
 import com.nielsmasdorp.nederadio.R
 
@@ -22,8 +20,8 @@ import com.nielsmasdorp.nederadio.R
  */
 @Composable
 fun LoadingView(
-    modifier: Modifier = Modifier,
     backgroundColor: Color,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier

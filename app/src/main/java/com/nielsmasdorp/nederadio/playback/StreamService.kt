@@ -47,9 +47,13 @@ import java.util.concurrent.TimeUnit
  * Also switches from local playback to cast playback and exposes the library to other components
  * such as Android Auto
  */
+@Suppress("TooManyFunctions")
 @UnstableApi
-class StreamService : MediaLibraryService(),
-    Listener, MediaLibrarySession.Callback, SessionAvailabilityListener {
+class StreamService :
+    MediaLibraryService(),
+    Listener,
+    MediaLibrarySession.Callback,
+    SessionAvailabilityListener {
 
     private val streamLibrary: StreamLibrary by inject()
     private val setActiveStream: SetActiveStream by inject()
@@ -282,17 +286,19 @@ class StreamService : MediaLibraryService(),
                 AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
                     .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
-                    .build(), true // Automatic requesting and dropping audio focus
+                    .build(),
+                true // Automatic requesting and dropping audio focus
             )
             .setHandleAudioBecomingNoisy(true) // Handle headphones disconnect
             .setWakeMode(C.WAKE_MODE_NETWORK) // Wake+WiFi lock while playing
             .build()
 
         val intent = Intent(this, NederadioActivity::class.java)
-        val immutableFlag = if (Build.VERSION.SDK_INT >= 23) FLAG_IMMUTABLE else 0
+        val requestCode = 0
+        val immutableFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) FLAG_IMMUTABLE else requestCode
         val pendingIntent = PendingIntent.getActivity(
             this,
-            0,
+            requestCode,
             intent,
             immutableFlag or FLAG_UPDATE_CURRENT
         )

@@ -14,9 +14,9 @@ import com.google.accompanist.pager.rememberPagerState
  */
 @Composable
 fun StreamTabsContent(
-    modifier: Modifier = Modifier,
     tabs: List<TabItem>,
-    pagerState: PagerState
+    pagerState: PagerState,
+    modifier: Modifier = Modifier
 ) {
     HorizontalPager(
         modifier = modifier.background(MaterialTheme.colorScheme.primary),
@@ -41,5 +41,6 @@ fun StreamTabsContentPreview() = StreamTabsContent(
             onSelectStream = {},
             streams = emptyList()
         )
-    ), pagerState = rememberPagerState()
+    ),
+    pagerState = rememberPagerState()
 )

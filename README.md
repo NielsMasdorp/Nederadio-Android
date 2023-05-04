@@ -42,7 +42,30 @@ You could easily use your own streams in this app, the data set is located in `b
 * CastPlayer implementation in Media3 does not implement the required API to show live song updates unfortunately. Need to revisit in the future
 * Landscape UI not implemented
 
-Want to help? Open a PR!
+Want to help? Open a PR! Be sure to add Detekt via:
+
+### Detekt
+
+Please add this to `<<your-repo>>/.git/hooks/pre-commit` and make it executable by `chmod +x pre-commit`.
+This will make sure Detekt runs and prevents any commits that fail our coding standards.
+
+```
+#!/usr/bin/env bash
+echo "Running detekt check..."
+OUTPUT="/tmp/detekt-$(date +%s)"
+./gradlew detekt > $OUTPUT
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  cat $OUTPUT
+  rm $OUTPUT
+  echo "***********************************************"
+  echo "                 Detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
+rm $OUTPUT
+```
 
 ## Used libraries
 

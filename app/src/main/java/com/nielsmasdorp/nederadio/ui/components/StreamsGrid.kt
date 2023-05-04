@@ -27,8 +27,8 @@ import com.skydoves.landscapist.glide.GlideImage
  */
 @Composable
 fun StreamsGrid(
-    modifier: Modifier = Modifier,
     streams: List<Stream>,
+    modifier: Modifier = Modifier,
     onSelectStream: (String) -> Unit = {}
 ) {
 

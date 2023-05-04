@@ -41,7 +41,7 @@ class Tree(val rootNode: MediaItemNode) {
                     return child.children.map { it.mediaItem }
                 }
             }
-            throw IllegalStateException("Unknown id: $nodeId!")
+            error("Unknown id: $nodeId!")
         }
     }
 
@@ -54,6 +54,6 @@ class Tree(val rootNode: MediaItemNode) {
                 if (subChild.mediaItem.mediaId == itemId) return subChild.mediaItem
             }
         }
-        throw IllegalStateException("Unknown id: $itemId!")
+        error("Unknown id: $itemId!")
     }
 }

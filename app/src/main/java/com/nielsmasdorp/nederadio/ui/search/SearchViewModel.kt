@@ -28,7 +28,6 @@ class SearchViewModel(
             }
         }
 
-
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
     }

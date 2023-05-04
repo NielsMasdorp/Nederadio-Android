@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import androidx.annotation.AnyRes
-import androidx.annotation.DrawableRes
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
@@ -56,7 +55,8 @@ class StreamLibrary(private val context: Context, getSuccessfulStreams: GetSucce
             children = if (favorites.isNotEmpty()) {
                 listOf(favoritesNode, stationsNode)
             } else {
-                listOf(stationsNode) // TODO maybe find a better way, like implementing an empty view if it is somehow possible
+                // TODO maybe find a better way, like implementing an empty view somehow
+                listOf(stationsNode)
             }
         )
     }
@@ -75,8 +75,8 @@ class StreamLibrary(private val context: Context, getSuccessfulStreams: GetSucce
                         iconRes?.let {
                             Uri.parse(
                                 ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                                        context.packageName + "/drawable" + '/' +
-                                        context.resources.getResourceEntryName(it)
+                                    context.packageName + "/drawable" + '/' +
+                                    context.resources.getResourceEntryName(it)
                             )
                         }
                     )

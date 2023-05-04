@@ -34,14 +34,15 @@ class FakeStreamRepository(private var streams: List<Streams>) : StreamRepositor
     override suspend fun updateTrack(track: String) {
         when (val current = streams.first()) {
             is Streams.Success -> {
-                streams = listOf(current.copy(
-                    streams = current.streams.map { stream ->
-                        if (stream.isActive) {
-                            stream.copy(track = track)
-                        } else stream
-
-                    }
-                ))
+                streams = listOf(
+                    current.copy(
+                        streams = current.streams.map { stream ->
+                            if (stream.isActive) {
+                                stream.copy(track = track)
+                            } else stream
+                        }
+                    )
+                )
             }
             else -> {}
         }
@@ -51,11 +52,13 @@ class FakeStreamRepository(private var streams: List<Streams>) : StreamRepositor
     override suspend fun updateActive(id: String) {
         when (val current = streams.first()) {
             is Streams.Success -> {
-                streams = listOf(current.copy(
-                    streams = current.streams.map { stream ->
-                        stream.copy(isActive = stream.id == id)
-                    }
-                ))
+                streams = listOf(
+                    current.copy(
+                        streams = current.streams.map { stream ->
+                            stream.copy(isActive = stream.id == id)
+                        }
+                    )
+                )
             }
             else -> {}
         }

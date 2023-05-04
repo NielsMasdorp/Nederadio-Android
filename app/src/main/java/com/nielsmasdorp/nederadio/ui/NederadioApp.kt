@@ -21,6 +21,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.ui.components.EventHandler
+import com.nielsmasdorp.nederadio.ui.components.dialog.AboutAppDialog
+import com.nielsmasdorp.nederadio.ui.components.dialog.SleepTimerDialog
+import com.nielsmasdorp.nederadio.ui.extension.currentFraction
 import com.nielsmasdorp.nederadio.ui.home.HomeScreen
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.SheetContent
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.collapsed.SheetCollapsed
@@ -28,9 +31,6 @@ import com.nielsmasdorp.nederadio.ui.home.bottomsheet.collapsed.StreamScreenSmal
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.expanded.SheetExpanded
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.expanded.StreamViewLarge
 import com.nielsmasdorp.nederadio.ui.search.SearchScreen
-import com.nielsmasdorp.nederadio.ui.components.dialog.AboutAppDialog
-import com.nielsmasdorp.nederadio.ui.components.dialog.SleepTimerDialog
-import com.nielsmasdorp.nederadio.ui.extension.currentFraction
 import com.nielsmasdorp.nederadio.ui.search.SearchViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
@@ -39,13 +39,14 @@ import org.koin.androidx.compose.getViewModel
  * @author Niels Masdorp (NielsMasdorp)
  */
 @SuppressLint("UnrememberedGetBackStackEntry")
+@Suppress("MagicNumber")
 @Composable
 fun NederadioApp(
-    modifier: Modifier = Modifier,
-    viewModel: AppViewModel = getViewModel(),
     smallPlayerControls: PlayerControls<View>,
     largePlayerControls: PlayerControls<View>,
-    castButton: View
+    castButton: View,
+    modifier: Modifier = Modifier,
+    viewModel: AppViewModel = getViewModel()
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -141,7 +142,7 @@ fun NederadioApp(
             }
         },
         sheetPeekHeight = 72.dp +
-                WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
+            WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
         sheetGesturesEnabled = false
     ) {
         AnimatedNavHost(
@@ -162,7 +163,8 @@ fun NederadioApp(
                     onAbout = viewModel::onAboutPicked
                 )
             }
-            composable("search",
+            composable(
+                "search",
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Up,

@@ -3,13 +3,13 @@ package com.nielsmasdorp.nederadio.playback
 import androidx.core.net.toUri
 import androidx.media3.cast.MediaItemConverter
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
 import com.google.android.gms.cast.MediaInfo
-import com.google.android.gms.cast.MediaMetadata as CastMetadata
 import com.google.android.gms.cast.MediaMetadata.MEDIA_TYPE_GENERIC
 import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.common.images.WebImage
-import androidx.media3.common.MediaMetadata
+import com.google.android.gms.cast.MediaMetadata as CastMetadata
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -41,7 +41,6 @@ class StreamMediaItemConverter(private val castTitle: () -> String) : MediaItemC
                     .build()
             )
             .build()
-
     }
 
     override fun toMediaQueueItem(mediaItem: MediaItem): MediaQueueItem {

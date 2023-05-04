@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun StreamTabs(
-    modifier: Modifier = Modifier,
     tabs: List<TabItem>,
-    pagerState: PagerState
+    pagerState: PagerState,
+    modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
     TabRow(
@@ -35,7 +35,8 @@ fun StreamTabs(
             TabRowDefaults.Indicator(
                 Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
             )
-        }) {
+        }
+    ) {
         tabs.forEachIndexed { index, tab ->
             LeadingIconTab(
                 icon = {
@@ -78,5 +79,6 @@ fun StreamTabsPreview() = StreamTabs(
             onSelectStream = {},
             streams = emptyList()
         )
-    ), pagerState = rememberPagerState()
+    ),
+    pagerState = rememberPagerState()
 )

@@ -6,9 +6,9 @@ import androidx.media3.common.util.UnstableApi
 import com.nielsmasdorp.nederadio.data.network.AndroidNetworkManager
 import com.nielsmasdorp.nederadio.data.network.StreamApi
 import com.nielsmasdorp.nederadio.data.network.ktorHttpClient
+import com.nielsmasdorp.nederadio.data.settings.SharedPreferencesSettingsRepository
 import com.nielsmasdorp.nederadio.data.stream.AndroidStreamManager
 import com.nielsmasdorp.nederadio.data.stream.ApiStreamRepository
-import com.nielsmasdorp.nederadio.data.settings.SharedPreferencesSettingsRepository
 import com.nielsmasdorp.nederadio.domain.connectivity.NetworkManager
 import com.nielsmasdorp.nederadio.domain.settings.*
 import com.nielsmasdorp.nederadio.domain.stream.*

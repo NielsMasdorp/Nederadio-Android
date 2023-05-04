@@ -30,5 +30,4 @@ class AddToFavoritesTest {
         // then
         coVerify { settingsRepository.addToFavorite(id) }
     }
-
 }

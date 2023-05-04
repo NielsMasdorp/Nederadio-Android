@@ -30,11 +30,12 @@ class AppViewModelTest {
         val manager = mockk<StreamManager>()
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
-        val controls: List<PlayerControls<*>> = listOf(object : PlayerControls<String> {
-            override fun getView(): String {
-                return "first control"
-            }
-        },
+        val controls: List<PlayerControls<*>> = listOf(
+            object : PlayerControls<String> {
+                override fun getView(): String {
+                    return "first control"
+                }
+            },
             object : PlayerControls<String> {
                 override fun getView(): String {
                     return "second control"
@@ -180,7 +181,7 @@ class AppViewModelTest {
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
@@ -206,7 +207,7 @@ class AppViewModelTest {
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
@@ -236,7 +237,7 @@ class AppViewModelTest {
         val addToFavorites = mockk<AddToFavorites>()
         val removeFromFavorites = mockk<RemoveFromFavorites>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
@@ -266,7 +267,7 @@ class AppViewModelTest {
         val addToFavorites = mockk<AddToFavorites>()
         val removeFromFavorites = mockk<RemoveFromFavorites>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
         coEvery { removeFromFavorites(id = id) } returns Unit
@@ -295,7 +296,7 @@ class AppViewModelTest {
         val getActiveStream = mockk<GetActiveStream>()
         val updateStreams = mockk<UpdateStreams>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
         coEvery { updateStreams() } returns Unit
@@ -323,7 +324,7 @@ class AppViewModelTest {
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(ms) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
@@ -349,7 +350,7 @@ class AppViewModelTest {
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(ms) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
@@ -375,7 +376,7 @@ class AppViewModelTest {
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(ms) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
@@ -401,7 +402,7 @@ class AppViewModelTest {
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(Streams.Loading) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(ms) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
@@ -427,7 +428,7 @@ class AppViewModelTest {
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(streams) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 
@@ -473,7 +474,7 @@ class AppViewModelTest {
         val getAllStreams = mockk<GetAllStreams>()
         val getActiveStream = mockk<GetActiveStream>()
         every { getAllStreams.streams } returns flow { emit(streams) }
-        every { getActiveStream.stream} returns flow { emit(ActiveStream.Empty) }
+        every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
 

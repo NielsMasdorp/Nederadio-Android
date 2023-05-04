@@ -15,6 +15,7 @@ import kotlin.math.min
 /**
  * Mostly taken from https://github.com/android/uamp/blob/media3/common/src/main/java/com/example/android/uamp/media/ReplaceableForwardingPlayer.kt
  */
+@Suppress("TooManyFunctions")
 @UnstableApi
 class ReplaceableForwardingPlayer(private var player: Player) : Player {
 
@@ -410,9 +411,9 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
 
     private inner class PlayerListener : Listener {
         override fun onEvents(player: Player, events: Events) {
-            if (events.contains(EVENT_POSITION_DISCONTINUITY)
-                || events.contains(EVENT_MEDIA_ITEM_TRANSITION)
-                || events.contains(EVENT_TIMELINE_CHANGED)
+            if (events.contains(EVENT_POSITION_DISCONTINUITY) ||
+                events.contains(EVENT_MEDIA_ITEM_TRANSITION) ||
+                events.contains(EVENT_TIMELINE_CHANGED)
             ) {
                 if (!player.currentTimeline.isEmpty) {
                     currentPlaylistIndex = player.currentMediaItemIndex
