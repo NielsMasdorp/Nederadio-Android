@@ -18,7 +18,9 @@ Nederadio is built using all the latest practices in Android development:
  - Live song updates (except when casting)
  - Sleep timer
 
-## Screenshots
+## In action
+
+https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-84f2-b05d3e9b19aa.mp4
 
 <p float="left">
   <img src="/app/screenshots/screenshot1.png" width="150" />
