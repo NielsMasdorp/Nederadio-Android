@@ -28,7 +28,6 @@ import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
 import com.nielsmasdorp.nederadio.domain.stream.SetActiveStream
 import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
-import com.nielsmasdorp.nederadio.playback.library.StreamLibrary.Companion.STATIONS_ITEM_ID
 import com.nielsmasdorp.nederadio.ui.NederadioActivity
 import com.nielsmasdorp.nederadio.util.connectedDeviceName
 import com.nielsmasdorp.nederadio.util.moveToFront
@@ -38,6 +37,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.guava.future
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
+import kotlin.math.max
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -106,6 +106,7 @@ class StreamService :
                     EXTRAS_KEY_CONTENT_STYLE_PLAYABLE,
                     EXTRAS_VALUE_CONTENT_STYLE_CATEGORY_GRID_ITEM
                 )
+                putBoolean(MEDIA_SEARCH_SUPPORTED, true)
             }
             val newParams = LibraryParams.Builder()
                 .setExtras(extras)
@@ -149,6 +150,37 @@ class StreamService :
         return serviceScope.future {
             val item = streamLibrary.browsableContent.first().getItem(itemId = mediaId)
             LibraryResult.ofItem(item, null)
+        }
+    }
+
+    override fun onSearch(
+        session: MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        query: String,
+        params: LibraryParams?
+    ): ListenableFuture<LibraryResult<Void>> {
+        return serviceScope.future {
+            // Ignore extras since we have only top level streams without genres etc.
+            val results = streamLibrary.browsableContent.first().search(query = query)
+            mediaSession.notifySearchResultChanged(browser, query, results.size, params)
+            LibraryResult.ofVoid()
+        }
+    }
+
+    override fun onGetSearchResult(
+        session: MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        query: String,
+        page: Int,
+        pageSize: Int,
+        params: LibraryParams?
+    ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        return serviceScope.future {
+            // Ignore extras since we have only top level streams without genres etc.
+            val results = streamLibrary.browsableContent.first().search(query = query)
+            val fromIndex = max((page - 1) * pageSize, results.size - 1)
+            val toIndex = max(fromIndex + pageSize, results.size)
+            LibraryResult.ofItemList(results.subList(fromIndex, toIndex), params)
         }
     }
 
@@ -263,17 +295,29 @@ class StreamService :
             val streams = streamLibrary
                 .browsableContent
                 .first()
-                .getChildren(nodeId = STATIONS_ITEM_ID)
-            if (mediaItems.size == 1) { // User has selected an item in Android Auto
-                val item = mediaItems[0]
-                // Replace single items by all items with selected item as first item
-                streams
-                    .toMutableList()
-                    .apply { moveToFront { it.mediaId == item.mediaId } }
+            if (mediaItems.size == 1) {
+                val singleItem = mediaItems[0]
+                if (singleItem.mediaId.isBlank() &&
+                    singleItem.requestMetadata.searchQuery != null
+                ) {
+                    // User has preformed a voice search in Android Auto
+                    streams.search(query = singleItem.requestMetadata.searchQuery)
+                        .toMutableList()
+                } else {
+                    // User has selected an item in Android Auto
+                    // It is expected behavior, but might get solved in the future
+                    // That the rest of the queue is removed by Android Auto
+                    // So we have to   recreate the queue with the selected item in front
+                    streams
+                        .getAllPlayableItems()
+                        .toMutableList()
+                        .apply { moveToFront { it.mediaId == singleItem.mediaId } }
+                }
             } else {
                 // Just use the [MediaItem] from the content library since the URI exists there
+                val allContent = streams.getAllPlayableItems()
                 mediaItems.map { mediaItem ->
-                    streams.find { it.mediaId == mediaItem.mediaId }!!
+                    allContent.find { it.mediaId == mediaItem.mediaId }!!
                 }.toMutableList()
             }
         }
@@ -295,7 +339,8 @@ class StreamService :
 
         val intent = Intent(this, NederadioActivity::class.java)
         val requestCode = 0
-        val immutableFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) FLAG_IMMUTABLE else requestCode
+        val immutableFlag =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) FLAG_IMMUTABLE else requestCode
         val pendingIntent = PendingIntent.getActivity(
             this,
             requestCode,
@@ -383,6 +428,8 @@ class StreamService :
     }
 
     companion object {
+
+        const val MEDIA_SEARCH_SUPPORTED = "android.media.browse.SEARCH_SUPPORTED"
 
         const val START_TIMER_COMMAND = "start_timer"
         const val START_TIMER_COMMAND_VALUE_KEY = "start_timer_value"

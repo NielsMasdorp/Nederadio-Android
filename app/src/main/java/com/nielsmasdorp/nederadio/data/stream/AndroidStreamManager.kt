@@ -81,10 +81,8 @@ class AndroidStreamManager(
                         if (currentStreamIndex != -1) {
                             val currentStream = streams[currentStreamIndex]
                             val currentStreamInUse = controller.currentMediaItem
-                            if (controller.mediaItemCount == 0) {
+                            if (currentStreamInUse?.mediaId != currentStream.mediaId) {
                                 controller.setMediaItems(streams, currentStreamIndex, 0L)
-                            } else if (currentStreamInUse?.mediaId != currentStream.mediaId) {
-                                controller.seekTo(currentStreamIndex, 0L)
                             }
                         }
                     }

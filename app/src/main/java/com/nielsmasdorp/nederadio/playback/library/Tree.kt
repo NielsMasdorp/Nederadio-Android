@@ -46,6 +46,11 @@ class Tree(val rootNode: MediaItemNode) {
     }
 
     /**
+     * Return all playable items
+     */
+    fun getAllPlayableItems() = getChildren(nodeId = STATIONS_ITEM_ID)
+
+    /**
      * Return a single playable item for a given id
      */
     fun getItem(itemId: String): MediaItem {
@@ -55,5 +60,19 @@ class Tree(val rootNode: MediaItemNode) {
             }
         }
         error("Unknown id: $itemId!")
+    }
+
+    /**
+     * Return a list of items based on a search query
+     */
+    fun search(query: String?): List<MediaItem> {
+        return getChildren(nodeId = STATIONS_ITEM_ID).let { results ->
+            if (query.isNullOrBlank()) {
+                // Return shuffled full list when no query is supplied
+                results.shuffled()
+            } else {
+                results.filter { it.mediaMetadata.artist?.contains(query) == true }
+            }
+        }
     }
 }
