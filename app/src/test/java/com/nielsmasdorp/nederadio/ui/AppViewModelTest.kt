@@ -5,8 +5,6 @@ import com.nielsmasdorp.nederadio.domain.settings.AddToFavorites
 import com.nielsmasdorp.nederadio.domain.settings.RemoveFromFavorites
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.util.CoroutineTestRule
-import com.nielsmasdorp.nederadio.util.getOrAwaitValue
-import dev.burnoo.cokoin.get
 import io.mockk.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -318,7 +316,7 @@ class AppViewModelTest {
     }
 
     @Test
-    fun `when zero sleep timer is updated by manager, propagate formatted event`() {
+    fun `when zero sleep timer is updated by manager, propagate formatted event`() = runBlocking {
         // given
         val ms = 0L
         val manager = mockk<StreamManager>()
@@ -340,11 +338,11 @@ class AppViewModelTest {
         )
 
         // then
-        Assert.assertEquals("", vm.sleepTimer.getOrAwaitValue())
+        Assert.assertEquals("", vm.sleepTimer.first())
     }
 
     @Test
-    fun `when second sleep timer is updated by manager, propagate formatted event`() {
+    fun `when second sleep timer is updated by manager, propagate formatted event`() = runBlocking {
         // given
         val ms = 1_000L
         val manager = mockk<StreamManager>()
@@ -366,11 +364,11 @@ class AppViewModelTest {
         )
 
         // then
-        Assert.assertEquals("00:01", vm.sleepTimer.getOrAwaitValue())
+        Assert.assertEquals("00:01", vm.sleepTimer.first())
     }
 
     @Test
-    fun `when minute sleep timer is updated by manager, propagate formatted event`() {
+    fun `when minute sleep timer is updated by manager, propagate formatted event`() = runBlocking {
         // given
         val ms = 1_00_000L
         val manager = mockk<StreamManager>()
@@ -392,11 +390,11 @@ class AppViewModelTest {
         )
 
         // then
-        Assert.assertEquals("01:40", vm.sleepTimer.getOrAwaitValue())
+        Assert.assertEquals("01:40", vm.sleepTimer.first())
     }
 
     @Test
-    fun `when hour sleep timer is updated by manager, propagate formatted event`() {
+    fun `when hour sleep timer is updated by manager, propagate formatted event`() = runBlocking {
         // given
         val ms = 3_600_0000L
         val manager = mockk<StreamManager>()
@@ -418,11 +416,11 @@ class AppViewModelTest {
         )
 
         // then
-        Assert.assertEquals("10:00:00", vm.sleepTimer.getOrAwaitValue())
+        Assert.assertEquals("10:00:00", vm.sleepTimer.first())
     }
 
     @Test
-    fun `when streams are updated by manager, send streams to livedata`() {
+    fun `when streams are updated by manager, send streams to livedata`() = runBlocking {
         // given
         val streams = Streams.Loading
         val manager = mockk<StreamManager>()
@@ -444,11 +442,11 @@ class AppViewModelTest {
         )
 
         // then
-        Assert.assertEquals(streams, vm.streams.getOrAwaitValue())
+        Assert.assertEquals(streams, vm.streams.first())
     }
 
     @Test
-    fun `when streams are updated by manager, send favorites according to favorite status to livedata`() {
+    fun `when streams are updated by manager, send favorites according to favorite status to livedata`() = runBlocking {
         // given
         val streams = Streams.Success(
             listOf(
@@ -490,11 +488,11 @@ class AppViewModelTest {
         )
 
         // then
-        Assert.assertEquals(favorites, vm.favorites.getOrAwaitValue())
+        Assert.assertEquals(favorites, vm.favorites.first())
     }
 
     @Test
-    fun `when current stream is updated by manager, send stream to livedata`() {
+    fun `when current stream is updated by manager, send stream to livedata`() = runBlocking {
         // given
         val stream = ActiveStream.Empty
         val manager = mockk<StreamManager>()
@@ -516,7 +514,7 @@ class AppViewModelTest {
         )
 
         // then
-        Assert.assertEquals(stream, vm.activeStream.getOrAwaitValue())
+        Assert.assertEquals(stream, vm.activeStream.first())
     }
 
     private fun createViewModel(

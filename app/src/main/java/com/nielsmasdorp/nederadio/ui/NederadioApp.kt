@@ -12,7 +12,6 @@ import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -84,10 +83,10 @@ fun NederadioApp(
         sheetToggle()
     }
 
-    val streams: Streams by viewModel.streams.observeAsState(initial = Streams.Loading)
-    val currentFavorites: List<Stream> by viewModel.favorites.observeAsState(initial = emptyList())
-    val activeStream: ActiveStream by viewModel.activeStream.observeAsState(initial = ActiveStream.Unknown)
-    val sleepTimer: String? by viewModel.sleepTimer.observeAsState(initial = null)
+    val streams: Streams by viewModel.streams.collectAsState(initial = Streams.Loading)
+    val currentFavorites: List<Stream> by viewModel.favorites.collectAsState(initial = emptyList())
+    val activeStream: ActiveStream by viewModel.activeStream.collectAsState(initial = ActiveStream.Unknown)
+    val sleepTimer: String? by viewModel.sleepTimer.collectAsState(initial = null)
     val showAboutAppDialog: Boolean by viewModel.showAboutApp.collectAsState(initial = false)
     val showSleepTimerDialog: Boolean by viewModel.showSleepTimer.collectAsState(initial = false)
 

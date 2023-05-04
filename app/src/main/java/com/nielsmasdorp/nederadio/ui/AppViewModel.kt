@@ -28,11 +28,11 @@ class AppViewModel(
     private val dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 ) : ViewModel() {
 
-    val streams: LiveData<Streams> = getAllStreams.streams.asLiveData() // TODO drop livedata
+    val streams: Flow<Streams> = getAllStreams.streams // TODO drop livedata
 
-    val activeStream: LiveData<ActiveStream> = getActiveStream.stream.asLiveData()
+    val activeStream: Flow<ActiveStream> = getActiveStream.stream
 
-    val favorites: LiveData<List<Stream>> = streams
+    val favorites: Flow<List<Stream>> = streams
         .map { streams ->
             if (streams is Streams.Success) {
                 streams.streams.filter { stream -> stream.isFavorite }
@@ -41,10 +41,9 @@ class AppViewModel(
             }
         }
 
-    val sleepTimer: LiveData<String> = streamManager.sleepTimerFlow
+    val sleepTimer: Flow<String> = streamManager.sleepTimerFlow
         .map { formatTimer(it) }
         .filterNotNull()
-        .asLiveData()
 
     var errorState by mutableStateOf(ErrorState())
         private set

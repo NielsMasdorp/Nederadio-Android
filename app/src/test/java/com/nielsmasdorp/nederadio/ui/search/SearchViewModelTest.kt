@@ -5,7 +5,9 @@ import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.util.CoroutineTestRule
 import com.nielsmasdorp.nederadio.util.getOrAwaitValue
 import io.mockk.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -59,7 +61,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `when streams are updated without query, then propagate all streams`() {
+    fun `when streams are updated without query, then propagate all streams`() = runBlocking {
         // given
         val query = ""
         val streams = Streams.Success(
@@ -94,11 +96,11 @@ class SearchViewModelTest {
         vm.onSearchQueryChanged(query = query)
 
         // then
-        Assert.assertEquals(streams.streams, vm.searchedStreams.getOrAwaitValue())
+        Assert.assertEquals(streams.streams, vm.searchedStreams.first())
     }
 
     @Test
-    fun `when streams are updated with query, then propagate all streams`() {
+    fun `when streams are updated with query, then propagate all streams`() = runBlocking {
         // given
         val query = "lame"
         val streams = Streams.Success(
@@ -143,7 +145,7 @@ class SearchViewModelTest {
         vm.onSearchQueryChanged(query = query)
 
         // then
-        Assert.assertEquals(expected, vm.searchedStreams.getOrAwaitValue())
+        Assert.assertEquals(expected, vm.searchedStreams.first())
     }
 
     private fun createViewModel(
