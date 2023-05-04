@@ -13,23 +13,27 @@ Nederadio is built using all the latest practices in Android development:
  - Material3
  - Material You on Android 12 and higher
  - Dark/Light mode
- - Cast support
+ - Cast support including to TVs
  - Android Auto support
- - Live song updates (except when casting)
- - Sleep timer
+ - Current song information (except when casting or the stream does not support it)
+ - Sleep timer which slowly fades the volume and stops the stream after a set time
 
 ## In action
 
+### App
+
 https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-84f2-b05d3e9b19aa.mp4
 
+### Android Auto
+
 <p float="left">
-  <img src="/app/screenshots/auto_1.png" width="225" />
-  <img src="/app/screenshots/auto_2.png" width="225" />
+  <img src="/app/screenshots/auto_1.png" width="600" />
+  <img src="/app/screenshots/auto_2.png" width="600" />
 </p>
 
 ## Change data
 
-You could easily use your own streams in this app, the data set is located in `backend/public/nederadio/data.json`. It is currently served on my own server but you could change the endpoint in `StreamApi` to whatever you like.
+You could easily use your own streams in this app, the data set is located in `backend/public/nederadio/data.json`. And it contains a NodeJS app that can run on on your backend of choosing. It is currently served on my own server but you could change the endpoint in `StreamApi` to whatever you like.
 
 ## Used libraries
 
