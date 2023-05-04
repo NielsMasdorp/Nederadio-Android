@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.guava.future
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
+import kotlin.math.max
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -149,6 +150,37 @@ class StreamService :
         return serviceScope.future {
             val item = streamLibrary.browsableContent.first().getItem(itemId = mediaId)
             LibraryResult.ofItem(item, null)
+        }
+    }
+
+    override fun onSearch(
+        session: MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        query: String,
+        params: LibraryParams?
+    ): ListenableFuture<LibraryResult<Void>> {
+        return serviceScope.future {
+            // Ignore extras since we have only top level streams without genres etc.
+            val results = streamLibrary.browsableContent.first().search(query = query)
+            mediaSession.notifySearchResultChanged(browser, query, results.size, params)
+            LibraryResult.ofVoid()
+        }
+    }
+
+    override fun onGetSearchResult(
+        session: MediaLibrarySession,
+        browser: MediaSession.ControllerInfo,
+        query: String,
+        page: Int,
+        pageSize: Int,
+        params: LibraryParams?
+    ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
+        return serviceScope.future {
+            // Ignore extras since we have only top level streams without genres etc.
+            val results = streamLibrary.browsableContent.first().search(query = query)
+            val fromIndex = max((page - 1) * pageSize, results.size - 1)
+            val toIndex = max(fromIndex + pageSize, results.size)
+            LibraryResult.ofItemList(results.subList(fromIndex, toIndex), params)
         }
     }
 
@@ -295,7 +327,8 @@ class StreamService :
 
         val intent = Intent(this, NederadioActivity::class.java)
         val requestCode = 0
-        val immutableFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) FLAG_IMMUTABLE else requestCode
+        val immutableFlag =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) FLAG_IMMUTABLE else requestCode
         val pendingIntent = PendingIntent.getActivity(
             this,
             requestCode,
