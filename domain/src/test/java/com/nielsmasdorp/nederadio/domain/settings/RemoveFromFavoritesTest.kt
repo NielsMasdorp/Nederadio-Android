@@ -31,5 +31,4 @@ class RemoveFromFavoritesTest {
         // then
         coVerify { settingsRepository.removeFromFavorite(id) }
     }
-
 }

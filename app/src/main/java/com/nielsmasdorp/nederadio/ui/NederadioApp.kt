@@ -12,7 +12,6 @@ import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -22,6 +21,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.ui.components.EventHandler
+import com.nielsmasdorp.nederadio.ui.components.dialog.AboutAppDialog
+import com.nielsmasdorp.nederadio.ui.components.dialog.SleepTimerDialog
+import com.nielsmasdorp.nederadio.ui.extension.currentFraction
 import com.nielsmasdorp.nederadio.ui.home.HomeScreen
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.SheetContent
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.collapsed.SheetCollapsed
@@ -29,24 +31,22 @@ import com.nielsmasdorp.nederadio.ui.home.bottomsheet.collapsed.StreamScreenSmal
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.expanded.SheetExpanded
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.expanded.StreamViewLarge
 import com.nielsmasdorp.nederadio.ui.search.SearchScreen
-import com.nielsmasdorp.nederadio.ui.components.dialog.AboutAppDialog
-import com.nielsmasdorp.nederadio.ui.components.dialog.SleepTimerDialog
-import com.nielsmasdorp.nederadio.ui.extension.currentFraction
 import com.nielsmasdorp.nederadio.ui.search.SearchViewModel
-import dev.burnoo.cokoin.viewmodel.getViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
 @SuppressLint("UnrememberedGetBackStackEntry")
+@Suppress("MagicNumber")
 @Composable
 fun NederadioApp(
-    modifier: Modifier = Modifier,
-    viewModel: AppViewModel = getViewModel(),
     smallPlayerControls: PlayerControls<View>,
     largePlayerControls: PlayerControls<View>,
-    castButton: View
+    castButton: View,
+    modifier: Modifier = Modifier,
+    viewModel: AppViewModel = getViewModel()
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -84,10 +84,10 @@ fun NederadioApp(
         sheetToggle()
     }
 
-    val streams: Streams by viewModel.streams.observeAsState(initial = Streams.Loading)
-    val currentFavorites: List<Stream> by viewModel.favorites.observeAsState(initial = emptyList())
-    val activeStream: ActiveStream by viewModel.activeStream.observeAsState(initial = ActiveStream.Unknown)
-    val sleepTimer: String? by viewModel.sleepTimer.observeAsState(initial = null)
+    val streams: Streams by viewModel.streams.collectAsState(initial = Streams.Loading)
+    val currentFavorites: List<Stream> by viewModel.favorites.collectAsState(initial = emptyList())
+    val activeStream: ActiveStream by viewModel.activeStream.collectAsState(initial = ActiveStream.Unknown)
+    val sleepTimer: String? by viewModel.sleepTimer.collectAsState(initial = null)
     val showAboutAppDialog: Boolean by viewModel.showAboutApp.collectAsState(initial = false)
     val showSleepTimerDialog: Boolean by viewModel.showSleepTimer.collectAsState(initial = false)
 
@@ -142,7 +142,7 @@ fun NederadioApp(
             }
         },
         sheetPeekHeight = 72.dp +
-                WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
+            WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
         sheetGesturesEnabled = false
     ) {
         AnimatedNavHost(
@@ -163,7 +163,8 @@ fun NederadioApp(
                     onAbout = viewModel::onAboutPicked
                 )
             }
-            composable("search",
+            composable(
+                "search",
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentScope.SlideDirection.Up,

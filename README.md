@@ -2,7 +2,7 @@
 
 Stream popular dutch radio stations.
 
-This is mostly a pet project created to learn Jetpack Compose and the new Jetpack Media3 API's.
+This is mostly a pet project created to learn Jetpack Compose and the new Jetpack Media3 API
 
 Nederadio is built using all the latest practices in Android development:
 
@@ -13,28 +13,64 @@ Nederadio is built using all the latest practices in Android development:
  - Material3
  - Material You on Android 12 and higher
  - Dark/Light mode
- - Cast support
- - Live song updates
- - Sleep timer
+ - Cast support including to TVs
+ - Android Auto support
+ - Current song information (except when casting or the stream does not support it)
+ - Sleep timer which slowly fades the volume and stops the stream after a set time
 
-## Screenshots
+## In action
+
+### App
+
+https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-84f2-b05d3e9b19aa.mp4
+
+### Android Auto
 
 <p float="left">
-  <img src="/app/screenshots/screenshot1.png" width="150" />
-  <img src="/app/screenshots/screenshot2.png" width="150" />
-  <img src="/app/screenshots/screenshot3.png" width="150" />
-  <img src="/app/screenshots/screenshot4.png" width="150" />
-  <img src="/app/screenshots/screenshot5.png" width="150" />
+  <img src="/app/screenshots/auto_1.png" width="600" />
+  <img src="/app/screenshots/auto_2.png" width="600" />
 </p>
 
 ## Change data
 
-You could easily use your own streams in this app, the data set is located in `backend/public/nederadio/data.json`. It is currently served on my own server but you could change the endpoint in `StreamApi` to whatever you like.
+You could easily use your own streams in this app, the data set is located in `backend/public/nederadio/data.json`. And it contains a NodeJS app that can run on on your backend of choosing. It is currently served on my own server but you could change the endpoint in `StreamApi` to whatever you like.
+
+## Current issues and future enhancements
+
+* When switching to cast, the same media session is used as when using Exoplayer, which leads to a media notification that does not adhere to the casting guidelines. See https://github.com/androidx/media/issues/39 and https://github.com/androidx/media/issues/264
+* Playback resumption seems iffy, need to take a better look. See https://android-developers.googleblog.com/2020/08/playing-nicely-with-media-controls.html and the implementation of `onGetLibraryRoot()` and `onGetChildren` in `StreamService`
+* CastPlayer implementation in Media3 does not implement the required API to show live song updates unfortunately. Need to revisit in the future
+* Landscape UI not implemented
+* Search for Google Assistant/Android Auto not implemented, see: https://developer.android.com/training/cars/media#support_voice
+
+Want to help? Open a PR! Be sure to add Detekt via:
+
+### Detekt
+
+Please add this to `<<your-repo>>/.git/hooks/pre-commit` and make it executable by `chmod +x pre-commit`.
+This will make sure Detekt runs and prevents any commits that fail our coding standards.
+
+```
+#!/usr/bin/env bash
+echo "Running detekt check..."
+OUTPUT="/tmp/detekt-$(date +%s)"
+./gradlew detekt > $OUTPUT
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  cat $OUTPUT
+  rm $OUTPUT
+  echo "***********************************************"
+  echo "                 Detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
+rm $OUTPUT
+```
 
 ## Used libraries
 
 * [Koin](https://github.com/InsertKoinIO/koin)
-* [Cokoin](https://github.com/burnoo/cokoin)
 * [Jetpack Media3](https://github.com/androidx/media)
 * [Jetpack Compose](https://developer.android.com/jetpack/compose)
 * [Ktor](https://github.com/ktorio/ktor)

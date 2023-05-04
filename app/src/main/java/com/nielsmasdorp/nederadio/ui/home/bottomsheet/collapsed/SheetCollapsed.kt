@@ -19,11 +19,11 @@ import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
  */
 @Composable
 fun SheetCollapsed(
-    modifier: Modifier = Modifier,
     activeStream: ActiveStream,
     isEnabled: Boolean,
     currentFraction: Float,
     onSheetClick: () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable RowScope.(ActiveStream) -> Unit
 ) {
     val background = if (activeStream is ActiveStream.Unknown) {

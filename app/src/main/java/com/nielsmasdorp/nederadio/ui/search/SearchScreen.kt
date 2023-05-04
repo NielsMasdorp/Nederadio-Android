@@ -7,11 +7,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.nielsmasdorp.nederadio.ui.components.StreamsGrid
-import dev.burnoo.cokoin.viewmodel.getViewModel
+import org.koin.androidx.compose.getViewModel
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -26,7 +25,7 @@ fun SearchScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val streams by viewModel.searchedStreams.observeAsState(initial = emptyList())
+    val streams by viewModel.searchedStreams.collectAsState(initial = emptyList())
     val query: String by viewModel.searchQuery.collectAsState(initial = "")
 
     BackHandler(enabled = backPressHandler != null) {

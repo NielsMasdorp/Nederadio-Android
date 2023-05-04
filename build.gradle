@@ -3,7 +3,7 @@
 buildscript {
 
     //google
-    ext.google_cast_version = '21.2.0'
+    ext.google_cast_version = '21.3.0'
     ext.material_version = '1.8.0'
 
     //kotlin
@@ -11,6 +11,7 @@ buildscript {
     ext.kotlinx_coroutines_android_version = '1.6.4'
     ext.kotlinx_coroutines_core_version = '1.6.4'
     ext.kotlinx_serialization_version = '1.3.2'
+    ext.kotlinx_guava_version = '1.6.4'
 
     //androidx
     ext.androidx_media_router_version = '1.3.1'
@@ -19,12 +20,13 @@ buildscript {
     ext.androidx_core_version = '1.9.0'
     ext.androidx_lifecycle_version = '2.5.1'
     ext.androidx_navigation_version = '2.5.3'
-    ext.androidx_media3_version = '1.0.0-rc02'
+    ext.androidx_media3_version = '1.0.1'
     ext.androidx_compose_version = '1.3.1'
     ext.androidx_compose_material3_version = '1.0.1'
 
     //koin
-    ext.cokoin_version = '1.0.0'
+    ext.koin_version = '3.3.3'
+    ext.koin_compose_version = '3.4.2'
 
     //ktor
     ext.ktor_version = '1.6.8'
@@ -45,6 +47,10 @@ buildscript {
     ext.androidx_lifecycle_testing_version = "2.2.0"
     ext.androidx_test_ext_junit_version = "1.1.3"
 
+    // Detekt
+    ext.detekt_version = "1.21.0"
+    ext.detekt_compose_version = "0.0.9"
+
     repositories {
         google()
         mavenCentral()
@@ -53,6 +59,52 @@ buildscript {
         classpath 'com.android.tools.build:gradle:7.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+    }
+}
+
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "$detekt_version"
+}
+
+detekt {
+    input = files(collectSourceDirs())
+    parallel = true
+    autoCorrect = true
+    config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+}
+
+/**
+ * @return List of source directories from all subprojects.
+ */
+def collectSourceDirs() {
+    def sourceDirs = []
+    subprojects.each {
+        sourceDirs << file("${it.projectDir}/src/main/java")
+        sourceDirs << file("${it.projectDir}/src/main/kotlin")
+        sourceDirs << file("${it.projectDir}/src/test/java")
+        sourceDirs << file("${it.projectDir}/src/test/kotlin")
+        sourceDirs << file("${it.projectDir}/src/androidTest/java")
+        sourceDirs << file("${it.projectDir}/src/debug/java")
+        sourceDirs << file("${it.projectDir}/src/acceptance/java")
+        sourceDirs << file("${it.projectDir}/src/release/java")
+    }
+    return sourceDirs.findAll { it.exists() }
+}
+
+dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
+    detektPlugins "com.twitter.compose.rules:detekt:$detekt_compose_version"
+}
+
+tasks.named("detekt").configure {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+        html.outputLocation.set(file("build/reports/detekt.html"))
+        txt.required.set(false)
+        sarif.required.set(false)
+        md.required.set(false)
     }
 }
 

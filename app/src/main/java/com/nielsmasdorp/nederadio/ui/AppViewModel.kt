@@ -1,8 +1,8 @@
 package com.nielsmasdorp.nederadio.ui
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.*
 import com.nielsmasdorp.nederadio.domain.DefaultDispatcherProvider
 import com.nielsmasdorp.nederadio.domain.DispatcherProvider
@@ -28,11 +28,11 @@ class AppViewModel(
     private val dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 ) : ViewModel() {
 
-    val streams: LiveData<Streams> = getAllStreams.streams.asLiveData()
+    val streams: Flow<Streams> = getAllStreams.streams // TODO drop livedata
 
-    val activeStream: LiveData<ActiveStream> = getActiveStream.stream.asLiveData()
+    val activeStream: Flow<ActiveStream> = getActiveStream.stream
 
-    val favorites: LiveData<List<Stream>> = streams
+    val favorites: Flow<List<Stream>> = streams
         .map { streams ->
             if (streams is Streams.Success) {
                 streams.streams.filter { stream -> stream.isFavorite }
@@ -41,10 +41,9 @@ class AppViewModel(
             }
         }
 
-    val sleepTimer: LiveData<String> = streamManager.sleepTimerFlow
+    val sleepTimer: Flow<String> = streamManager.sleepTimerFlow
         .map { formatTimer(it) }
         .filterNotNull()
-        .asLiveData()
 
     var errorState by mutableStateOf(ErrorState())
         private set
@@ -61,9 +60,11 @@ class AppViewModel(
                 .filter { it is StreamingError.Filled }
                 .collect { error ->
                     val errorText = (error as StreamingError.Filled).error
-                    errorState = errorState.copy(error = Event(errorText) {
-                        errorState = errorState.copy(error = null)
-                    })
+                    errorState = errorState.copy(
+                        error = Event(errorText) {
+                            errorState = errorState.copy(error = null)
+                        }
+                    )
                 }
         }
     }
@@ -108,6 +109,7 @@ class AppViewModel(
         }
     }
 
+    @Suppress("MagicNumber")
     private fun calculateMs(option: Int): Long {
         return when (option) {
             0 -> 0
@@ -133,17 +135,17 @@ class AppViewModel(
                 Locale.getDefault(), "%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(timeLeft),
                 TimeUnit.MILLISECONDS.toMinutes(timeLeft) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
+                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
                 TimeUnit.MILLISECONDS.toSeconds(timeLeft) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft))
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft))
             )
         } else {
             String.format(
                 Locale.getDefault(), "%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(timeLeft) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
+                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
                 TimeUnit.MILLISECONDS.toSeconds(timeLeft) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft))
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft))
             )
         }
     }

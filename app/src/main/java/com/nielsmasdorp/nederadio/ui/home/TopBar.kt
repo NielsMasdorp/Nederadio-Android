@@ -28,6 +28,7 @@ import com.nielsmasdorp.nederadio.R
 fun TopBar(
     castButton: View,
     showCastButton: Boolean,
+    modifier: Modifier = Modifier,
     onAboutClicked: () -> Unit = {},
     onSearchClicked: () -> Unit = {},
 ) {
@@ -35,6 +36,7 @@ fun TopBar(
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
+        modifier = modifier,
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary
         ),
@@ -86,7 +88,8 @@ fun TopBar(
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface
                         )
-                    })
+                    }
+                )
             }
         }
     )

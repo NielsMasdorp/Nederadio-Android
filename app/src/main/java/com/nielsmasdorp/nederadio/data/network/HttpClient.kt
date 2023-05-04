@@ -6,9 +6,9 @@ import io.ktor.client.engine.android.Android
 import io.ktor.client.features.*
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.features.logging.Logging
-import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.LogLevel
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.Logging
 import io.ktor.client.features.observer.ResponseObserver
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -29,16 +29,17 @@ val ktorHttpClient = HttpClient(Android) {
     }
 
     install(JsonFeature) {
-        serializer = KotlinxSerializer(Json {
-            prettyPrint = true
-            isLenient = true
-            ignoreUnknownKeys = true
-        })
+        serializer = KotlinxSerializer(
+            Json {
+                prettyPrint = true
+                isLenient = true
+                ignoreUnknownKeys = true
+            }
+        )
 
         engine {
             connectTimeout = TIME_OUT
             socketTimeout = TIME_OUT
-
         }
     }
 
@@ -47,7 +48,6 @@ val ktorHttpClient = HttpClient(Android) {
             override fun log(message: String) {
                 Log.v("Logger Ktor =>", message)
             }
-
         }
         level = LogLevel.ALL
     }

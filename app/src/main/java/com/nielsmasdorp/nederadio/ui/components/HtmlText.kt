@@ -17,8 +17,8 @@ import androidx.core.text.HtmlCompat
  */
 @Composable
 fun HtmlText(
-    modifier: Modifier = Modifier,
-    html: String
+    html: String,
+    modifier: Modifier = Modifier
 ) {
     val color = MaterialTheme.colorScheme.onSurface
     AndroidView(

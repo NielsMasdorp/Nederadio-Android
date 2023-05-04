@@ -37,14 +37,14 @@ import com.skydoves.landscapist.glide.GlideImage
  */
 @Composable
 fun StreamViewLarge(
-    modifier: Modifier = Modifier,
     playerControls: PlayerControls<View>,
     activeStream: ActiveStream,
     sleepTimer: String?,
     onCollapseClick: () -> Unit,
     onTimerClicked: () -> Unit,
     onStreamFavoriteStatusChanged: (String, Boolean) -> Unit,
-    currentFraction: Float
+    currentFraction: Float,
+    modifier: Modifier = Modifier
 ) {
 
     Surface(
@@ -64,7 +64,8 @@ fun StreamViewLarge(
                 Spacer(modifier = Modifier.height(16.dp))
                 IconButton(
                     modifier = Modifier.graphicsLayer(alpha = 0f + currentFraction),
-                    onClick = { onCollapseClick() }) {
+                    onClick = { onCollapseClick() }
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.chevron_down),
                         contentDescription = stringResource(id = R.string.settings_content_description),

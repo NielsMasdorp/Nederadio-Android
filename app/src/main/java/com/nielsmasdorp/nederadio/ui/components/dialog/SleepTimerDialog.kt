@@ -21,6 +21,7 @@ import com.nielsmasdorp.nederadio.R
  * @author Niels Masdorp (NielsMasdorp)
  */
 @Composable
+@Suppress("ModifierReused")
 fun SleepTimerDialog(
     modifier: Modifier = Modifier,
     onSelect: (Int) -> Unit = {},

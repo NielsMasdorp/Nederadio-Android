@@ -15,9 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
  */
 @Composable
 fun EmptyView(
-    modifier: Modifier = Modifier,
     title: String,
-    tint: Color
+    tint: Color,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,

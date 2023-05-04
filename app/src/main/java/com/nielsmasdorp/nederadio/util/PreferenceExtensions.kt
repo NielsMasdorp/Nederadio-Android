@@ -24,7 +24,7 @@ inline fun <reified T> SharedPreferences.observeKey(key: String, default: T): Fl
 
 inline fun <reified T> SharedPreferences.getItem(key: String, default: T): T {
     @Suppress("UNCHECKED_CAST")
-    return when (default){
+    return when (default) {
         is String -> getString(key, default) as T
         is Int -> getInt(key, default) as T
         is Long -> getLong(key, default) as T

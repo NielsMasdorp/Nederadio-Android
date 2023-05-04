@@ -10,10 +10,12 @@ import androidx.media3.common.Player.*
 import androidx.media3.common.text.CueGroup
 import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
+import kotlin.math.min
 
 /**
  * Mostly taken from https://github.com/android/uamp/blob/media3/common/src/main/java/com/example/android/uamp/media/ReplaceableForwardingPlayer.kt
  */
+@Suppress("TooManyFunctions")
 @UnstableApi
 class ReplaceableForwardingPlayer(private var player: Player) : Player {
 
@@ -75,86 +77,81 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
         playlist.addAll(mediaItems)
     }
 
-    @Deprecated(
-        message = "Not supported",
-        replaceWith = ReplaceWith(
-            expression = "setMediaItems(mediaItems = mediaItems, startWindowIndex = 0, startPositionMs = 0L)"
-        )
-    )
     override fun setMediaItems(mediaItems: MutableList<MediaItem>) {
-        throw UnsupportedOperationException("Not supported!")
+        player.setMediaItems(mediaItems)
+        playlist.clear()
+        playlist.addAll(mediaItems)
     }
 
-    @Deprecated(
-        message = "Not supported",
-        replaceWith = ReplaceWith(
-            expression = "setMediaItems(mediaItems = mediaItems, startWindowIndex = 0, startPositionMs = 0L)"
-        )
-    )
     override fun setMediaItems(mediaItems: MutableList<MediaItem>, resetPosition: Boolean) {
-        throw UnsupportedOperationException("Not supported!")
+        player.setMediaItems(mediaItems, resetPosition)
+        playlist.clear()
+        playlist.addAll(mediaItems)
     }
 
-    @Deprecated(
-        message = "Not supported",
-        replaceWith = ReplaceWith(
-            expression = "setMediaItems(mediaItems = listOf(mediaItem), startWindowIndex = 0, startPositionMs = 0L)"
-        )
-    )
     override fun setMediaItem(mediaItem: MediaItem) {
-        throw UnsupportedOperationException("Not supported!")
+        player.setMediaItem(mediaItem)
+        playlist.clear()
+        playlist.add(mediaItem)
     }
 
-    @Deprecated(
-        message = "Not supported",
-        replaceWith = ReplaceWith(
-            expression = "setMediaItems(mediaItems = listOf(mediaItem), startWindowIndex = 0, startPositionMs = startPositionMs)"
-        )
-    )
     override fun setMediaItem(mediaItem: MediaItem, startPositionMs: Long) {
-        throw UnsupportedOperationException("Not supported!")
+        player.setMediaItem(mediaItem, startPositionMs)
+        playlist.clear()
+        playlist.add(mediaItem)
     }
 
-    @Deprecated(
-        message = "Not supported",
-        replaceWith = ReplaceWith(
-            expression = "setMediaItems(mediaItems = listOf(mediaItem), startWindowIndex = 0, startPositionMs = 0L)"
-        )
-    )
     override fun setMediaItem(mediaItem: MediaItem, resetPosition: Boolean) {
-        throw UnsupportedOperationException("Not supported!")
+        player.setMediaItem(mediaItem, resetPosition)
+        playlist.clear()
+        playlist.add(mediaItem)
     }
 
     override fun addMediaItem(mediaItem: MediaItem) {
-        throw UnsupportedOperationException("Not supported!")
+        player.addMediaItem(mediaItem)
+        playlist.add(mediaItem)
     }
 
     override fun addMediaItem(index: Int, mediaItem: MediaItem) {
-        throw UnsupportedOperationException("Not supported!")
+        player.addMediaItem(index, mediaItem)
+        playlist.add(index, mediaItem)
     }
 
     override fun addMediaItems(mediaItems: MutableList<MediaItem>) {
-        throw UnsupportedOperationException("Not supported!")
+        player.addMediaItems(mediaItems)
+        playlist.addAll(mediaItems)
     }
 
     override fun addMediaItems(index: Int, mediaItems: MutableList<MediaItem>) {
-        throw UnsupportedOperationException("Not supported!")
+        player.addMediaItems(index, mediaItems)
+        playlist.addAll(index, mediaItems)
     }
 
     override fun moveMediaItem(currentIndex: Int, newIndex: Int) {
-        throw UnsupportedOperationException("Not supported!")
+        player.moveMediaItem(currentIndex, newIndex)
+        playlist.add(min(newIndex, playlist.size), playlist.removeAt(currentIndex))
     }
 
     override fun moveMediaItems(fromIndex: Int, toIndex: Int, newIndex: Int) {
-        throw UnsupportedOperationException("Not supported!")
+        val removedItems: ArrayDeque<MediaItem> = ArrayDeque()
+        val removedItemsLength = toIndex - fromIndex
+        for (i in removedItemsLength - 1 downTo 0) {
+            removedItems.addFirst(playlist.removeAt(fromIndex + i))
+        }
+        playlist.addAll(min(newIndex, playlist.size), removedItems)
     }
 
     override fun removeMediaItem(index: Int) {
-        throw UnsupportedOperationException("Not supported!")
+        player.removeMediaItem(index)
+        playlist.removeAt(index)
     }
 
     override fun removeMediaItems(fromIndex: Int, toIndex: Int) {
-        throw UnsupportedOperationException("Not supported!")
+        player.removeMediaItems(fromIndex, toIndex)
+        val removedItemsLength = toIndex - fromIndex
+        for (i in removedItemsLength - 1 downTo 0) {
+            playlist.removeAt(fromIndex + i)
+        }
     }
 
     override fun clearMediaItems() {
@@ -414,9 +411,9 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
 
     private inner class PlayerListener : Listener {
         override fun onEvents(player: Player, events: Events) {
-            if (events.contains(EVENT_POSITION_DISCONTINUITY)
-                || events.contains(EVENT_MEDIA_ITEM_TRANSITION)
-                || events.contains(EVENT_TIMELINE_CHANGED)
+            if (events.contains(EVENT_POSITION_DISCONTINUITY) ||
+                events.contains(EVENT_MEDIA_ITEM_TRANSITION) ||
+                events.contains(EVENT_TIMELINE_CHANGED)
             ) {
                 if (!player.currentTimeline.isEmpty) {
                     currentPlaylistIndex = player.currentMediaItemIndex

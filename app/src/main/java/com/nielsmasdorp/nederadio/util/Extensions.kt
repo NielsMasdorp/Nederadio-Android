@@ -23,14 +23,19 @@ import io.ktor.client.features.*
 /**
  * @author Niels Masdorp
  */
+@Suppress("MagicNumber")
 fun Exception.toFailure(resources: Resources): Failure = when (this) {
-    is ServerResponseException -> Failure.HttpErrorInternalServerError(resources.getString(R.string.streams_fetch_error_general))
+    is ServerResponseException -> Failure.HttpErrorInternalServerError(
+        resources.getString(R.string.streams_fetch_error_general)
+    )
     is ClientRequestException ->
         when (this.response.status.value) {
             400 -> Failure.HttpErrorBadRequest(resources.getString(R.string.streams_fetch_error_general))
             401 -> Failure.HttpErrorUnauthorized(resources.getString(R.string.streams_fetch_error_general))
             403 -> Failure.HttpErrorForbidden(resources.getString(R.string.streams_fetch_error_general))
-            404 -> Failure.HttpErrorNotFound(resources.getString(R.string.streams_fetch_error_general))
+            404 -> Failure.HttpErrorNotFound(
+                resources.getString(R.string.streams_fetch_error_general)
+            )
             else -> Failure.HttpError(resources.getString(R.string.streams_fetch_error_general))
         }
     is RedirectResponseException -> Failure.HttpError(resources.getString(R.string.streams_fetch_error_general))
@@ -60,24 +65,22 @@ fun MediaController.sendCommandToService(
 fun Stream.toMediaItem(): MediaItem {
     return MediaItem.Builder()
         .setMediaId(id)
-        .setRequestMetadata(
-            MediaItem.RequestMetadata.Builder()
-                .setMediaUri(url.toUri())
-                .build()
-        )
+        .setUri(url.toUri())
         .setMediaMetadata(
             MediaMetadata.Builder()
                 .setMediaType(MediaMetadata.MEDIA_TYPE_RADIO_STATION)
                 .setSubtitle(title)
                 .setArtist(title)
                 .setArtworkUri(imageUrl.toUri())
+                .setIsPlayable(true)
+                .setIsBrowsable(false)
                 .build()
         )
         .build()
 }
 
 /**
- * @return the name of the connected cast device, if any
+ * Return the name of the connected cast device, if any
  */
 fun CastContext.connectedDeviceName(): String? {
     return sessionManager
@@ -87,3 +90,17 @@ fun CastContext.connectedDeviceName(): String? {
 }
 
 fun PlayerControls<*>.view(): PlayerControlView = getView() as PlayerControlView
+
+/**
+ * Move an item that matches a given predicate to the front of the list
+ * If no element is found, the list remains untouched
+ */
+fun <T> MutableList<T>.moveToFront(predicate: (T) -> Boolean): MutableList<T> {
+    return this.apply {
+        val item = find(predicate)
+        item?.let {
+            remove(it)
+            add(0, it)
+        }
+    }
+}

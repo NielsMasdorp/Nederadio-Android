@@ -8,6 +8,7 @@ package com.nielsmasdorp.nederadio.domain.stream
 sealed class StreamingError {
 
     data class Filled(val error: String) : StreamingError() {
+        @Suppress("EqualsAlwaysReturnsTrueOrFalse")
         override fun equals(other: Any?): Boolean =
             false // never equal, so duplicate values are accepted by [Flow]
 

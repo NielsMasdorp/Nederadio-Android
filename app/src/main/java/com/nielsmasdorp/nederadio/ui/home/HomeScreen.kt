@@ -10,8 +10,8 @@ import androidx.compose.ui.res.stringResource
 import com.google.accompanist.pager.rememberPagerState
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
-import com.nielsmasdorp.nederadio.domain.stream.Streams
 import com.nielsmasdorp.nederadio.domain.stream.Stream
+import com.nielsmasdorp.nederadio.domain.stream.Streams
 import com.nielsmasdorp.nederadio.ui.components.LoadingView
 import com.nielsmasdorp.nederadio.ui.components.StreamsErrorView
 
@@ -20,11 +20,11 @@ import com.nielsmasdorp.nederadio.ui.components.StreamsErrorView
  */
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
     castButton: View,
     streams: Streams,
     activeStream: ActiveStream,
     favorites: List<Stream>,
+    modifier: Modifier = Modifier,
     onStreamSelected: (String) -> Unit = {},
     onRetryStreams: () -> Unit = {},
     onSearch: () -> Unit = {},

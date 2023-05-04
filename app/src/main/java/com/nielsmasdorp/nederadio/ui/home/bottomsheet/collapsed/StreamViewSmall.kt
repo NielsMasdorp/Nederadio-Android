@@ -31,9 +31,9 @@ import com.skydoves.landscapist.glide.GlideImage
  */
 @Composable
 fun StreamScreenSmall(
-    modifier: Modifier = Modifier,
     activeStream: ActiveStream,
     playerControls: PlayerControls<View>,
+    modifier: Modifier = Modifier,
     onStreamFavoriteStatusChanged: (String, Boolean) -> Unit,
 ) {
     val controlColor = MaterialTheme.colorScheme.onPrimary.toArgb()

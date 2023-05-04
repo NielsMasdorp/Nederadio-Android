@@ -8,13 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.framework.CastButtonFactory
-import com.nielsmasdorp.nederadio.di.networkModule
-import com.nielsmasdorp.nederadio.di.settingsModule
-import com.nielsmasdorp.nederadio.di.streamModule
-import com.nielsmasdorp.nederadio.di.uiModule
 import com.nielsmasdorp.nederadio.ui.theme.AppTheme
-import dev.burnoo.cokoin.Koin
-import org.koin.android.ext.koin.androidContext
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -35,23 +29,12 @@ class NederadioActivity : AppCompatActivity() {
         )
         setContent {
             AppTheme {
-                Koin(appDeclaration = {
-                    androidContext(applicationContext)
-                    modules(
-                        streamModule,
-                        settingsModule,
-                        networkModule,
-                        uiModule
-                    )
-                }) {
-                    NederadioApp(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        smallPlayerControls = controlViews[0],
-                        largePlayerControls = controlViews[1],
-                        castButton = castButton
-                    )
-                }
+                NederadioApp(
+                    modifier = Modifier.fillMaxSize(),
+                    smallPlayerControls = controlViews[0],
+                    largePlayerControls = controlViews[1],
+                    castButton = castButton
+                )
             }
         }
     }
