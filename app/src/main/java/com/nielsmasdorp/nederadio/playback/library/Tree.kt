@@ -1,32 +1,31 @@
 package com.nielsmasdorp.nederadio.playback.library
 
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
+import com.nielsmasdorp.nederadio.playback.library.StreamLibrary.Companion.RECENT_ITEM_ID
 import com.nielsmasdorp.nederadio.playback.library.StreamLibrary.Companion.STATIONS_ITEM_ID
-import com.nielsmasdorp.nederadio.util.moveToFront
 
 @UnstableApi
 class Tree(val rootNode: MediaItemNode) {
 
-    /**
-     * Return the root of the list of stations with the last played item at the start
-     */
-    val recentRootNode: MediaItemNode
-        get() = rootNode.children.find { it.mediaItem.mediaId == STATIONS_ITEM_ID }!!
+    val recentRootNode: MediaItem by lazy {
+        MediaItem.Builder()
+            .setMediaId(RECENT_ITEM_ID)
+            .setMediaMetadata(
+                MediaMetadata.Builder()
+                    .setFolderType(MediaMetadata.FOLDER_TYPE_ALBUMS)
+                    .setIsPlayable(false)
+                    .build()
+            )
+            .build()
+    }
 
-    /**
-     * Recreate the stations children list but put the last played item at the front
-     */
-    fun getRecentChildren(lastPlayedId: String? = null): List<MediaItem> {
-        return recentRootNode
+    fun getLastPlayed(lastPlayedId: String): MediaItem {
+        return rootNode.children.first { it.mediaItem.mediaId == STATIONS_ITEM_ID }
             .children
-            .map { it.mediaItem }
-            .toMutableList()
-            .apply {
-                if (lastPlayedId != null) {
-                    moveToFront { it.mediaId == lastPlayedId }
-                }
-            }
+            .find { it.mediaItem.mediaId == lastPlayedId }!!
+            .mediaItem
     }
 
     /**

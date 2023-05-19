@@ -38,15 +38,10 @@ You could easily use your own streams in this app, the data set is located in `b
 ## Current issues and future enhancements
 
 * When switching to cast, the same media session is used as when using Exoplayer, which leads to a media notification that does not adhere to the casting guidelines. See https://github.com/androidx/media/issues/39 and https://github.com/androidx/media/issues/264
-* Playback resumption seems iffy, need to take a better look. See https://android-developers.googleblog.com/2020/08/playing-nicely-with-media-controls.html and the implementation of `onGetLibraryRoot()` and `onGetChildren` in `StreamService`
 * CastPlayer implementation in Media3 does not implement the required API to show live song updates unfortunately. Need to revisit in the future
 * Landscape UI not implemented
 
-Want to help? Open a PR! Be sure to add Detekt via:
-
-### Detekt
-
-Please add this to `<<your-repo>>/.git/hooks/pre-commit` and make it executable by `chmod +x pre-commit`.
+Want to help? Open a PR! Be sure to add Detekt via adding this to `<<your-repo>>/.git/hooks/pre-commit` and make it executable by `chmod +x pre-commit`.
 This will make sure Detekt runs and prevents any commits that fail our coding standards.
 
 ```
