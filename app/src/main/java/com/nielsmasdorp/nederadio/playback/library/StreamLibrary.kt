@@ -90,6 +90,7 @@ class StreamLibrary(private val context: Context, getSuccessfulStreams: GetSucce
 
     companion object {
         const val ROOT_ITEM_ID = "[rootId]"
+        const val RECENT_ITEM_ID = "[recentsId]"
         const val STATIONS_ITEM_ID = "[stationsId]"
         const val FAVORITES_ITEM_ID = "[favoritesId]"
     }

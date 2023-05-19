@@ -76,6 +76,8 @@ class StreamService :
     override fun onTaskRemoved(rootIntent: Intent) {
         super.onTaskRemoved(rootIntent)
         releaseMediaSession()
+        stopSleepTimer()
+        serviceScope.cancel()
         stopSelf()
     }
 
@@ -95,11 +97,17 @@ class StreamService :
     ): ListenableFuture<LibraryResult<MediaItem>> {
         return serviceScope.future {
             val isRecentRequest = params?.isRecent ?: false
+            val tree = streamLibrary.browsableContent.first()
             val rootItem = if (!isRecentRequest) {
-                streamLibrary.browsableContent.first().rootNode.mediaItem
+                tree.rootNode.mediaItem
             } else {
                 // Playback resumption
-                streamLibrary.browsableContent.first().recentRootNode.mediaItem
+                tree.recentRootNode.also {
+                    tree.getLastPlayed(lastPlayedId = getLastPlayedId()!!).let { item ->
+                        player.setMediaItem(item)
+                        player.prepare()
+                    }
+                }
             }
             val extras = Bundle().apply {
                 putInt(
@@ -109,8 +117,8 @@ class StreamService :
                 putBoolean(MEDIA_SEARCH_SUPPORTED, true)
             }
             val newParams = LibraryParams.Builder()
-                .setExtras(extras)
                 .setRecent(isRecentRequest)
+                .setExtras(extras)
                 .build()
             LibraryResult.ofItem(rootItem, newParams)
         }
@@ -125,18 +133,11 @@ class StreamService :
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
         return serviceScope.future {
-            val isRecentRequest = params?.isRecent ?: false
-            val children = if (!isRecentRequest) {
-                streamLibrary
-                    .browsableContent
-                    .first()
-                    .getChildren(nodeId = parentId)
+            val tree = streamLibrary.browsableContent.first()
+            val children = if (parentId == tree.recentRootNode.mediaId) {
+                listOf(tree.getLastPlayed(lastPlayedId = getLastPlayedId()!!))
             } else {
-                // Playback resumption
-                streamLibrary
-                    .browsableContent
-                    .first()
-                    .getRecentChildren(lastPlayedId = getLastPlayedId())
+                tree.getChildren(nodeId = parentId).toMutableList()
             }
             LibraryResult.ofItemList(children, params)
         }
@@ -251,6 +252,17 @@ class StreamService :
         val playerCommands = result.availablePlayerCommands
         session.setAvailableCommands(controller, sessionCommands, playerCommands)
         return MediaSession.ConnectionResult.accept(sessionCommands, playerCommands)
+    }
+
+    /**
+     * Called when a [MediaController] has connected to the current [MediaSession]
+     * If there is an item playing and we are just connected, post the metadata
+     * to connected controllers
+     */
+    override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
+        player.currentMediaItem?.mediaMetadata?.let { mediaMetadata ->
+            onMediaMetadataChanged(mediaMetadata = mediaMetadata)
+        }
     }
 
     /**
