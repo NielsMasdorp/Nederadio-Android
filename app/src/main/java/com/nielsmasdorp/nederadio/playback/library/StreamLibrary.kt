@@ -55,7 +55,6 @@ class StreamLibrary(private val context: Context, getSuccessfulStreams: GetSucce
             children = if (favorites.isNotEmpty()) {
                 listOf(favoritesNode, stationsNode)
             } else {
-                // TODO maybe find a better way, like implementing an empty view somehow
                 listOf(stationsNode)
             }
         )
