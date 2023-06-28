@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.nielsmasdorp.nederadio.R
+import com.nielsmasdorp.nederadio.domain.equalizer.EqualizerManager
 import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
 import com.nielsmasdorp.nederadio.domain.stream.SetActiveStream
 import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
@@ -58,6 +59,7 @@ class StreamService :
     private val streamLibrary: StreamLibrary by inject()
     private val setActiveStream: SetActiveStream by inject()
     private val getLastPlayedId: GetLastPlayedId by inject()
+    private val equalizerManager: EqualizerManager by inject()
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     private lateinit var localPlayer: Player
@@ -75,14 +77,17 @@ class StreamService :
 
     override fun onTaskRemoved(rootIntent: Intent) {
         super.onTaskRemoved(rootIntent)
-        releaseMediaSession()
-        stopSleepTimer()
-        serviceScope.cancel()
+        teardown()
         stopSelf()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        teardown()
+    }
+
+    private fun teardown() {
+        equalizerManager.teardown()
         releaseMediaSession()
         stopSleepTimer()
         serviceScope.cancel()
@@ -188,12 +193,18 @@ class StreamService :
     /**
      * Casting has started, switch to [CastPlayer]
      */
-    override fun onCastSessionAvailable() = player.setPlayer(newPlayer = castPlayer)
+    override fun onCastSessionAvailable() {
+        player.setPlayer(newPlayer = castPlayer)
+        equalizerManager.onCastingStatusChanged(isCasting = true)
+    }
 
     /**
      * Casting has been stopped, switch to [ExoPlayer]
      */
-    override fun onCastSessionUnavailable() = player.setPlayer(newPlayer = localPlayer)
+    override fun onCastSessionUnavailable() {
+        player.setPlayer(newPlayer = localPlayer)
+        equalizerManager.onCastingStatusChanged(isCasting = false)
+    }
 
     /**
      * [MediaItem] has been updated
@@ -347,7 +358,9 @@ class StreamService :
             )
             .setHandleAudioBecomingNoisy(true) // Handle headphones disconnect
             .setWakeMode(C.WAKE_MODE_NETWORK) // Wake+WiFi lock while playing
-            .build()
+            .build().apply {
+                equalizerManager.initialize(audioSessionId = audioSessionId)
+            }
 
         val intent = Intent(this, NederadioActivity::class.java)
         val requestCode = 0

@@ -23,6 +23,7 @@
 
     <string name="about_title">About Nederadio</string>
     <string name="action_about">About</string>
+    <string name="action_equalizer">Equalizer</string>
     <string name="about_message"><![CDATA[
         Current version: %s, made by:<br/><br/>
         <b>Niels Masdorp</b><br/>
@@ -37,6 +38,7 @@
         <a href=\'https://github.com/bumptech/glide\'>Glide</a>&nbsp;&nbsp;
         <a href=\'https://github.com/skydoves/landscapist\'>Landscapist</a>&nbsp;&nbsp;
         <a href=\'https://github.com/airbnb/lottie-android\'>Lottie</a>&nbsp;&nbsp;
+        <a href=\'https://github.com/patrykandpatrick/vico\'>Vico</a>&nbsp;&nbsp;
     ]]></string>
     <string name="about_positive">Close</string>
 
@@ -62,4 +64,10 @@
     <string name="stream_subtitle_casting">Casting..</string>
     <string name="stream_subtitle_casting_device">Casting to %s</string>
     <string name="stream_subtitle_unknown_song">No information present</string>
+
+    <string name="equalizer_enable_content_descr">Enable the equalizer</string>
+    <string name="equalizer_selected_preset_descr">Selected preset</string>
+    <string name="equalizer_not_available">Equalizer not available when casting is in progress</string>
+    <string name="equalizer_loading">Equalizer is being initialized</string>
+
 </resources>

@@ -41,9 +41,23 @@ class SharedPreferencesSettingsRepository(context: Context) : SettingsRepository
 
     override suspend fun isFavorite(id: String): Boolean = getFavorites().contains(id)
 
+    override suspend fun getEqualizerSettings(): Pair<Boolean, Short> {
+        return Pair(
+            prefs.getBoolean(EQUALIZER_ENABLED, false),
+            prefs.getInt(EQUALIZER_PRESET, 0).toShort()
+        )
+    }
+
+    override suspend fun setEqualizerSettings(enabled: Boolean, preset: Short) {
+        prefs.edit().putBoolean(EQUALIZER_ENABLED, enabled).apply()
+        prefs.edit().putInt(EQUALIZER_PRESET, preset.toInt()).apply()
+    }
+
     companion object {
         const val PREF_KEY = "settings"
         const val LAST_PLAYED_INDEX = "last_played_id"
         const val FAVORITES = "favorites"
+        const val EQUALIZER_ENABLED = "equalizer_enabled"
+        const val EQUALIZER_PRESET = "equalizer_preset"
     }
 }

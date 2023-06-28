@@ -72,6 +72,7 @@ rm $OUTPUT
 * [Glide](https://github.com/bumptech/glide)
 * [Landscapist](https://github.com/skydoves/landscapist)
 * [Lottie](https://github.com/airbnb/lottie-android)
+* [Vico](https://github.com/patrykandpatrick/vico)
 
 License
 ====

@@ -29,8 +29,9 @@ fun TopBar(
     castButton: View,
     showCastButton: Boolean,
     modifier: Modifier = Modifier,
-    onAboutClicked: () -> Unit = {},
     onSearchClicked: () -> Unit = {},
+    onEqualizerClicked: () -> Unit = {},
+    onAboutClicked: () -> Unit = {},
 ) {
 
     var showMenu by remember { mutableStateOf(false) }
@@ -77,6 +78,19 @@ fun TopBar(
                 expanded = showMenu,
                 onDismissRequest = { showMenu = false }
             ) {
+                DropdownMenuItem(
+                    onClick = {
+                        onEqualizerClicked()
+                        showMenu = false
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(id = R.string.action_equalizer),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                )
                 DropdownMenuItem(
                     onClick = {
                         onAboutClicked()

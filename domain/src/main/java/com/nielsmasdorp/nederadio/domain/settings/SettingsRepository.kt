@@ -13,7 +13,7 @@ interface SettingsRepository {
     val favoritesFlow: Flow<Set<String>>
 
     /**
-     * Return whether a stream is favorited
+     * Return whether a stream is added as a favorite
      * @param id id to check
      */
     suspend fun isFavorite(id: String): Boolean
@@ -45,4 +45,16 @@ interface SettingsRepository {
      * @param id the id of the stream
      */
     suspend fun removeFromFavorite(id: String)
+
+    /**
+     * @return the current equalizer settings, being the enabled status and the last known preset
+     */
+    suspend fun getEqualizerSettings(): Pair<Boolean, Short>
+
+    /**
+     * Set the new equalizer settings
+     * @param enabled whether the equalizer is enabled
+     * @param preset the preset being index from 0 to n
+     */
+    suspend fun setEqualizerSettings(enabled: Boolean, preset: Short)
 }
