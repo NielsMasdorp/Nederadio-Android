@@ -25,7 +25,7 @@ Nederadio is built using all the latest practices in Android development:
 
 https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-84f2-b05d3e9b19aa.mp4
 
-  <img src="/app/screenshots/equalizer.png" width="200" />
+  <img src="/app/screenshots/equalizer.png" width="300" />
 
 ### Android Auto
 
