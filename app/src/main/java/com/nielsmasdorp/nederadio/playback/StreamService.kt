@@ -87,7 +87,6 @@ class StreamService :
     }
 
     private fun teardown() {
-        equalizerManager.teardown()
         releaseMediaSession()
         stopSleepTimer()
         serviceScope.cancel()

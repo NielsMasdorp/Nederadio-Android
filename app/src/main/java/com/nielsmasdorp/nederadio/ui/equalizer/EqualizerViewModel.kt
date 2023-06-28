@@ -6,6 +6,7 @@ import com.nielsmasdorp.nederadio.domain.equalizer.EqualizerManager
 import com.nielsmasdorp.nederadio.domain.equalizer.EqualizerState
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.*
+import kotlin.math.roundToInt
 
 class EqualizerViewModel(
     private val equalizerManager: EqualizerManager
@@ -19,7 +20,7 @@ class EqualizerViewModel(
                 equalizerProducer.setEntries(
                     state.bands.mapIndexed { index, item ->
                         EqualizerEntry(
-                            hertz = "${item.frequency.div(1000)}Hz",
+                            hertz = formatHertz(frequency = item.frequency.toFloat()),
                             x = index.toFloat(),
                             y = item.level.toFloat()
                         )
@@ -39,5 +40,14 @@ class EqualizerViewModel(
 
     fun setEnabled(enabled: Boolean) {
         equalizerManager.onEnabled(enabled = enabled)
+    }
+
+    @Suppress("MagicNumber")
+    private fun formatHertz(frequency: Float): String {
+        return if (frequency < 1_000_000) {
+            "${frequency.div(1_000).roundToInt()}Hz"
+        } else {
+            "${frequency.div(1_000_000).roundToInt()}kHz"
+        }
     }
 }

@@ -28,12 +28,7 @@ interface EqualizerManager {
 
     /**
      * Change the equalizer to a different preset
-     * @param the preset as index from 0 to n
+     * @param preset as index from 0 to n
      */
     fun onPresetChanged(preset: Short)
-
-    /**
-     * Clean up the equalizer when the app is closing
-     */
-    fun teardown()
 }

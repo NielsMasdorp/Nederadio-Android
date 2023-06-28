@@ -55,10 +55,6 @@ class AndroidEqualizerManager(
         }
     }
 
-    override fun teardown() {
-        scope.cancel()
-    }
-
     private fun Equalizer.toState(): EqualizerState {
         val bands = mutableListOf<EqualizerBand>()
         val presets = mutableListOf<String>()
