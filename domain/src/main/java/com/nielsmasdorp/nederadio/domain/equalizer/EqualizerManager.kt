@@ -1,13 +1,13 @@
 package com.nielsmasdorp.nederadio.domain.equalizer
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 interface EqualizerManager {
 
     /**
      * The current state of the equalizer as set by the user
      */
-    val equalizerState: StateFlow<EqualizerState>
+    val equalizerState: Flow<EqualizerState>
 
     /**
      * Initialize the equalizer with a given
