@@ -1,5 +1,7 @@
 ## Nederadio
 
+![Build & Test](https://github.com/NielsMasdorp/Nederadio-Android/actions/workflows/ci.yml/badge.svg)
+
 Stream popular dutch radio stations.
 
 This is mostly a pet project created to learn Jetpack Compose and the new Jetpack Media3 API
