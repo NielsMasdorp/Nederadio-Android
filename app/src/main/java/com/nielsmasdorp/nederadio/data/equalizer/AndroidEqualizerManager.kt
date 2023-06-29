@@ -30,12 +30,10 @@ class AndroidEqualizerManager(
     }
 
     override fun onCastingStatusChanged(isCasting: Boolean) {
-        if (isCasting) {
-            equalizerState.value = if (isCasting) {
-                EqualizerState.NotAvailableWhileCasting
-            } else {
-                equalizer.toState()
-            }
+        equalizerState.value = if (isCasting) {
+            EqualizerState.NotAvailableWhileCasting
+        } else {
+            equalizer.toState()
         }
     }
 

@@ -4,7 +4,7 @@ buildscript {
 
     //google
     ext.google_cast_version = '21.3.0'
-    ext.material_version = '1.8.0'
+    ext.material_version = '1.9.0'
 
     //kotlin
     ext.kotlin_version = '1.7.10'
@@ -14,13 +14,13 @@ buildscript {
     ext.kotlinx_guava_version = '1.6.4'
 
     //androidx
-    ext.androidx_media_router_version = '1.3.1'
+    ext.androidx_media_router_version = '1.4.0'
     ext.androidx_app_compat_version = '1.6.1'
-    ext.androidx_activity_version = '1.6.1'
-    ext.androidx_core_version = '1.9.0'
-    ext.androidx_lifecycle_version = '2.5.1'
-    ext.androidx_navigation_version = '2.5.3'
-    ext.androidx_media3_version = '1.0.1'
+    ext.androidx_activity_version = '1.7.2'
+    ext.androidx_core_version = '1.10.1'
+    ext.androidx_lifecycle_version = '2.6.1'
+    ext.androidx_navigation_version = '2.6.0'
+    ext.androidx_media3_version = '1.1.0-rc01'
     ext.androidx_compose_version = '1.3.1'
     ext.androidx_compose_material3_version = '1.0.1'
 
@@ -37,6 +37,7 @@ buildscript {
     //misc
     ext.landscapist_glide_version = '1.4.5'
     ext.lottie_version = '4.2.2'
+    ext.vico_version = '1.6.5'
 
     //test
     ext.junit_version = "4.13.2"
@@ -56,7 +57,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'com.android.tools.build:gradle:7.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
