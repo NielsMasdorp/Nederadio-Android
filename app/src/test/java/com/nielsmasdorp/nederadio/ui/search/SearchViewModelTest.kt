@@ -21,6 +21,7 @@ class SearchViewModelTest {
 
     @get:Rule
     val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
+
     @Test
     fun `when search query changes, emit new value`() {
         // given

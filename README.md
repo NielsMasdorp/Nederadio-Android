@@ -17,12 +17,17 @@ Nederadio is built using all the latest practices in Android development:
  - Android Auto support
  - Current song information (except when casting or the stream does not support it)
  - Sleep timer which slowly fades the volume and stops the stream after a set time
+ - Simple equalizer with presets
 
 ## In action
 
 ### App
 
-https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-84f2-b05d3e9b19aa.mp4
+
+
+General use            |  Equalizer
+:-------------------------:|:-------------------------:
+<video src="https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-84f2-b05d3e9b19aa.mp4">  |   <img src="/app/screenshots/equalizer.png" width="300" />
 
 ### Android Auto
 
@@ -72,6 +77,7 @@ rm $OUTPUT
 * [Glide](https://github.com/bumptech/glide)
 * [Landscapist](https://github.com/skydoves/landscapist)
 * [Lottie](https://github.com/airbnb/lottie-android)
+* [Vico](https://github.com/patrykandpatrick/vico)
 
 License
 ====

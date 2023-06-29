@@ -14,8 +14,8 @@ android {
         minSdkVersion 26
         //noinspection OldTargetApi
         targetSdkVersion 33
-        versionCode 193
-        versionName "2.2.2"
+        versionCode 194
+        versionName "2.3.0"
     }
     buildTypes {
         release {
@@ -106,6 +106,7 @@ dependencies {
     implementation "com.github.skydoves:landscapist-glide:$landscapist_glide_version"
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
     implementation "com.airbnb.android:lottie-compose:$lottie_version"
+    implementation "com.patrykandpatrick.vico:compose-m3:1.6.5"
 
     //test
     testImplementation "junit:junit:$junit_version"

@@ -4,6 +4,8 @@ import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Equalizer
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -29,8 +31,9 @@ fun TopBar(
     castButton: View,
     showCastButton: Boolean,
     modifier: Modifier = Modifier,
-    onAboutClicked: () -> Unit = {},
     onSearchClicked: () -> Unit = {},
+    onEqualizerClicked: () -> Unit = {},
+    onAboutClicked: () -> Unit = {},
 ) {
 
     var showMenu by remember { mutableStateOf(false) }
@@ -78,9 +81,36 @@ fun TopBar(
                 onDismissRequest = { showMenu = false }
             ) {
                 DropdownMenuItem(
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Equalizer,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
+                    onClick = {
+                        onEqualizerClicked()
+                        showMenu = false
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(id = R.string.action_equalizer),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                )
+                DropdownMenuItem(
                     onClick = {
                         onAboutClicked()
                         showMenu = false
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Info,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     },
                     text = {
                         Text(

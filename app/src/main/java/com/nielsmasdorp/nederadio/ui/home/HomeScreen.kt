@@ -28,6 +28,7 @@ fun HomeScreen(
     onStreamSelected: (String) -> Unit = {},
     onRetryStreams: () -> Unit = {},
     onSearch: () -> Unit = {},
+    onEqualizer: () -> Unit = {},
     onAbout: () -> Unit = {}
 ) {
 
@@ -38,6 +39,7 @@ fun HomeScreen(
             castButton = castButton,
             showCastButton = activeStream is ActiveStream.Filled,
             onAboutClicked = onAbout,
+            onEqualizerClicked = onEqualizer,
             onSearchClicked = onSearch,
         )
         when (streams) {

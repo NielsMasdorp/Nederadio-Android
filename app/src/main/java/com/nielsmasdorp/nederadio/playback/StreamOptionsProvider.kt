@@ -42,7 +42,7 @@ class StreamOptionsProvider : OptionsProvider {
             .setCastMediaOptions(
                 CastMediaOptions.Builder()
                     .setNotificationOptions(null)
-                    .setMediaSessionEnabled(false) // TODO figure out everything related to this
+                    .setMediaSessionEnabled(false)
                     .build()
             )
             .setStopReceiverApplicationWhenEndingSession(true)
@@ -55,6 +55,6 @@ class StreamOptionsProvider : OptionsProvider {
 
     companion object {
         private const val APP_ID =
-            "A12D4273" // TODO register cast app https://cast.google.com/publish/#/signup
+            "A12D4273"
     }
 }

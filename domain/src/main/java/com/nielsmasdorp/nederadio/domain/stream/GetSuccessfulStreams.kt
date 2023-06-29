@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.*
  */
 class GetSuccessfulStreams(getAllStreams: GetAllStreams) {
 
-    // TODO test
     val streams: Flow<List<Stream>> = getAllStreams.streams
         .filter { it is Streams.Success }
         .map { it as Streams.Success }

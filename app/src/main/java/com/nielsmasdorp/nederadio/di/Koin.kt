@@ -3,6 +3,7 @@ package com.nielsmasdorp.nederadio.di
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.media3.common.util.UnstableApi
+import com.nielsmasdorp.nederadio.data.equalizer.AndroidEqualizerManager
 import com.nielsmasdorp.nederadio.data.network.AndroidNetworkManager
 import com.nielsmasdorp.nederadio.data.network.StreamApi
 import com.nielsmasdorp.nederadio.data.network.ktorHttpClient
@@ -10,10 +11,14 @@ import com.nielsmasdorp.nederadio.data.settings.SharedPreferencesSettingsReposit
 import com.nielsmasdorp.nederadio.data.stream.AndroidStreamManager
 import com.nielsmasdorp.nederadio.data.stream.ApiStreamRepository
 import com.nielsmasdorp.nederadio.domain.connectivity.NetworkManager
+import com.nielsmasdorp.nederadio.domain.equalizer.EqualizerManager
+import com.nielsmasdorp.nederadio.domain.equalizer.GetEqualizerSettings
+import com.nielsmasdorp.nederadio.domain.equalizer.SetEqualizerSettings
 import com.nielsmasdorp.nederadio.domain.settings.*
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
 import com.nielsmasdorp.nederadio.ui.AppViewModel
+import com.nielsmasdorp.nederadio.ui.equalizer.EqualizerViewModel
 import com.nielsmasdorp.nederadio.ui.search.SearchViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -51,6 +56,17 @@ val settingsModule = module {
     single<SettingsRepository> { SharedPreferencesSettingsRepository(context = androidApplication()) }
 }
 
+val equalizerModule = module {
+    single { GetEqualizerSettings(repository = get()) }
+    single { SetEqualizerSettings(repository = get()) }
+    single<EqualizerManager> {
+        AndroidEqualizerManager(
+            getEqualizerSettings = get(),
+            setEqualizerSettings = get()
+        )
+    }
+}
+
 val networkModule = module {
     single { androidApplication().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
     single<NetworkManager> { AndroidNetworkManager(connectivityManager = get()) }
@@ -69,4 +85,5 @@ val uiModule = module {
         )
     }
     viewModel { SearchViewModel(getAllStreams = get(), streamManager = get()) }
+    viewModel { EqualizerViewModel(equalizerManager = get()) }
 }

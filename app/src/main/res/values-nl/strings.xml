@@ -23,6 +23,7 @@
 
     <string name="about_title">Over Nederadio</string>
     <string name="action_about">Over</string>
+    <string name="action_equalizer">Equalizer</string>
     <string name="about_message"><![CDATA[
         Huidige versie: %s, gemaakt door:<br/><br/>
         <b>Niels Masdorp</b><br/>
@@ -62,4 +63,10 @@
     <string name="stream_subtitle_casting">Casten..</string>
     <string name="stream_subtitle_casting_device">Casten naar %s</string>
     <string name="stream_subtitle_unknown_song">Geen informatie bekend</string>
+
+    <string name="equalizer_enable_content_descr">Zet de equalizer aan</string>
+    <string name="equalizer_selected_preset_descr">Geselecteerde preset</string>
+    <string name="equalizer_not_available">Equalizer niet beschikbaar wanneer er gecast wordt</string>
+    <string name="equalizer_loading">Equalizer wordt geladen</string>
+
 </resources>

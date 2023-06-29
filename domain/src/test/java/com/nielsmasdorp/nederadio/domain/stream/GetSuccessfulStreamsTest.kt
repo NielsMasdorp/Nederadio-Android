@@ -49,7 +49,7 @@ class GetSuccessfulStreamsTest {
         // given
         val streams = Streams.Loading
         val getAllStreams: GetAllStreams = mockk()
-        coEvery { getAllStreams.streams } returns emptyFlow()
+        coEvery { getAllStreams.streams } returns flowOf(streams)
 
         // when
         val subject = GetSuccessfulStreams(getAllStreams = getAllStreams)
@@ -63,7 +63,7 @@ class GetSuccessfulStreamsTest {
         // given
         val streams = Streams.Error(Failure.GenericError("test"))
         val getAllStreams: GetAllStreams = mockk()
-        coEvery { getAllStreams.streams } returns emptyFlow()
+        coEvery { getAllStreams.streams } returns flowOf(streams)
 
         // when
         val subject = GetSuccessfulStreams(getAllStreams = getAllStreams)

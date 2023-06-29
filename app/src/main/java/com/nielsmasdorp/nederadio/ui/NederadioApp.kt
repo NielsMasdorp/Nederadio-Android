@@ -23,6 +23,8 @@ import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.ui.components.EventHandler
 import com.nielsmasdorp.nederadio.ui.components.dialog.AboutAppDialog
 import com.nielsmasdorp.nederadio.ui.components.dialog.SleepTimerDialog
+import com.nielsmasdorp.nederadio.ui.equalizer.EqualizerScreen
+import com.nielsmasdorp.nederadio.ui.equalizer.EqualizerViewModel
 import com.nielsmasdorp.nederadio.ui.extension.currentFraction
 import com.nielsmasdorp.nederadio.ui.home.HomeScreen
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.SheetContent
@@ -160,6 +162,7 @@ fun NederadioApp(
                     onStreamSelected = viewModel::onStreamPicked,
                     onRetryStreams = viewModel::onRetryStreams,
                     onSearch = { navController.navigate("search") },
+                    onEqualizer = { navController.navigate("equalizer") },
                     onAbout = viewModel::onAboutPicked
                 )
             }
@@ -185,6 +188,33 @@ fun NederadioApp(
                     modifier = Modifier.statusBarsPadding(),
                     viewModel = searchViewModel,
                     onExitSearch = { navController.popBackStack() },
+                    backPressHandler = if (scaffoldState.bottomSheetState.isExpanded) {
+                        { sheetToggle() }
+                    } else null
+                )
+            }
+            composable(
+                "equalizer",
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentScope.SlideDirection.Up,
+                        animationSpec = tween(200)
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentScope.SlideDirection.Down,
+                        animationSpec = tween(200)
+                    )
+                }
+            ) {
+                val equalizerViewModel = getViewModel<EqualizerViewModel>(
+                    viewModelStoreOwner = navController.getBackStackEntry("route")
+                )
+                EqualizerScreen(
+                    modifier = Modifier.statusBarsPadding(),
+                    viewModel = equalizerViewModel,
+                    onExitEqualizer = { navController.popBackStack() },
                     backPressHandler = if (scaffoldState.bottomSheetState.isExpanded) {
                         { sheetToggle() }
                     } else null
