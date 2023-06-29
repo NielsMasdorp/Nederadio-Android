@@ -4,6 +4,8 @@ import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Equalizer
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -79,6 +81,13 @@ fun TopBar(
                 onDismissRequest = { showMenu = false }
             ) {
                 DropdownMenuItem(
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Equalizer,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
                     onClick = {
                         onEqualizerClicked()
                         showMenu = false
@@ -95,6 +104,13 @@ fun TopBar(
                     onClick = {
                         onAboutClicked()
                         showMenu = false
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Info,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     },
                     text = {
                         Text(
