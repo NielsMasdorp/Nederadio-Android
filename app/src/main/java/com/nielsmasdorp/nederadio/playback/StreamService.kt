@@ -33,6 +33,7 @@ import com.nielsmasdorp.nederadio.ui.NederadioActivity
 import com.nielsmasdorp.nederadio.util.connectedDeviceName
 import com.nielsmasdorp.nederadio.util.moveToFront
 import com.nielsmasdorp.nederadio.util.sendCommandToController
+import com.nielsmasdorp.nederadio.util.toMediaItem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.guava.future
@@ -253,6 +254,24 @@ class StreamService :
         session: MediaSession,
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
+        if (controller.packageName == "com.google.android.projection.gearhead" &&
+            player.playbackState == STATE_IDLE
+        ) {
+            // If there is a last played stream, preload the item in Android Auto
+            serviceScope.launch {
+                val lastPlayedId = getLastPlayedId()
+                if (lastPlayedId != null) {
+                    val content = streamLibrary.streams.first()
+                    content.find { it.id == lastPlayedId }?.toMediaItem()?.run {
+                        withContext(Dispatchers.Main) {
+                            player.setMediaItem(this@run)
+                            player.prepare()
+                        }
+                    }
+                }
+            }
+        }
+
         val result = super.onConnect(session, controller)
 
         val sessionCommands = result.availableSessionCommands
