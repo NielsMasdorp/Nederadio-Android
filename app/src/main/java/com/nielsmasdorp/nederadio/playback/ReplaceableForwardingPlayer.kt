@@ -141,6 +141,22 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
         playlist.addAll(min(newIndex, playlist.size), removedItems)
     }
 
+    override fun replaceMediaItem(index: Int, mediaItem: MediaItem) {
+        player.replaceMediaItem(index, mediaItem)
+        playlist.set(index, mediaItem)
+    }
+
+    override fun replaceMediaItems(
+        fromIndex: Int,
+        toIndex: Int,
+        mediaItems: MutableList<MediaItem>
+    ) {
+        player.replaceMediaItems(fromIndex, toIndex, mediaItems)
+        mediaItems.forEachIndexed { index, mediaItem ->
+            playlist.set(fromIndex + index, mediaItem)
+        }
+    }
+
     override fun removeMediaItem(index: Int) {
         player.removeMediaItem(index)
         playlist.removeAt(index)
@@ -254,13 +270,6 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
     override fun getPlaybackParameters(): PlaybackParameters = player.playbackParameters
 
     override fun stop() = player.stop()
-
-    override fun stop(reset: Boolean) {
-        player.stop(reset)
-        if (reset) {
-            playlist.clear()
-        }
-    }
 
     override fun release() {
         player.release()
@@ -401,12 +410,28 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
         player.deviceVolume = volume
     }
 
+    override fun setDeviceVolume(volume: Int, flags: Int) {
+        player.setDeviceVolume(volume, flags)
+    }
+
     override fun increaseDeviceVolume() = player.increaseDeviceVolume()
+
+    override fun increaseDeviceVolume(flags: Int) {
+        player.increaseDeviceVolume(flags)
+    }
 
     override fun decreaseDeviceVolume() = player.decreaseDeviceVolume()
 
+    override fun decreaseDeviceVolume(flags: Int) {
+        player.decreaseDeviceVolume(flags)
+    }
+
     override fun setDeviceMuted(muted: Boolean) {
         player.isDeviceMuted = muted
+    }
+
+    override fun setDeviceMuted(muted: Boolean, flags: Int) {
+        player.setDeviceMuted(muted, flags)
     }
 
     private inner class PlayerListener : Listener {

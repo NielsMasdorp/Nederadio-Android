@@ -18,6 +18,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.*
 import androidx.media3.session.MediaConstants.*
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
+import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import androidx.media3.session.SessionCommand.*
 import androidx.media3.session.SessionResult.RESULT_SUCCESS
 import com.google.android.gms.cast.framework.CastContext
@@ -29,11 +30,10 @@ import com.nielsmasdorp.nederadio.domain.equalizer.EqualizerManager
 import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
 import com.nielsmasdorp.nederadio.domain.stream.SetActiveStream
 import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
+import com.nielsmasdorp.nederadio.playback.library.Tree
 import com.nielsmasdorp.nederadio.ui.NederadioActivity
 import com.nielsmasdorp.nederadio.util.connectedDeviceName
-import com.nielsmasdorp.nederadio.util.moveToFront
 import com.nielsmasdorp.nederadio.util.sendCommandToController
-import com.nielsmasdorp.nederadio.util.toMediaItem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.guava.future
@@ -58,6 +58,10 @@ class StreamService :
     SessionAvailabilityListener {
 
     private val streamLibrary: StreamLibrary by inject()
+
+    private val contentTree: Flow<Tree> = streamLibrary.browsableContent
+    private suspend fun Flow<Tree>.await(): Tree = first()
+
     private val setActiveStream: SetActiveStream by inject()
     private val getLastPlayedId: GetLastPlayedId by inject()
     private val equalizerManager: EqualizerManager by inject()
@@ -102,13 +106,13 @@ class StreamService :
     ): ListenableFuture<LibraryResult<MediaItem>> {
         return serviceScope.future {
             val isRecentRequest = params?.isRecent ?: false
-            val tree = streamLibrary.browsableContent.first()
+            val contentTree = contentTree.await()
             val rootItem = if (!isRecentRequest) {
-                tree.rootNode.mediaItem
+                contentTree.rootNode.mediaItem
             } else {
                 // Playback resumption
-                tree.recentRootNode.also {
-                    tree.getLastPlayed(lastPlayedId = getLastPlayedId()!!).let { item ->
+                contentTree.recentRootNode.also {
+                    contentTree.getLastPlayed(lastPlayedId = getLastPlayedId()!!).let { item ->
                         player.setMediaItem(item)
                         player.prepare()
                     }
@@ -138,11 +142,11 @@ class StreamService :
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
         return serviceScope.future {
-            val tree = streamLibrary.browsableContent.first()
-            val children = if (parentId == tree.recentRootNode.mediaId) {
-                listOf(tree.getLastPlayed(lastPlayedId = getLastPlayedId()!!))
+            val contentTree = contentTree.await()
+            val children = if (parentId == contentTree.recentRootNode.mediaId) {
+                listOf(contentTree.getLastPlayed(lastPlayedId = getLastPlayedId()!!))
             } else {
-                tree.getChildren(nodeId = parentId).toMutableList()
+                contentTree.getChildren(nodeId = parentId).toMutableList()
             }
             LibraryResult.ofItemList(children, params)
         }
@@ -154,8 +158,7 @@ class StreamService :
         mediaId: String
     ): ListenableFuture<LibraryResult<MediaItem>> {
         return serviceScope.future {
-            val item = streamLibrary.browsableContent.first().getItem(itemId = mediaId)
-            LibraryResult.ofItem(item, null)
+            LibraryResult.ofItem(contentTree.await().getItem(itemId = mediaId), null)
         }
     }
 
@@ -166,9 +169,12 @@ class StreamService :
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<Void>> {
         return serviceScope.future {
-            // Ignore extras since we have only top level streams without genres etc.
-            val results = streamLibrary.browsableContent.first().search(query = query)
-            mediaSession.notifySearchResultChanged(browser, query, results.size, params)
+            mediaSession.notifySearchResultChanged(
+                /* browser */ browser,
+                /* query */ query,
+                /* itemCount */ contentTree.await().search(query = query).size,
+                /* params */ params
+            )
             LibraryResult.ofVoid()
         }
     }
@@ -182,16 +188,18 @@ class StreamService :
         params: LibraryParams?
     ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
         return serviceScope.future {
-            // Ignore extras since we have only top level streams without genres etc.
-            val results = streamLibrary.browsableContent.first().search(query = query)
+            val results = contentTree.await().search(query = query)
             val fromIndex = max((page - 1) * pageSize, results.size - 1)
             val toIndex = max(fromIndex + pageSize, results.size)
-            LibraryResult.ofItemList(results.subList(fromIndex, toIndex), params)
+            LibraryResult.ofItemList(
+                /* items */ results.subList(fromIndex, toIndex),
+                /* params */ params
+            )
         }
     }
 
     /**
-     * Casting has started, switch to [CastPlayer]
+     * Casting has started, switch to [CastPlayer] and notify equalizer
      */
     override fun onCastSessionAvailable() {
         player.setPlayer(newPlayer = castPlayer)
@@ -199,7 +207,7 @@ class StreamService :
     }
 
     /**
-     * Casting has been stopped, switch to [ExoPlayer]
+     * Casting has been stopped, switch to [ExoPlayer] and notify equalizer
      */
     override fun onCastSessionUnavailable() {
         player.setPlayer(newPlayer = localPlayer)
@@ -254,26 +262,7 @@ class StreamService :
         session: MediaSession,
         controller: MediaSession.ControllerInfo
     ): MediaSession.ConnectionResult {
-        if (controller.packageName == "com.google.android.projection.gearhead" &&
-            player.playbackState == STATE_IDLE
-        ) {
-            // If there is a last played stream, preload the item in Android Auto
-            serviceScope.launch {
-                val lastPlayedId = getLastPlayedId()
-                if (lastPlayedId != null) {
-                    val content = streamLibrary.streams.first()
-                    content.find { it.id == lastPlayedId }?.toMediaItem()?.run {
-                        withContext(Dispatchers.Main) {
-                            player.setMediaItem(this@run)
-                            player.prepare()
-                        }
-                    }
-                }
-            }
-        }
-
         val result = super.onConnect(session, controller)
-
         val sessionCommands = result.availableSessionCommands
             .buildUpon()
             .add(SessionCommand(START_TIMER_COMMAND, Bundle()))
@@ -315,52 +304,57 @@ class StreamService :
         }
     }
 
-    override fun onAddMediaItems(
+    override fun onSetMediaItems(
         mediaSession: MediaSession,
         controller: MediaSession.ControllerInfo,
-        mediaItems: MutableList<MediaItem>
-    ): ListenableFuture<MutableList<MediaItem>> {
-        // There are a couple of issues with media3:
-        // Firstly when the [MediaController] in [AndroidStreamManager] adds media items this
-        // hook gets called. As a security measure content URI's get removed before the [MediaItem]s
-        // reach the [MediaSession]. We have to fill these URI's again.
-        //
-        // Also when the [MediaController] used by Android Auto selects a new track
-        // this method is called with only one item (the selected one), the rest of the queue
-        // is dropped for some reason. his is a known problem,
-        // See: https://github.com/androidx/media/issues/156 and https://github.com/androidx/media/issues/236
-        // To solve both these problems we check the [MediaItems]s here and replace them with the
-        // Known items in our repository. In the case of Android Auto we use the whole list instead
-        // of having a queue with a single item.
+        mediaItems: MutableList<MediaItem>,
+        startIndex: Int,
+        startPositionMs: Long
+    ): ListenableFuture<MediaItemsWithStartPosition> {
         return serviceScope.future {
-            val streams = streamLibrary
-                .browsableContent
-                .first()
+            val contentTree = contentTree.await()
             if (mediaItems.size == 1) {
                 val singleItem = mediaItems[0]
-                if (singleItem.mediaId.isBlank() &&
-                    singleItem.requestMetadata.searchQuery != null
-                ) {
-                    // User has preformed a voice search in Android Auto
-                    streams.search(query = singleItem.requestMetadata.searchQuery)
+                val itemId = singleItem.mediaId
+                if (itemId.isBlank() && singleItem.requestMetadata.searchQuery != null) {
+                    // Voice search -> return search results
+                    val streams = contentTree
+                        .search(query = singleItem.requestMetadata.searchQuery)
                         .toMutableList()
+                    MediaItemsWithStartPosition(streams, startIndex, startPositionMs)
                 } else {
-                    // User has selected an item in Android Auto
-                    // It is expected behavior, but might get solved in the future
-                    // That the rest of the queue is removed by Android Auto
-                    // So we have to   recreate the queue with the selected item in front
-                    streams
-                        .getAllPlayableItems()
-                        .toMutableList()
-                        .apply { moveToFront { it.mediaId == singleItem.mediaId } }
+                    // Selected item in Android Auto, whole list gets dropped (bug)
+                    // so -> recreate items with correct starting index of selected item
+                    // see: https://github.com/androidx/media/issues/156 and 236
+                    val streams = contentTree.getAllPlayableItems().toMutableList()
+                    val index = streams.indexOfFirst { it.mediaId == itemId }
+                    MediaItemsWithStartPosition(streams, index, startPositionMs)
                 }
             } else {
-                // Just use the [MediaItem] from the content library since the URI exists there
-                val allContent = streams.getAllPlayableItems()
-                mediaItems.map { mediaItem ->
-                    allContent.find { it.mediaId == mediaItem.mediaId }!!
+                // normal cases -> map to content tree for usable URIs
+                // because they get stripped for IPC safety
+                val streams = contentTree.getAllPlayableItems()
+                val mappedStreams = mediaItems.map { mediaItem ->
+                    streams.find { it.mediaId == mediaItem.mediaId }!!
                 }.toMutableList()
+                MediaItemsWithStartPosition(mappedStreams, startIndex, startPositionMs)
             }
+        }
+    }
+
+    override fun onPlaybackResumption(
+        mediaSession: MediaSession,
+        controller: MediaSession.ControllerInfo
+    ): ListenableFuture<MediaItemsWithStartPosition> {
+        return serviceScope.future {
+            val content = contentTree.await()
+            val streams = content.getAllPlayableItems()
+            val lastPlayedStream = content.getLastPlayed(lastPlayedId = getLastPlayedId()!!)
+            MediaItemsWithStartPosition(
+                /* mediaItems */ streams.toMutableList(),
+                /* startIndex */streams.indexOf(lastPlayedStream),
+                /* startPositionMs */ 0L
+            )
         }
     }
 
