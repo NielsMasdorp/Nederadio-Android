@@ -7,18 +7,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
 @Composable
 fun SheetExpanded(
+    currentFraction: Float,
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
+            .graphicsLayer(alpha = 1f - currentFraction)
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         content()

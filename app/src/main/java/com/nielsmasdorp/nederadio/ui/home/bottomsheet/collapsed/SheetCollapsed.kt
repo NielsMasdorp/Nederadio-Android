@@ -34,8 +34,8 @@ fun SheetCollapsed(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .graphicsLayer(alpha = 1f - currentFraction)
-            .height(72.dp)
+            .graphicsLayer(alpha = currentFraction)
+            .height(80.dp)
             .background(background)
             .clickable(
                 onClick = onSheetClick,

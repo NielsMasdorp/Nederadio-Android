@@ -66,7 +66,7 @@ fun StreamScreenSmall(
             Row(
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(8.dp),
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Card(

@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
@@ -43,7 +42,6 @@ fun StreamViewLarge(
     onCollapseClick: () -> Unit,
     onTimerClicked: () -> Unit,
     onStreamFavoriteStatusChanged: (String, Boolean) -> Unit,
-    currentFraction: Float,
     modifier: Modifier = Modifier
 ) {
 
@@ -62,10 +60,7 @@ fun StreamViewLarge(
             if (activeStream is ActiveStream.Filled) { // should not be visible to user when stream is not filled
                 val stream = activeStream.stream
                 Spacer(modifier = Modifier.height(16.dp))
-                IconButton(
-                    modifier = Modifier.graphicsLayer(alpha = 0f + currentFraction),
-                    onClick = { onCollapseClick() }
-                ) {
+                IconButton(onClick = { onCollapseClick() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.chevron_down),
                         contentDescription = stringResource(id = R.string.settings_content_description),
@@ -138,25 +133,25 @@ fun StreamViewLarge(
                 Spacer(modifier = Modifier.height(16.dp))
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
                 ) {
                     val playPauseColor = MaterialTheme.colorScheme.onPrimaryContainer.toArgb()
                     Box(
                         modifier = Modifier
                             .size(72.dp)
-                            .align(Alignment.Center)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primaryContainer)
-                    )
-                    AndroidView(
-                        factory = { playerControls.getView() as PlayerControlView },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.Center),
-                        update = { view ->
-                            view.setColors(playPauseColor)
-                        }
-                    )
+                            .background(MaterialTheme.colorScheme.primaryContainer),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        AndroidView(
+                            factory = { playerControls.getView() as PlayerControlView },
+                            modifier = Modifier.fillMaxWidth(),
+                            update = { view ->
+                                view.setColors(playPauseColor)
+                            }
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 TextButton(onClick = { onTimerClicked() }) {

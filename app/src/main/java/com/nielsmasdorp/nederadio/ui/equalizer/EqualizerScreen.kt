@@ -92,7 +92,7 @@ fun EqualizerScreen(
             Box(
                 modifier = modifier
                     .padding(innerPadding)
-                    .padding(bottom = 72.dp)
+                    .padding(bottom = 80.dp)
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 when (val data = state) {

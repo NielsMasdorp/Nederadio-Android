@@ -4,16 +4,16 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -25,7 +25,6 @@ import com.nielsmasdorp.nederadio.ui.components.dialog.AboutAppDialog
 import com.nielsmasdorp.nederadio.ui.components.dialog.SleepTimerDialog
 import com.nielsmasdorp.nederadio.ui.equalizer.EqualizerScreen
 import com.nielsmasdorp.nederadio.ui.equalizer.EqualizerViewModel
-import com.nielsmasdorp.nederadio.ui.extension.currentFraction
 import com.nielsmasdorp.nederadio.ui.home.HomeScreen
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.SheetContent
 import com.nielsmasdorp.nederadio.ui.home.bottomsheet.collapsed.SheetCollapsed
@@ -36,6 +35,8 @@ import com.nielsmasdorp.nederadio.ui.search.SearchScreen
 import com.nielsmasdorp.nederadio.ui.search.SearchViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
+
+private const val AnimationDurationMs = 50
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -53,12 +54,10 @@ fun NederadioApp(
 
     val systemUiController = rememberSystemUiController()
 
-    DisposableEffect(systemUiController) {
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = false
-        )
-        onDispose {}
+    val systemBarsColor = MaterialTheme.colorScheme.primary
+
+    LaunchedEffect(systemUiController) {
+        systemUiController.setSystemBarsColor(color = systemBarsColor)
     }
 
     DisposableEffect(key1 = viewModel) {
@@ -68,21 +67,19 @@ fun NederadioApp(
 
     val navController = rememberAnimatedNavController()
     val scope = rememberCoroutineScope()
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
-    )
+    val scaffoldState = rememberBottomSheetScaffoldState()
 
     val sheetToggle: () -> Unit = {
         scope.launch {
-            if (scaffoldState.bottomSheetState.isCollapsed) {
+            if (scaffoldState.bottomSheetState.currentValue == SheetValue.PartiallyExpanded) {
                 scaffoldState.bottomSheetState.expand()
             } else {
-                scaffoldState.bottomSheetState.collapse()
+                scaffoldState.bottomSheetState.partialExpand()
             }
         }
     }
 
-    BackHandler(enabled = scaffoldState.bottomSheetState.isExpanded) {
+    BackHandler(enabled = scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded) {
         sheetToggle()
     }
 
@@ -92,7 +89,10 @@ fun NederadioApp(
     val sleepTimer: String? by viewModel.sleepTimer.collectAsState(initial = null)
     val showAboutAppDialog: Boolean by viewModel.showAboutApp.collectAsState(initial = false)
     val showSleepTimerDialog: Boolean by viewModel.showSleepTimer.collectAsState(initial = false)
-
+    val currentBottomSheetFraction: Float by animateFloatAsState(
+        targetValue = if (scaffoldState.bottomSheetState.targetValue == SheetValue.Expanded) 0f else 1f,
+        animationSpec = tween(durationMillis = AnimationDurationMs, easing = FastOutSlowInEasing)
+    )
     EventHandler(event = viewModel.errorState.error) {
         scaffoldState.snackbarHostState.showSnackbar(message = it)
     }
@@ -109,14 +109,14 @@ fun NederadioApp(
     }
 
     BottomSheetScaffold(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
-        sheetElevation = if (activeStream is ActiveStream.Filled) 12.dp else 0.dp,
-        backgroundColor = MaterialTheme.colorScheme.primary,
+        sheetContainerColor = MaterialTheme.colorScheme.primary,
+        sheetDragHandle = null,
         sheetContent = {
             SheetContent {
                 SheetExpanded(
+                    currentFraction = currentBottomSheetFraction,
                     content = {
                         StreamViewLarge(
                             playerControls = largePlayerControls,
@@ -124,14 +124,15 @@ fun NederadioApp(
                             sleepTimer = sleepTimer,
                             onCollapseClick = { sheetToggle() },
                             onTimerClicked = viewModel::onTimerPicked,
-                            onStreamFavoriteStatusChanged = viewModel::onStreamFavoriteChanged,
-                            currentFraction = scaffoldState.currentFraction
+                            onStreamFavoriteStatusChanged = viewModel::onStreamFavoriteChanged
                         )
                     }
                 )
                 SheetCollapsed(
-                    isEnabled = scaffoldState.bottomSheetState.isCollapsed && activeStream is ActiveStream.Filled,
-                    currentFraction = scaffoldState.currentFraction,
+                    isEnabled = scaffoldState.bottomSheetState.currentValue ==
+                        SheetValue.PartiallyExpanded &&
+                        activeStream is ActiveStream.Filled,
+                    currentFraction = currentBottomSheetFraction,
                     onSheetClick = { sheetToggle() },
                     activeStream = activeStream
                 ) { currentStream ->
@@ -143,18 +144,44 @@ fun NederadioApp(
                 }
             }
         },
-        sheetPeekHeight = 72.dp +
+        sheetPeekHeight = 80.dp +
             WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
-        sheetGesturesEnabled = false
+        sheetSwipeEnabled = false
     ) {
         AnimatedNavHost(
             navController = navController,
             startDestination = "home",
             route = "route"
         ) {
-            composable("home") {
+            composable(
+                "home",
+                enterTransition = {
+                    slideIntoContainer(
+                        towards = AnimatedContentScope.SlideDirection.Up,
+                        animationSpec = tween(delayMillis = AnimationDurationMs)
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        towards = AnimatedContentScope.SlideDirection.Up,
+                        animationSpec = tween(delayMillis = AnimationDurationMs)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        towards = AnimatedContentScope.SlideDirection.Down,
+                        animationSpec = tween(delayMillis = AnimationDurationMs)
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        towards = AnimatedContentScope.SlideDirection.Down,
+                        animationSpec = tween(delayMillis = AnimationDurationMs)
+                    )
+                }
+            ) {
                 HomeScreen(
-                    modifier = Modifier.statusBarsPadding(),
+                    modifier = Modifier.fillMaxSize(),
                     castButton = castButton,
                     streams = streams,
                     activeStream = activeStream,
@@ -170,14 +197,14 @@ fun NederadioApp(
                 "search",
                 enterTransition = {
                     slideIntoContainer(
-                        AnimatedContentScope.SlideDirection.Up,
-                        animationSpec = tween(200)
+                        towards = AnimatedContentScope.SlideDirection.Up,
+                        animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
-                        AnimatedContentScope.SlideDirection.Down,
-                        animationSpec = tween(200)
+                        towards = AnimatedContentScope.SlideDirection.Down,
+                        animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 }
             ) {
@@ -185,10 +212,10 @@ fun NederadioApp(
                     viewModelStoreOwner = navController.getBackStackEntry("route")
                 )
                 SearchScreen(
-                    modifier = Modifier.statusBarsPadding(),
+                    modifier = Modifier.fillMaxSize(),
                     viewModel = searchViewModel,
                     onExitSearch = { navController.popBackStack() },
-                    backPressHandler = if (scaffoldState.bottomSheetState.isExpanded) {
+                    backPressHandler = if (scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded) {
                         { sheetToggle() }
                     } else null
                 )
@@ -197,14 +224,14 @@ fun NederadioApp(
                 "equalizer",
                 enterTransition = {
                     slideIntoContainer(
-                        AnimatedContentScope.SlideDirection.Up,
-                        animationSpec = tween(200)
+                        towards = AnimatedContentScope.SlideDirection.Up,
+                        animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
-                        AnimatedContentScope.SlideDirection.Down,
-                        animationSpec = tween(200)
+                        towards = AnimatedContentScope.SlideDirection.Down,
+                        animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 }
             ) {
@@ -212,10 +239,10 @@ fun NederadioApp(
                     viewModelStoreOwner = navController.getBackStackEntry("route")
                 )
                 EqualizerScreen(
-                    modifier = Modifier.statusBarsPadding(),
+                    modifier = Modifier.fillMaxSize(),
                     viewModel = equalizerViewModel,
                     onExitEqualizer = { navController.popBackStack() },
-                    backPressHandler = if (scaffoldState.bottomSheetState.isExpanded) {
+                    backPressHandler = if (scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded) {
                         { sheetToggle() }
                     } else null
                 )
