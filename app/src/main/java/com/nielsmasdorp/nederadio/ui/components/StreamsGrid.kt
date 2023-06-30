@@ -34,12 +34,11 @@ fun StreamsGrid(
 
     Surface(
         modifier = modifier
-            .fillMaxSize()
-            .padding(bottom = 72.dp),
+            .fillMaxSize(),
         color = MaterialTheme.colorScheme.primaryContainer,
     ) {
         if (streams.isEmpty()) {
-            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 EmptyView(
                     title = stringResource(id = R.string.streams_overview_no_streams_found),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
@@ -52,7 +51,7 @@ fun StreamsGrid(
                     start = 16.dp,
                     end = 16.dp,
                     top = 16.dp,
-                    bottom = 40.dp
+                    bottom = 96.dp
                 ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)

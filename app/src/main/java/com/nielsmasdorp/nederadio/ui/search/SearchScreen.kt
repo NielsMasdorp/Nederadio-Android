@@ -42,6 +42,7 @@ fun SearchScreen(
                 .fillMaxSize()
         ) {
             SearchBar(
+                modifier = Modifier.statusBarsPadding(),
                 query = query,
                 onSearchQueryChanged = viewModel::onSearchQueryChanged,
                 onExitSearch = onExitSearch

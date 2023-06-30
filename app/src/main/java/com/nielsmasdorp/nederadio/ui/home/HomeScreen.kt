@@ -2,7 +2,7 @@ package com.nielsmasdorp.nederadio.ui.home
 
 import android.view.View
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,8 +34,9 @@ fun HomeScreen(
 
     val pagerState = rememberPagerState()
 
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier) {
         TopBar(
+            modifier = Modifier.statusBarsPadding(),
             castButton = castButton,
             showCastButton = activeStream is ActiveStream.Filled,
             onAboutClicked = onAbout,
