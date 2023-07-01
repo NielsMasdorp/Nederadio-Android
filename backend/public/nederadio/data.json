@@ -1,218 +1,512 @@
 [
   {
-    "id": "bc639a68-6fde-4297-9154-483e68a1005d",
-    "url": "https://22343.live.streamtheworld.com/100PNL_MP3_SC",
-    "name": "100% NL",
-    "image": "https://digitenne.kpn.com/uploads/img/zenders/radio-zenders-icons-png/1001radio100nl.png"
+    "id": "30797283-2d5f-43b5-ab6a-248513d9db3d",
+    "url": "https://icecast.omroep.nl/radio1-bb-mp3",
+    "name": "NPO Radio 1",
+    "image": "https://luisteren.nl/app/uploads/2018/10/station-1.png"
   },
   {
-    "id": "3faa5398-10ed-4a88-a612-32381c05f615",
-    "url": "https://stream.100p.nl/web01_mp3",
-    "name": "100% NL Feest",
-    "image": "https://luisteren.nl/app/uploads/2018/12/100_nl_feest_fm.png"
+    "id": "eab1f3cf-22a5-4941-8425-c2128ea93df8",
+    "url": "https://icecast.omroep.nl/radio2-bb-mp3",
+    "name": "NPO Radio 2",
+    "image": "https://luisteren.nl/app/uploads/2018/11/npo_radio2-1.jpg"
   },
   {
-    "id": "a8dae3e5-32ce-4398-ab6c-f4589be75aeb",
-    "url": "https://stream.100p.nl/web04_mp3",
-    "name": "100% NL Nederpop",
-    "image": "https://cdn-profiles.tunein.com/s304614/images/logog.jpg?t=162406"
+    "id": "ac26b522-a07e-4a3a-9634-e770ffdceee6",
+    "url": "https://icecast.omroep.nl/3fm-bb-mp3",
+    "name": "NPO 3FM",
+    "image": "https://luisteren.nl/app/uploads/2018/11/NPO_3fm.jpg"
   },
   {
-    "id": "418902f6-f6dc-4592-b50b-dc81f6fda080",
-    "url": "https://23553.live.streamtheworld.com/RADIO538AAC.aac",
-    "name": "Radio 538",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Logo_538_Nederland.png"
+    "id": "2e58ad52-d2fc-493b-8112-1fe250fcbbce",
+    "url": "https://icecast.omroep.nl/radio4-bb-mp3",
+    "name": "NPO Radio 4",
+    "image": "https://luisteren.nl/app/uploads/2018/11/NPO-Radio4.png"
   },
   {
-    "id": "2a70b8f7-a006-4f8a-b78f-6862997f8ecd",
-    "url": "https://22713.live.streamtheworld.com/TLPSTR01AAC.aac",
-    "name": "Radio 538 Dance Dep.",
-    "image": "https://pbs.twimg.com/profile_images/727062009850793984/toOxK7JZ_400x400.jpg"
+    "id": "eb6aa8de-0b87-499a-84b6-ca14b10bee59",
+    "url": "https://icecast.omroep.nl/radio5-bb-mp3",
+    "name": "NPO Radio 5",
+    "image": "https://luisteren.nl/app/uploads/2018/11/NPO_Radio_5.jpg"
   },
   {
-    "id": "4551f818-b811-4fff-98f4-7ad15526f4a9",
-    "url": "https://25323.live.streamtheworld.com/TLPSTR11AAC.aac",
-    "name": "Radio 538 Hitzone",
-    "image": "https://cdn-profiles.tunein.com/s74980/images/logog.jpg?t=636219"
+    "id": "a7d86dc9-c41b-4f92-a4cb-e3cfe232d3ce",
+    "url": "https://icecast.omroep.nl/radio6-bb-mp3",
+    "name": "NPO Radio 6",
+    "image": "https://luisteren.nl/app/uploads/2018/11/NPO-Radio_6.png"
   },
   {
-    "id": "ab1e371f-e862-4614-8e54-e7aa73fb4fa0",
-    "url": "https://25343.live.streamtheworld.com/TLPSTR19AAC.aac",
-    "name": "Radio 538 Ibiza",
-    "image": "https://cdn-profiles.tunein.com/s168807/images/logod.jpg?t=636219"
-  },
-  {
-    "id": "574bc016-127e-4f64-8b2a-fb97ff4c48b3",
-    "url": "https://22613.live.streamtheworld.com/TLPSTR09AAC.aac",
-    "name": "Radio 538 Non-Stop",
-    "image": "https://cdn-profiles.tunein.com/s252020/images/logog.png"
-  },
-  {
-    "id": "8f903360-8be2-4722-9641-772976506cdd",
-    "url": "https://25343.live.streamtheworld.com/TLPSTR21AAC.aac",
-    "name": "Radio Die Verrückte",
-    "image": "https://cdn-profiles.tunein.com/s98498/images/logog.jpg?t=636219"
-  },
-  {
-    "id": "64920e7a-52a3-43d4-8b29-46861a25e9f3",
-    "url": "https://stream.arrowcaz.nl/arrowrockradio",
-    "name": "Arrow Rock Radio",
-    "image": "https://d3kle7qwymxpcy.cloudfront.net/images/broadcasts/d6/9c/10834/c300.png"
-  },
-  {
-    "id": "d7e37f24-c888-4737-a973-9a318fdf5ddf",
-    "url": "https://23943.live.streamtheworld.com/QMUSICNLAAC_96.aac",
-    "name": "Q music",
-    "image": "https://cdn-profiles.tunein.com/s87683/images/logod.png?t=1"
-  },
-  {
-    "id": "5c25f320-c57b-49e2-b676-b10731cbc83c",
-    "url": "https://23943.live.streamtheworld.com/QMUSICNL_THEMA.mp3",
-    "name": "Q music Non-Stop",
-    "image": "https://static1.qmusic.medialaancdn.be/3/76/93/cf/23/Site_logo__220x220_.png"
-  },
-  {
-    "id": "65a676ce-860d-47f3-aca7-4c03af898779",
-    "url": "https://23903.live.streamtheworld.com/QMUSICNL_TOP40.mp3",
-    "name": "Q music Top 40",
-    "image": "https://i.scdn.co/image/ab67706c0000bebb513ab59cccfcf9bef6cabe2f"
-  },
-  {
-    "id": "27f2b29e-6baf-4f79-a79b-a1247931fea6",
-    "url": "https://23853.live.streamtheworld.com/QMUSICNL_FOUTE_UUR.mp3",
-    "name": "Q music Het foute Uur",
-    "image": "https://bdbookings.nl/wp-content/uploads/2020/01/Het-Foute-uur-boeken.png"
-  },
-  {
-    "id": "01bd827f-9831-4f09-b643-f656843ea3b0",
-    "url": "https://25533.live.streamtheworld.com/RADIO10.mp3",
+    "id": "02b40f9c-77ce-4b2e-b141-8f129722d78b",
+    "url": "https://25533.live.streamtheworld.com/RADIO10.mp3?dist=luisterennl",
     "name": "Radio 10",
-    "image": "https://cdn-profiles.tunein.com/s16793/images/logog.png?t=1"
+    "image": "https://luisteren.nl/app/uploads/2018/11/Radio_10.jpg"
   },
   {
-    "id": "9347bccd-4fae-4c22-be86-93bfba69d8a2",
-    "url": "https://25303.live.streamtheworld.com/TLPSTR15.mp3",
-    "name": "Radio 10 Non-Stop",
-    "image": "https://cdn-profiles.tunein.com/s298425/images/logog.png?t=156897"
+    "id": "4667c9af-610a-4485-9c46-bea223fcaf2e",
+    "url": "https://22713.live.streamtheworld.com/TLPSTR20.mp3?dist=luisterennl",
+    "name": "Radio 10 80's hits",
+    "image": "https://luisteren.nl/app/uploads/2018/11/radio_10_80s_hits.png"
   },
   {
-    "id": "04818365-4719-43de-a746-39e6b2f786ce",
-    "url": "https://22343.live.streamtheworld.com/TLPSTR18.mp3",
-    "name": "Radio 10 60's & 70's",
-    "image": "https://cdn-profiles.tunein.com/s74981/images/logod.png?t=156897"
+    "id": "420cddba-76e1-452e-bc42-86e0d1695269",
+    "url": "https://25273.live.streamtheworld.com/TLPSTR18.mp3?dist=luisterennl",
+    "name": "Radio 10 60's and 70's hits",
+    "image": "https://luisteren.nl/app/uploads/2018/11/radio_10_60_70s_hits.png"
   },
   {
-    "id": "7704654a-1387-4fbc-8379-9acf2dd25c1f",
-    "url": "https://25253.live.streamtheworld.com/TLPSTR20.mp3",
-    "name": "Radio 10 80's",
-    "image": "https://cdn-profiles.tunein.com/s74982/images/logog.png?t=156897"
+    "id": "83def7cf-4c41-4b81-9842-1f6a7eb9d811",
+    "url": "https://25253.live.streamtheworld.com/TLPSTR15.mp3?dist=luisterennl",
+    "name": "Radio 10 non-stop",
+    "image": "https://luisteren.nl/app/uploads/2018/11/radio_10_non_stop.png"
   },
   {
-    "id": "bd9aa896-9f8d-4d53-885c-bf1335050949",
-    "url": "https://22663.live.streamtheworld.com/VERONICA.mp3",
-    "name": "Radio Veronica",
-    "image": "https://cdn-profiles.tunein.com/s6717/images/logod.jpg?t=2"
+    "id": "a2a3acd3-9569-4290-9c51-6e6d7505a747",
+    "url": "https://icecast-qmusicnl-cdp.triple-it.nl/Qmusic_nl_live_96.mp3",
+    "name": "Qmusic",
+    "image": "https://luisteren.nl/app/uploads/2018/12/qmusic.png"
   },
   {
-    "id": "d5a46f03-bf49-41a9-8775-4d6508348b5a",
-    "url": "https://25273.live.streamtheworld.com/SRGSTR09.mp3",
-    "name": "Radio Veronica Non-Stop",
-    "image": "https://static.mytuner.mobi/media/tvos_radios/wgxdk9y9jvdd.png"
+    "id": "507f49e2-31bc-4d7d-98d7-179b4572cfbb",
+    "url": "https://icecast-qmusicnl-cdp.triple-it.nl/Qmusic_nl_nonstop_96.mp3",
+    "name": "Qmusic non-stop",
+    "image": "https://luisteren.nl/app/uploads/2018/11/qmusic-non-stop-radio.png"
   },
   {
-    "id": "ec59d529-26e4-44cb-976f-d302e07d5291",
-    "url": "https://22723.live.streamtheworld.com/SRGSTR11.mp3",
-    "name": "Veronica Rock Radio",
-    "image": "https://cdn-profiles.tunein.com/s108043/images/logog.png"
+    "id": "97540c37-e923-4e88-92ce-f46f3412c83f",
+    "url": "https://icecast-qmusicnl-cdp.triple-it.nl/Qmusic_nl_fouteuur_96.mp3",
+    "name": "Qmusic het foute uur",
+    "image": "https://luisteren.nl/app/uploads/2018/12/qmusic-HET-FOUTE-UUR.png"
   },
   {
-    "id": "d0ed313c-af68-4ce8-bd18-8f9cb9de2d15",
-    "url": "https://25293.live.streamtheworld.com/SRGSTR10.mp3",
-    "name": "Veronica Top 1000",
-    "image": "https://cdn-profiles.tunein.com/s90509/images/logod.png?t=155119"
+    "id": "476c9731-6500-4264-9417-4f735ea6a93c",
+    "url": "https://icecast.omroep.nl/funx-bb-mp3",
+    "name": "FunX",
+    "image": "https://luisteren.nl/app/uploads/2018/11/FUNX_radio.jpg"
   },
   {
-    "id": "a90130ab-c69b-4ccc-b112-05169ee493c4",
-    "url": "https://19993.live.streamtheworld.com/SKYRADIO.mp3",
-    "name": "Skyradio",
-    "image": "https://images.ctfassets.net/avx85g85supt/6nomzxzS7LHHy5S5f70PBt/88a2dc0e338af4fb548775dde126073a/Sky-Station-Tiles_SKY.jpg?f=center&fit=fill&fit=thumb&w=600&h=600&fm=jpg"
+    "id": "69ee0fb5-4d3b-42b3-8793-e6bc39b79215",
+    "url": "https://icecast.omroep.nl/funx-reggae-bb-mp3",
+    "name": "FunX Reggae",
+    "image": "https://luisteren.nl/app/uploads/2018/11/FUNX_REGGAE_RADIO.png"
   },
   {
-    "id": "dd9eab9c-a9ee-46ab-9082-932006b0f61b",
-    "url": "https://25253.live.streamtheworld.com/SRGSTR01.mp3",
-    "name": "Skyradio Hits",
+    "id": "0f80b94d-1901-4939-8130-2c6ce8eb12c9",
+    "url": "https://icecast.omroep.nl/funx-hiphop-bb-mp3",
+    "name": "FunX Hip-Hop",
+    "image": "https://luisteren.nl/app/uploads/2018/11/FUNX_HIP_HOP_RADIO.png"
+  },
+  {
+    "id": "6fa8956c-c434-4314-9e1e-24fcbcb36b97",
+    "url": "https://icecast.omroep.nl/funx-arab-bb-mp3",
+    "name": "FunX Arab",
+    "image": "https://luisteren.nl/app/uploads/2018/11/FUNX_ARAB.png"
+  },
+  {
+    "id": "1ce1acfb-aad9-49b5-bc4c-37fdac373e9d",
+    "url": "https://icecast.omroep.nl/funx-latin-bb-mp3",
+    "name": "FunX Latin",
+    "image": "https://luisteren.nl/app/uploads/2018/11/FUNX_LATIN_RADIO.png"
+  },
+  {
+    "id": "ac7d6532-b6c4-4bf9-94a0-d3d17af7cfe9",
+    "url": "https://icecast.omroep.nl/funx-dance-bb-mp3",
+    "name": "FunX Dance",
+    "image": "https://luisteren.nl/app/uploads/2018/11/funx-dance.png"
+  },
+  {
+    "id": "89ccbcfc-fb94-485a-b68e-715cecc505b5",
+    "url": "https://icecast.omroep.nl/funx-denhaag-bb-mp3",
+    "name": "FunX Den Haag",
+    "image": "https://luisteren.nl/app/uploads/2018/11/funx-den-haag.png"
+  },
+  {
+    "id": "1dac8a23-5fff-48b7-880a-c7d37cc08625",
+    "url": "https://icecast.omroep.nl/funx-amsterdam-bb-mp3",
+    "name": "FunX Amsterdam",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Funx-amsterdam.png"
+  },
+  {
+    "id": "9b1889ca-701b-4ecd-a1e7-ea3d9685c386",
+    "url": "https://icecast.omroep.nl/funx-slowjamz-bb-mp3",
+    "name": "FunX slow jams",
+    "image": "https://luisteren.nl/app/uploads/2018/11/funx-slow-jamz.png"
+  },
+  {
+    "id": "082edd12-a140-486b-acce-ca6b3fe2ffaf",
+    "url": "https://22663.live.streamtheworld.com/SRGSTR10.mp3?dist=luisterennl",
+    "name": "Veronica top 100 allertijden",
+    "image": "https://luisteren.nl/app/uploads/2018/11/veronica-top-1000-allertijden.png"
+  },
+  {
+    "id": "d7826425-3304-4715-8ebd-f31f666dff05",
+    "url": "https://22613.live.streamtheworld.com/VERONICA.mp3?dist=luisterennl",
+    "name": "Veronica",
+    "image": "https://luisteren.nl/app/uploads/2018/12/radio-veronica.png"
+  },
+  {
+    "id": "38dfb100-2b9f-47a6-a426-49f4a146a55e",
+    "url": "https://25333.live.streamtheworld.com/SRGSTR11.mp3?dist=luisterennl",
+    "name": "Veronica rock radio",
+    "image": "https://luisteren.nl/app/uploads/2018/10/veronica-rock-radio.png"
+  },
+  {
+    "id": "3dec2648-bd64-4d85-b573-0ab765d2b953",
+    "url": "https://19993.live.streamtheworld.com/RADIO538.mp3?dist=luisterennl",
+    "name": "Radio 538",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Radio_538.jpg"
+  },
+  {
+    "id": "1de7b9b5-4db3-468d-b069-60c359755a73",
+    "url": "https://22543.live.streamtheworld.com/TLPSTR19.mp3?dist=luisterennl",
+    "name": "Radio 538 Ibiza",
+    "image": "https://luisteren.nl/app/uploads/2018/12/radio-538-ibiza.png"
+  },
+  {
+    "id": "9e1551f2-d6b1-4354-9041-ccc286c4214d",
+    "url": "https://22323.live.streamtheworld.com/TLPSTR13.mp3?dist=luisterennl",
+    "name": "Radio 538 top 50",
+    "image": "https://luisteren.nl/app/uploads/2018/12/538_top_50_muziek_radio_538.png"
+  },
+  {
+    "id": "53ab3ba4-75e6-406f-8c9b-0cc1d1717fc3",
+    "url": "https://22543.live.streamtheworld.com/TLPSTR11.mp3?dist=luisterennl",
+    "name": "Radio 538 hitzone",
+    "image": "https://luisteren.nl/app/uploads/2018/12/radio-538-hitzone.png"
+  },
+  {
+    "id": "35623c4c-e3fb-4128-9dc6-acdbb7205807",
+    "url": "https://22343.live.streamtheworld.com/TLPSTR09.mp3?dist=luisterennl",
+    "name": "Radio 538 non-stop",
+    "image": "https://luisteren.nl/app/uploads/2018/12/radio-538-nonstop.png"
+  },
+  {
+    "id": "ee165677-a30b-4af6-ac4b-b244c3b1f0c1",
+    "url": "https://22543.live.streamtheworld.com/TLPSTR01.mp3?dist=luisterennl",
+    "name": "Radio 538 dance department",
+    "image": "https://luisteren.nl/app/uploads/2018/12/radio-538-dance-department.png"
+  },
+  {
+    "id": "2a295669-087c-4aeb-afd9-6d6e1b2a6462",
+    "url": "https://22543.live.streamtheworld.com/TLPSTR16.mp3?dist=luisterennl",
+    "name": "Radio 538 party",
+    "image": "https://luisteren.nl/app/uploads/2018/11/radio-538-PARTY.png"
+  },
+  {
+    "id": "d25b57bd-3d3d-4ddf-8e8d-ba6f30bbb2c5",
+    "url": "https://22353.live.streamtheworld.com/SKYRADIO.mp3?dist=luisterennl",
+    "name": "Skyradio non-stop",
+    "image": "https://luisteren.nl/app/uploads/2018/11/SKY_RADIO_NON_STOP.png"
+  },
+  {
+    "id": "ef241141-1b02-4690-b091-1ff1ff806aee",
+    "url": "https://22723.live.streamtheworld.com/SRGSTR15.mp3?dist=luisterennl",
+    "name": "Skyradio smooth hits",
+    "image": "https://luisteren.nl/app/uploads/2018/11/SKY_RADIO_SMOOTH_HITS.png"
+  },
+  {
+    "id": "8440ad6b-9e46-40e5-ae53-b49939140302",
+    "url": "https://22663.live.streamtheworld.com/SRGSTR03.mp3?dist=luisterennl",
+    "name": "Skyradio lovesongs",
+    "image": "https://luisteren.nl/app/uploads/2018/12/SKY_RADIO_LOVESONGS.png"
+  },
+  {
+    "id": "181e4db6-6a39-453e-bd2f-9babe313c28c",
+    "url": "https://22663.live.streamtheworld.com/SRGSTR07.mp3?dist=luisterennl",
+    "name": "Skyradio lounge",
+    "image": "https://luisteren.nl/app/uploads/2018/12/SKY_RADIO_LOUNGE.png"
+  },
+  {
+    "id": "11040296-6edd-4595-94ce-085cbc7b4d3d",
+    "url": "https://25243.live.streamtheworld.com/SRGSTR04.mp3?dist=luisterennl",
+    "name": "Skyradio 80's hits",
+    "image": "https://luisteren.nl/app/uploads/2018/12/SKY_RADIO_80S_HITS.png"
+  },
+  {
+    "id": "7be7496b-ad59-4d35-8fdd-9f139e58cbd4",
+    "url": "https://22663.live.streamtheworld.com/SRGSTR05.mp3?dist=luisterennl",
+    "name": "Skyradio 90's hits",
+    "image": "https://luisteren.nl/app/uploads/2018/12/SKY_RADIO_90S_HITS.png"
+  },
+  {
+    "id": "ff94a894-0364-47d0-856d-df244905f4e3",
+    "url": "https://25253.live.streamtheworld.com/SRGSTR01.mp3?dist=luisterennl",
+    "name": "Skyradio hits",
     "image": "https://luisteren.nl/app/uploads/2018/12/SKY_RADIO_HITS.png"
   },
   {
-    "id": "9d0fdfa5-1ec4-44dd-b69a-c6089aab3fde",
-    "url": "https://22723.live.streamtheworld.com/SRGSTR24.mp3",
-    "name": "Skyradio Non-Stop@Work",
-    "image": "https://cdn-profiles.tunein.com/s272433/images/logog.png?t=1"
+    "id": "f171bd4a-d090-4d61-83b9-ee62a31d3701",
+    "url": "https://25233.live.streamtheworld.com/SRGSTR08.mp3?dist=luisterennl",
+    "name": "Skyradio Christmas",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Sky_radio_christmast_.png"
   },
   {
-    "id": "8d61923f-8fd9-4aca-b035-8c6fa96619e1",
-    "url": "https://22723.live.streamtheworld.com/SRGSTR15.mp3",
-    "name": "Skyradio Smooth Hits",
-    "image": "https://cdn-profiles.tunein.com/s115725/images/logog.png?t=157105"
+    "id": "0f901ab6-3ea4-49b1-a36a-53b035683e6e",
+    "url": "https://25333.live.streamtheworld.com/SLAM_MP3_SC",
+    "name": "Slam",
+    "image": "https://luisteren.nl/app/uploads/SLAM_RADIONED_SLAM.jpg"
   },
   {
-    "id": "0165ba74-5899-445d-a51c-4ad9c09dc2f9",
-    "url": "https://25303.live.streamtheworld.com/WEB14_MP3_SC",
-    "name": "Slam!",
-    "image": "https://i.scdn.co/image/ab67706c0000bebb57311625ec92f8057733bc34"
+    "id": "bf2154a6-b50c-422e-a8d2-edeb00a2ff09",
+    "url": "https://20873.live.streamtheworld.com/WEB11_MP3_SC",
+    "name": "Slam hardstyle",
+    "image": "https://luisteren.nl/app/uploads/SLAM_RADIONED_HARDSTYLE.jpg"
   },
   {
-    "id": "3c8d1663-9f7c-44c8-b0b4-f679d726b5e4",
-    "url": "https://22543.live.streamtheworld.com/WEB10_MP3_SC",
-    "name": "Slam Non-Stop",
-    "image": "https://nl.radio.net/images/broadcasts/90/86/37582/1/c300.png"
+    "id": "22738d9e-c72c-49d9-b031-b610df82bbf8",
+    "url": "https://22323.live.streamtheworld.com/WEB10_MP3_SC",
+    "name": "Slam non-stop",
+    "image": "https://luisteren.nl/app/uploads/slam-non-stop.png"
   },
   {
-    "id": "33eea305-c1e4-4d18-bca1-003f5757393d",
+    "id": "1a884fc2-36f3-4e8e-8eec-78cbf92ada04",
+    "url": "https://20873.live.streamtheworld.com/WEB09_MP3_SC",
+    "name": "Slam juice",
+    "image": "https://luisteren.nl/app/uploads/SLAM_RADIONED_JUIZE.jpg"
+  },
+  {
+    "id": "13dc694c-067c-40aa-87e9-ace975632ac3",
+    "url": "https://22713.live.streamtheworld.com/WEB13_MP3_SC",
+    "name": "Slam mixmarathon",
+    "image": "https://luisteren.nl/app/uploads/SLAM_RADIONED_MIXMARATHON.jpg"
+  },
+  {
+    "id": "2de13a57-d124-4b56-abf6-aefdb405972a",
+    "url": "https://22323.live.streamtheworld.com/WEB12_MP3_SC",
+    "name": "Slam the boom room",
+    "image": "https://luisteren.nl/app/uploads/SLAM_RADIONED_THE-BOOM-ROOM.jpg"
+  },
+  {
+    "id": "cbeebc7c-99ff-4657-aae1-31815eee1f13",
+    "url": "https://25343.live.streamtheworld.com/WEB15_MP3_SC",
+    "name": "Slam 00's",
+    "image": "https://luisteren.nl/app/uploads/SLAM_RADIONED_00S.jpg"
+  },
+  {
+    "id": "1646570a-f596-4339-8ddf-0fe54144f03b",
     "url": "https://25303.live.streamtheworld.com/WEB13_MP3_SC",
-    "name": "Slam MixMarathon",
-    "image": "https://api.my-radios.com/images/thumb.php?countryCode=NL&name=29097-965043.png&size=200"
+    "name": "Slam 40",
+    "image": "https://luisteren.nl/app/uploads/SLAM_RADIONED_40.jpg"
   },
   {
-    "id": "45784ac0-f4fc-40b4-b397-bf03ed048225",
-    "url": "https://22343.live.streamtheworld.com/SUNLITE_MP3_SC",
-    "name": "Sunlite",
-    "image": "https://i.ibb.co/GVccLdR/Schermafbeelding-2021-10-07-om-14-33-20.png"
+    "id": "00c17ae5-18e5-4bfb-8d19-ab6d01e173bc",
+    "url": "https://21313.live.streamtheworld.com/100PNL_MP3_SC",
+    "name": "100% NL",
+    "image": "https://luisteren.nl/app/uploads/2018/11/100_nl_radio_.png"
   },
   {
-    "id": "12ca0cd7-10a4-45bf-92ce-ffd37c1112ff",
-    "url": "https://icecast.omroep.nl/radio1-bb-aac",
-    "name": "NPO Radio 1",
-    "image": "https://yt3.ggpht.com/Djbj9Z5gdAwEhdUctcQxh04cGFrXb-ubGGb-0pNwtZZFw837Rs_qKDgeejIAqkJC8yVnKpXoqg=s900-c-k-c0x00ffffff-no-rj"
+    "id": "1da6565c-3c16-41e4-874a-70fc639c9492",
+    "url": "https://25293.live.streamtheworld.com/WEB02_MP3_SC",
+    "name": "100% NL non-stop",
+    "image": "https://luisteren.nl/app/uploads/2018/12/100nl_nonstop.png"
   },
   {
-    "id": "0ea96b5c-0cce-4713-a9f6-655815d53977",
-    "url": "https://icecast.omroep.nl/radio2-bb-aac",
-    "name": "NPO Radio 2",
-    "image": "https://radioonlineluisteren.nl/wp-content/uploads/2021/05/NPO-Radio-2.jpeg"
+    "id": "5a19a65a-79d5-4e58-8cff-9a859033c700",
+    "url": "https://22343.live.streamtheworld.com/WEB01_MP3_SC",
+    "name": "100% NL liefde",
+    "image": "https://luisteren.nl/app/uploads/2018/12/100NL_liefde.png"
   },
   {
-    "id": "a0f18da6-afdd-47cc-a4a2-f3d0e81d973e",
-    "url": "https://icecast.omroep.nl/3fm-bb-aac",
-    "name": "NPO 3FM",
-    "image": "https://yt3.ggpht.com/ytc/AKedOLSvUTv9kuW3-hDp8n5uhLvHGrkU5hwYEpSw2MoSBg=s900-c-k-c0x00ffffff-no-rj"
+    "id": "0da2ba4b-592f-4728-a4b7-a66837deb83e",
+    "url": "https://25293.live.streamtheworld.com/WEB01_MP3_SC",
+    "name": "100% NL feest",
+    "image": "https://luisteren.nl/app/uploads/2018/12/100_nl_feest_fm.png"
   },
   {
-    "id": "498e7209-8727-4342-bb0d-edf79c055b0b",
-    "url": "https://icecast.omroep.nl/radio4-bb-aac",
-    "name": "NPO Radio 4",
-    "image": "https://static.mytuner.mobi/media/tvos_radios/pU4F5RWC7g.png"
+    "id": "65005fdf-5739-47a5-bf76-4070c45f2bfd",
+    "url": "https://25273.live.streamtheworld.com/SUBLIME.mp3?dist=platforms",
+    "name": "Sublime",
+    "image": "https://luisteren.nl/app/uploads/Sublime-Radio.jpg"
   },
   {
-    "id": "e3592d01-3f01-4739-ba3d-eb8a46c50015",
-    "url": "https://icecast.omroep.nl/radio5-bb-aac",
-    "name": "NPO Radio 5",
-    "image": "https://nl.radio.net/images/broadcasts/0f/6c/36730/c300.png"
+    "id": "67a95b7a-2652-4d8e-b1ec-14186f2fcb80",
+    "url": "https://22713.live.streamtheworld.com/SUBLIMESMOOTH.mp3",
+    "name": "Sublime smooth",
+    "image": "https://luisteren.nl/app/uploads/Sublime-Smooth-Radio.jpg"
   },
   {
-    "id": "539717f0-ff12-4888-9b27-1dafbb4f049b",
-    "url": "https://icecast.omroep.nl/funx-sb-aac",
-    "name": "NPO FunX",
-    "image": "https://i1.sndcdn.com/avatars-000147640894-e6uvf9-t500x500.jpg"
+    "id": "b8f2ee5a-dfa0-4a26-a72d-12b4bec37211",
+    "url": "https://25293.live.streamtheworld.com/SUBLIMEPUREJAZZ.mp3?dist=platforms",
+    "name": "Sublime pure jazz",
+    "image": "https://luisteren.nl/app/uploads/Sublime-Pure-Jazz.jpg"
+  },
+  {
+    "id": "15cbb450-4dfb-434c-b511-db696aff6375",
+    "url": "https://25293.live.streamtheworld.com/SUBLIMESOUL.mp3?dist=platforms",
+    "name": "Sublime soul",
+    "image": "https://luisteren.nl/app/uploads/Sublime-Soul.jpg"
+  },
+  {
+    "id": "b4488cf8-6e99-4623-8463-0ab09ad31c15",
+    "url": "https://22343.live.streamtheworld.com/SUBLIME500.mp3",
+    "name": "Sublime 500",
+    "image": "https://luisteren.nl/app/uploads/Sublime-Radio-Sublime-500.jpg"
+  },
+  {
+    "id": "cd4d6b8e-23da-4222-9214-cf2ec21b44ce",
+    "url": "https://25293.live.streamtheworld.com/SUBLIMEARROWJAZZ.mp3",
+    "name": "Sublime arrow jazz",
+    "image": "https://luisteren.nl/app/uploads/Sublime-Arrow-JAZZ-fm.jpg"
+  },
+  {
+    "id": "bee9b362-f3e4-462f-9f23-7a7f05452c9b",
+    "url": "https://freshradio.stream.laut.fm/freshradio?t302=2023-07-01_23-29-49&uuid=7057de3f-5849-4ce3-9b77-6e0db19555e3",
+    "name": "Way FM",
+    "image": "https://luisteren.nl/app/uploads/WAYFM.png"
+  },
+  {
+    "id": "baa222e2-0dde-4d50-b784-2864bb9ce046",
+    "url": "https://22343.live.streamtheworld.com/SOULRADIO.mp3",
+    "name": "Soul Radio",
+    "image": "https://luisteren.nl/app/uploads/2018/11/soul-radio-fm.png"
+  },
+  {
+    "id": "3c0d26b3-d945-4bab-8a7e-ade19021be6c",
+    "url": "https://21313.live.streamtheworld.com/BNR_NIEUWSRADIO.mp3",
+    "name": "BNR Nieuwsradio",
+    "image": "https://luisteren.nl/app/uploads/2018/11/BNR_NIEUWSRADIO_FM.jpg"
+  },
+  {
+    "id": "51e9e07e-ade5-4a09-9577-392e5d8fb41c",
+    "url": "https://mediaserv38.live-streams.nl:18023/stream",
+    "name": "Klasse FM",
+    "image": "https://luisteren.nl/app/uploads/2018/11/klasse-fm.jpg"
+  },
+  {
+    "id": "bbdcec59-18da-410c-864e-dc8f64be862d",
+    "url": "https://streamer.hosting078.nl:1565/stream",
+    "name": "Vlietstad Radio",
+    "image": "https://luisteren.nl/app/uploads/Vlietstad.jpg"
+  },
+  {
+    "id": "c55ca89e-4b4d-4a0a-89c5-e17cf0582c6f",
+    "url": "https://i1.cdn.jetstre.am:8000/sz=efteling=hdstream?token=6258ed3715b9e620f83250d8770e3bff&time=64a09c86",
+    "name": "Efteling kids radio",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Efteling_kids_radio.png"
+  },
+  {
+    "id": "c3f020c1-f9d1-4960-b274-6e0572322d4e",
+    "url": "https://icecast.omroep.nl/radio2-sterrennl-mp3",
+    "name": "Sterren NL",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Sterren_NL_RADIO.jpg"
+  },
+  {
+    "id": "836bfbdd-8ac8-4617-8c48-d070040f231d",
+    "url": "https://icecast.omroep.nl/3fm-serioustalent-mp3",
+    "name": "KX Radio",
+    "image": "https://luisteren.nl/app/uploads/2018/11/KX_RADIO.jpg"
+  },
+  {
+    "id": "5c0900f7-b3a3-421a-b6d7-03151cc96a9a",
+    "url": "https://stream2.mfmstreaming.nl/8032/stream.mp3",
+    "name": "Rainz FM",
+    "image": "https://luisteren.nl/app/uploads/rainzfm.png"
+  },
+  {
+    "id": "9a46fe61-c5a3-460f-899e-bcc1e560e398",
+    "url": "https://mediaserv68.live-streams.nl:18007/stream",
+    "name": "Easy 95.5 FM",
+    "image": "https://luisteren.nl/app/uploads/Easy-Fm-Logo-Gradient-Wit-groter.png"
+  },
+  {
+    "id": "b2a7f04f2-e8c9-43b0-b493-4bc44ac910d9",
+    "url": "https://amorfm_192.streampartner.nl/stream",
+    "name": "Amor FM",
+    "image": "https://luisteren.nl/app/uploads/2018/11/AMOR_FM.png"
+  },
+  {
+    "id": "549e6554-c672-4112-b8a8-9130c17337dd",
+    "url": "https://rivierenlandradio.stream-server.nl/stream",
+    "name": "Rivierenland radio",
+    "image": "https://luisteren.nl/app/uploads/rivierenland-radio.png"
+  },
+  {
+    "id": "0ffce3d8-f048-4239-8c60-bbe7026d992e",
+    "url": "https://25283.live.streamtheworld.com/TLPSTR17.mp3?dist=luisterennl",
+    "name": "XM The Talent Station",
+    "image": "https://luisteren.nl/app/uploads/2018/11/xm-radio.png"
+  },
+  {
+    "id": "6d46c238-79c8-422b-8f2f-2ec04ef0ff0c",
+    "url": "https://streams.pinguinradio.com/Aardschok192.mp3",
+    "name": "Pinguin Radio",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Pinguin_radio.jpg"
+  },
+  {
+    "id": "648ddae5-ef2b-438d-a48a-f7935c37cc30",
+    "url": "https://stream2.ujala.nl/stream/2/listen.mp3",
+    "name": "Ujala Radio",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Ujala-radio.png"
+  },
+  {
+    "id": "7053fd8e-755f-4216-947e-04811714940e",
+    "url": "https://cast1.torontocast.com:1930/;?type=http&nocache=1683479183",
+    "name": "Oldies online radio",
+    "image": "https://luisteren.nl/app/uploads/logo800x800-oldies-online-radio.png"
+  },
+  {
+    "id": "e1187892-8600-4f46-bc09-6554e4257466",
+    "url": "https://freemusickerst.stream.laut.fm/freemusickerst?t302=2023-07-01_23-40-29&uuid=51053279-5561-49aa-af26-509a33ba3bab",
+    "name": "Summer FM",
+    "image": "https://luisteren.nl/app/uploads/summer_fam.png"
+  },
+  {
+    "id": "4c6a4ad4-0728-471b-b109-498997a009fb",
+    "url": "https://25333.live.streamtheworld.com/RADIO509.mp3?dist=luisterennl",
+    "name": "Radio 509",
+    "image": "https://luisteren.nl/app/uploads/2018/11/radio509_fm.png"
+  },
+  {
+    "id": "b0e47a7d-b3de-46cf-85ca-2ecb122fb30f",
+    "url": "https://25333.live.streamtheworld.com/DEEP_RADIO.mp3",
+    "name": "Deep Radio",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Deep_Fm_radio.png"
+  },
+  {
+    "id": "7ead1a86-23c2-490f-8521-122e68a92b0c",
+    "url": "https://luister.bestehits.nl/stream96",
+    "name": "Beste Hits",
+    "image": "https://luisteren.nl/app/uploads/logo-600.png"
+  },
+  {
+    "id": "d1d5f87d-bb05-453a-b7f4-9423625ec26f",
+    "url": "https://streaming.hofhosting.nl/proxy/traffic_main?mp=/stream",
+    "name": "Traffic Radio",
+    "image": "https://luisteren.nl/app/uploads/2018/11/TRAFFIC_RADIO_FM.jpg"
+  },
+  {
+    "id": "580ddb79-c2cf-4d9d-b41d-4fcaac9f2806",
+    "url": "https://stream.gigantfm.nl/gigantfm",
+    "name": "Gigant FM",
+    "image": "https://luisteren.nl/app/uploads/gigantfm_logo.png"
+  },
+  {
+    "id": "4685b077-6f1e-41df-9cfa-be7ce4f756b9",
+    "url": "https://20873.live.streamtheworld.com/KINK.mp3",
+    "name": "KINK",
+    "image": "https://luisteren.nl/app/uploads/2019/11/kink-fm.jpg"
+  },
+  {
+    "id": "b26e2c87-7ea8-4923-aa94-7ac87cae91de",
+    "url": "https://uk1.streamingpulse.com/ssl/grollooradio",
+    "name": "Grolloo Radio",
+    "image": "https://luisteren.nl/app/uploads/2021/02/Grolloo-radio-luisteren-radio-online-luisteren-online-radio-luisteren.png"
+  },
+  {
+    "id": "d777a441-9dbe-4fbb-ac65-956ec6f78ac4",
+    "url": "https://stream.radionl.fm/radionl",
+    "name": "Radio NL",
+    "image": "https://luisteren.nl/app/uploads/2018/11/RadioNl_fm.png"
+  },
+  {
+    "id": "635d4153-ae69-4573-b262-4ccfe09e3075",
+    "url": "https://25333.live.streamtheworld.com/CLASSICFM.mp3",
+    "name": "Classic FM",
+    "image": "https://luisteren.nl/app/uploads/2018/11/Classic_fm.jpg"
+  },
+  {
+    "id": "8a27be9e-6aaa-4024-9f5c-d155ce5a3807",
+    "url": "https://www.anwb.nl/verkeer/verkeersinformatie/audio/verkeeranwbnl.mp3",
+    "name": "ANWB",
+    "image": "https://luisteren.nl/app/uploads/2019/11/anwb.jpg"
   }
 ]

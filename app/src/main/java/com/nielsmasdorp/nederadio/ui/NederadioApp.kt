@@ -157,25 +157,25 @@ fun NederadioApp(
                 "home",
                 enterTransition = {
                     slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Up,
+                        towards = AnimatedContentScope.SlideDirection.Left,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.Up,
+                        towards = AnimatedContentScope.SlideDirection.Left,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 popEnterTransition = {
                     slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Down,
+                        towards = AnimatedContentScope.SlideDirection.Right,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 popExitTransition = {
                     slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.Down,
+                        towards = AnimatedContentScope.SlideDirection.Right,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 }
@@ -197,13 +197,13 @@ fun NederadioApp(
                 "search",
                 enterTransition = {
                     slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Up,
+                        towards = AnimatedContentScope.SlideDirection.Left,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.Down,
+                        towards = AnimatedContentScope.SlideDirection.Right,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 }
@@ -224,13 +224,13 @@ fun NederadioApp(
                 "equalizer",
                 enterTransition = {
                     slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Up,
+                        towards = AnimatedContentScope.SlideDirection.Left,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.Down,
+                        towards = AnimatedContentScope.SlideDirection.Right,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 }

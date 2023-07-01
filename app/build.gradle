@@ -14,8 +14,8 @@ android {
         minSdkVersion 26
         //noinspection OldTargetApi
         targetSdkVersion 33
-        versionCode 196
-        versionName "2.3.2"
+        versionCode 197
+        versionName "2.3.3"
     }
     buildTypes {
         release {
