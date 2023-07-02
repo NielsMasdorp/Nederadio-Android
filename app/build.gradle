@@ -104,7 +104,6 @@ dependencies {
 
     // misc
     implementation "com.github.skydoves:landscapist-glide:$landscapist_glide_version"
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
     implementation "com.airbnb.android:lottie-compose:$lottie_version"
     implementation "com.patrykandpatrick.vico:compose-m3:$vico_version"
 

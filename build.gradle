@@ -35,7 +35,7 @@ buildscript {
     ext.accompanist_version = '0.24.13-rc'
 
     //misc
-    ext.landscapist_glide_version = '1.4.5'
+    ext.landscapist_glide_version = '2.2.2'
     ext.lottie_version = '4.2.2'
     ext.vico_version = '1.6.5'
 

@@ -1,19 +1,17 @@
 package com.nielsmasdorp.nederadio.ui.home.bottomsheet.collapsed
 
 import android.view.View
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -23,8 +21,8 @@ import androidx.media3.ui.PlayerControlView
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
 import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
+import com.nielsmasdorp.nederadio.ui.components.StreamImage
 import com.nielsmasdorp.nederadio.ui.extension.setColors
-import com.skydoves.landscapist.glide.GlideImage
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -36,6 +34,9 @@ fun StreamScreenSmall(
     modifier: Modifier = Modifier,
     onStreamFavoriteStatusChanged: (String, Boolean) -> Unit,
 ) {
+
+    val scope = rememberCoroutineScope()
+
     val controlColor = MaterialTheme.colorScheme.onPrimary.toArgb()
     when (activeStream) {
         is ActiveStream.Unknown -> return
@@ -69,18 +70,12 @@ fun StreamScreenSmall(
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Card(
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    GlideImage(
-                        imageModel = stream.imageUrl,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.White)
-                    )
-                }
+                StreamImage(
+                    modifier = Modifier.size(48.dp),
+                    stream = stream,
+                    shape = RoundedCornerShape(8.dp),
+                    scope = scope
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(
                     modifier = Modifier
