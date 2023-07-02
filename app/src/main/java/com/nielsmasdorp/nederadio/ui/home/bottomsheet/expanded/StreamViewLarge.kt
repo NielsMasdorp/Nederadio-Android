@@ -9,15 +9,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,8 +24,8 @@ import androidx.media3.ui.PlayerControlView
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
 import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
+import com.nielsmasdorp.nederadio.ui.components.StreamImage
 import com.nielsmasdorp.nederadio.ui.extension.setColors
-import com.skydoves.landscapist.glide.GlideImage
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -44,6 +40,8 @@ fun StreamViewLarge(
     onStreamFavoriteStatusChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val scope = rememberCoroutineScope()
 
     Surface(
         modifier = modifier,
@@ -68,20 +66,12 @@ fun StreamViewLarge(
                     )
                 }
                 Spacer(modifier = Modifier.height(32.dp))
-                Card(
-                    shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier.size(256.dp)
-                ) {
-                    GlideImage(
-                        imageModel = stream.imageUrl,
-                        placeHolder = ImageBitmap.imageResource(R.drawable.empty_background_small),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.White)
-                    )
-                }
+                StreamImage(
+                    modifier = Modifier.size(256.dp),
+                    stream = stream,
+                    shape = RoundedCornerShape(12.dp),
+                    scope = scope
+                )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     textAlign = TextAlign.Center,
