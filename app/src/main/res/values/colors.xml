@@ -5,6 +5,6 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#000000</color>
 
-    <color name="cast_button_tint">@android:color/white</color>
+    <color name="cast_button_tint">#49454F</color>
 
 </resources>

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="cast_button_tint">@color/material_dynamic_primary20</color>
+    <color name="cast_button_tint">@color/m3_sys_color_dynamic_light_surface_variant</color>
 </resources>

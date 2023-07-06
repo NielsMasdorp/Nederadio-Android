@@ -29,8 +29,8 @@ fun StreamTabs(
     TabRow(
         modifier = modifier,
         selectedTabIndex = pagerState.currentPage,
-        backgroundColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
+        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
@@ -43,7 +43,7 @@ fun StreamTabs(
                     Icon(
                         tab.icon,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 text = {
@@ -51,7 +51,7 @@ fun StreamTabs(
                         text = tab.title,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 selected = pagerState.currentPage == index,

@@ -31,7 +31,7 @@ fun SleepTimerDialog(
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
-            color = MaterialTheme.colorScheme.surface,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             shape = RoundedCornerShape(24.dp),
             modifier = modifier,
         ) {
@@ -39,11 +39,13 @@ fun SleepTimerDialog(
                 Text(
                     modifier = Modifier.padding(16.dp),
                     text = stringResource(id = R.string.sleep_timer_title),
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.titleLarge,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn {
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 16.dp)
+                ) {
                     itemsIndexed(options) { index, item ->
                         Row(
                             modifier = Modifier
@@ -54,7 +56,7 @@ fun SleepTimerDialog(
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                                 style = MaterialTheme.typography.titleMedium,
                                 text = item,
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }

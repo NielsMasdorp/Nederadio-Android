@@ -54,7 +54,7 @@ fun NederadioApp(
 
     val systemUiController = rememberSystemUiController()
 
-    val systemBarsColor = MaterialTheme.colorScheme.primary
+    val systemBarsColor = MaterialTheme.colorScheme.surfaceVariant
 
     LaunchedEffect(systemUiController) {
         systemUiController.setSystemBarsColor(color = systemBarsColor)
@@ -111,7 +111,6 @@ fun NederadioApp(
     BottomSheetScaffold(
         modifier = modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
-        sheetContainerColor = MaterialTheme.colorScheme.primary,
         sheetDragHandle = null,
         sheetContent = {
             SheetContent {

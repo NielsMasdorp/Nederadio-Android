@@ -30,9 +30,10 @@ fun AboutAppDialog(
         onDismissRequest = {
             onDismiss()
         },
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         title = {
             Text(
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 text = stringResource(id = R.string.about_title),
                 style = MaterialTheme.typography.titleLarge
             )

@@ -45,7 +45,7 @@ fun StreamViewLarge(
 
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.surfaceVariant
     ) {
 
         Column(
@@ -62,7 +62,7 @@ fun StreamViewLarge(
                     Icon(
                         painter = painterResource(id = R.drawable.chevron_down),
                         contentDescription = stringResource(id = R.string.settings_content_description),
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Spacer(modifier = Modifier.height(32.dp))
@@ -79,7 +79,7 @@ fun StreamViewLarge(
                         .padding(top = 16.dp),
                     text = stream.title,
                     style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 if (!stream.track.isNullOrEmpty()) {
@@ -87,7 +87,7 @@ fun StreamViewLarge(
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge,
                         text = stream.track.orEmpty(),
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -96,7 +96,7 @@ fun StreamViewLarge(
                     text = sleepTimer.orEmpty(),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(modifier = Modifier.weight(1.0f))
                 IconButton(onClick = {
@@ -117,7 +117,7 @@ fun StreamViewLarge(
                         } else {
                             stringResource(id = R.string.player_add_to_favorites)
                         },
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -126,12 +126,12 @@ fun StreamViewLarge(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    val playPauseColor = MaterialTheme.colorScheme.onPrimaryContainer.toArgb()
+                    val playPauseColor = MaterialTheme.colorScheme.onPrimary.toArgb()
                     Box(
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primaryContainer),
+                            .background(MaterialTheme.colorScheme.primary),
                         contentAlignment = Alignment.Center,
                     ) {
                         AndroidView(
@@ -146,7 +146,7 @@ fun StreamViewLarge(
                 Spacer(modifier = Modifier.height(8.dp))
                 TextButton(onClick = { onTimerClicked() }) {
                     Text(
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         text = stringResource(id = R.string.sleep_timer_button),
                         style = MaterialTheme.typography.titleLarge,
                     )

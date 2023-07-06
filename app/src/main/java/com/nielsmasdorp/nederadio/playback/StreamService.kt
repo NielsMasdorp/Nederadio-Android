@@ -14,7 +14,9 @@ import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.*
 import androidx.media3.common.Player.*
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.mediacodec.MediaCodecUtil
 import androidx.media3.session.*
 import androidx.media3.session.MediaConstants.*
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
@@ -360,6 +362,19 @@ class StreamService :
 
     @SuppressLint("ObsoleteSdkInt")
     private fun initialize() {
+        // Might be the fix for randomly stopping streams:
+        // see https://github.com/google/ExoPlayer/issues/7888
+        val defaultRenderersFactory = DefaultRenderersFactory(this).apply {
+            setMediaCodecSelector { mimeType, requiresSecureDecoder, requiresTunnelingDecoder ->
+                MediaCodecUtil.getDecoderInfos(
+                    mimeType,
+                    requiresSecureDecoder,
+                    requiresTunnelingDecoder
+                ).toMutableList().apply {
+                    removeIf { it.name == "OMX.SEC.mp3.dec" }
+                }
+            }
+        }
         localPlayer = ExoPlayer.Builder(this)
             .setAudioAttributes(
                 AudioAttributes.Builder()
@@ -368,6 +383,7 @@ class StreamService :
                     .build(),
                 true // Automatic requesting and dropping audio focus
             )
+            .setRenderersFactory(defaultRenderersFactory)
             .setHandleAudioBecomingNoisy(true) // Handle headphones disconnect
             .setWakeMode(C.WAKE_MODE_NETWORK) // Wake+WiFi lock while playing
             .build().apply {
