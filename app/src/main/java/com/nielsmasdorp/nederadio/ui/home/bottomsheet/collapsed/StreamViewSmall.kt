@@ -47,9 +47,7 @@ fun StreamScreenSmall(
             is ActiveStream.Unknown -> {}
             is ActiveStream.Empty -> {
                 Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                    modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -70,7 +68,7 @@ fun StreamScreenSmall(
             else -> {
                 val stream = (activeStream as ActiveStream.Filled).stream
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
