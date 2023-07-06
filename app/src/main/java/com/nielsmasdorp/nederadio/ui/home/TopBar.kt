@@ -41,7 +41,7 @@ fun TopBar(
     TopAppBar(
         modifier = modifier,
         colors = TopAppBarDefaults.mediumTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -55,7 +55,7 @@ fun TopBar(
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     text = stringResource(id = R.string.app_name),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         },
@@ -65,14 +65,14 @@ fun TopBar(
                 Icon(
                     Icons.Default.Search,
                     contentDescription = stringResource(id = R.string.search_content_description),
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(
                     Icons.Default.MoreVert,
                     contentDescription = stringResource(id = R.string.settings_content_description),
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             DropdownMenu(
@@ -85,7 +85,7 @@ fun TopBar(
                         Icon(
                             Icons.Default.Equalizer,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
                     onClick = {
@@ -96,7 +96,7 @@ fun TopBar(
                         Text(
                             text = stringResource(id = R.string.action_equalizer),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 )
@@ -109,14 +109,14 @@ fun TopBar(
                         Icon(
                             Icons.Default.Info,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
                     text = {
                         Text(
                             text = stringResource(id = R.string.action_about),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 )

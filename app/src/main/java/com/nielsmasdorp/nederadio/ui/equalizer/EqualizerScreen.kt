@@ -47,18 +47,18 @@ fun EqualizerScreen(
                         text = stringResource(id = R.string.action_equalizer),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
                 navigationIcon = {
                     IconButton(onClick = onExitEqualizer) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "back",
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 },
@@ -69,8 +69,10 @@ fun EqualizerScreen(
                         enabled = state.canBeEnabled,
                         onCheckedChange = viewModel::setEnabled,
                         colors = SwitchDefaults.colors(
-                            checkedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
-                            checkedThumbColor = MaterialTheme.colorScheme.primary
+                            uncheckedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
+                            checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            checkedThumbColor = MaterialTheme.colorScheme.onSurface
                         ),
                         thumbContent = if (state.isEnabled) {
                             {
@@ -78,7 +80,7 @@ fun EqualizerScreen(
                                     imageVector = Icons.Filled.Check,
                                     contentDescription = null,
                                     modifier = Modifier.size(SwitchDefaults.IconSize),
-                                    tint = MaterialTheme.colorScheme.onPrimary
+                                    tint = MaterialTheme.colorScheme.surface
                                 )
                             }
                         } else {

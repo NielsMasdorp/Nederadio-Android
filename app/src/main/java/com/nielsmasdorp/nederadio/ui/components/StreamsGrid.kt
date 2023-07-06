@@ -29,13 +29,13 @@ fun StreamsGrid(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.primaryContainer,
+        color = MaterialTheme.colorScheme.background,
     ) {
         if (streams.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 EmptyView(
                     title = stringResource(id = R.string.streams_overview_no_streams_found),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         } else {

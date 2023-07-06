@@ -37,95 +37,101 @@ fun StreamScreenSmall(
 
     val scope = rememberCoroutineScope()
 
-    val controlColor = MaterialTheme.colorScheme.onPrimary.toArgb()
-    when (activeStream) {
-        is ActiveStream.Unknown -> return
-        is ActiveStream.Empty -> {
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Radio,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(id = R.string.small_player_no_station_chosen),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-        else -> {
-            val stream = (activeStream as ActiveStream.Filled).stream
-            Row(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                StreamImage(
-                    modifier = Modifier.size(48.dp),
-                    stream = stream,
-                    shape = RoundedCornerShape(8.dp),
-                    scope = scope
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.surfaceVariant
+    ) {
+
+        val controlColor = MaterialTheme.colorScheme.primary.toArgb()
+        when (activeStream) {
+            is ActiveStream.Unknown -> {}
+            is ActiveStream.Empty -> {
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Icon(
+                        imageVector = Icons.Filled.Radio,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        text = stream.title,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        text = stringResource(id = R.string.small_player_no_station_chosen),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Bold
                     )
-                    if (!stream.track.isNullOrEmpty()) {
+                }
+            }
+            else -> {
+                val stream = (activeStream as ActiveStream.Filled).stream
+                Row(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    StreamImage(
+                        modifier = Modifier.size(48.dp),
+                        stream = stream,
+                        shape = RoundedCornerShape(8.dp),
+                        scope = scope
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp)
+                    ) {
                         Text(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = stream.track.orEmpty(),
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            text = stream.title,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontWeight = FontWeight.Bold
+                        )
+                        if (!stream.track.isNullOrEmpty()) {
+                            Text(
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                style = MaterialTheme.typography.bodyMedium,
+                                text = stream.track.orEmpty(),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                    IconButton(onClick = {
+                        onStreamFavoriteStatusChanged(
+                            stream.id,
+                            !stream.isFavorite
+                        )
+                    }) {
+                        Icon(
+                            imageVector = if (stream.isFavorite) {
+                                Icons.Filled.Favorite
+                            } else {
+                                Icons.Outlined.FavoriteBorder
+                            },
+                            contentDescription = if (stream.isFavorite) {
+                                stringResource(id = R.string.player_remove_from_favorites)
+                            } else {
+                                stringResource(id = R.string.player_add_to_favorites)
+                            },
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                }
-                IconButton(onClick = {
-                    onStreamFavoriteStatusChanged(
-                        stream.id,
-                        !stream.isFavorite
-                    )
-                }) {
-                    Icon(
-                        imageVector = if (stream.isFavorite) {
-                            Icons.Filled.Favorite
-                        } else {
-                            Icons.Outlined.FavoriteBorder
-                        },
-                        contentDescription = if (stream.isFavorite) {
-                            stringResource(id = R.string.player_remove_from_favorites)
-                        } else {
-                            stringResource(id = R.string.player_add_to_favorites)
-                        },
-                        tint = MaterialTheme.colorScheme.onPrimary
+                    AndroidView(
+                        factory = { playerControls.getView() as PlayerControlView },
+                        update = { view ->
+                            view.setColors(controlColor)
+                        }
                     )
                 }
-                AndroidView(
-                    factory = { playerControls.getView() as PlayerControlView },
-                    update = { view ->
-                        view.setColors(controlColor)
-                    }
-                )
             }
         }
     }

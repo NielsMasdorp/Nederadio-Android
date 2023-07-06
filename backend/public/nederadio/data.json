@@ -408,22 +408,10 @@
     "image": "https://luisteren.nl/app/uploads/Easy-Fm-Logo-Gradient-Wit-groter.png"
   },
   {
-    "id": "b2a7f04f2-e8c9-43b0-b493-4bc44ac910d9",
-    "url": "https://amorfm_192.streampartner.nl/stream",
-    "name": "Amor FM",
-    "image": "https://luisteren.nl/app/uploads/2018/11/AMOR_FM.png"
-  },
-  {
     "id": "549e6554-c672-4112-b8a8-9130c17337dd",
     "url": "https://rivierenlandradio.stream-server.nl/stream",
     "name": "Rivierenland radio",
     "image": "https://luisteren.nl/app/uploads/rivierenland-radio.png"
-  },
-  {
-    "id": "0ffce3d8-f048-4239-8c60-bbe7026d992e",
-    "url": "https://25283.live.streamtheworld.com/TLPSTR17.mp3?dist=luisterennl",
-    "name": "XM The Talent Station",
-    "image": "https://luisteren.nl/app/uploads/2018/11/xm-radio.png"
   },
   {
     "id": "6d46c238-79c8-422b-8f2f-2ec04ef0ff0c",
@@ -502,11 +490,5 @@
     "url": "https://25333.live.streamtheworld.com/CLASSICFM.mp3",
     "name": "Classic FM",
     "image": "https://luisteren.nl/app/uploads/2018/11/Classic_fm.jpg"
-  },
-  {
-    "id": "8a27be9e-6aaa-4024-9f5c-d155ce5a3807",
-    "url": "https://www.anwb.nl/verkeer/verkeersinformatie/audio/verkeeranwbnl.mp3",
-    "name": "ANWB",
-    "image": "https://luisteren.nl/app/uploads/2019/11/anwb.jpg"
   }
 ]

@@ -1,5 +1,6 @@
 package com.nielsmasdorp.nederadio.ui.search
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -35,7 +36,7 @@ fun SearchBar(
 
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.surfaceVariant
     ) {
         Row(
             modifier = Modifier
@@ -47,13 +48,13 @@ fun SearchBar(
                 Icon(
                     Icons.Default.ArrowBack,
                     contentDescription = stringResource(id = R.string.search_close_content_description),
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Surface(
                 modifier = Modifier
                     .height(56.dp),
-                color = MaterialTheme.colorScheme.primaryContainer,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 shape = RoundedCornerShape(56.dp),
             ) {
                 TextField(
@@ -61,14 +62,14 @@ fun SearchBar(
                         Text(
                             style = MaterialTheme.typography.bodyLarge,
                             text = stringResource(id = R.string.search_hint),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
                     leadingIcon = {
                         Icon(
                             Icons.Default.Search,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
                     trailingIcon = {
@@ -77,7 +78,7 @@ fun SearchBar(
                                 Icon(
                                     Icons.Default.Close,
                                     contentDescription = stringResource(id = R.string.search_clear_content_description),
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
@@ -87,13 +88,13 @@ fun SearchBar(
                     modifier = Modifier.fillMaxSize(),
                     value = query,
                     textStyle = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     onValueChange = onSearchQueryChanged,
-                    colors = TextFieldDefaults.textFieldColors(
+                    colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        cursorColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),

@@ -32,7 +32,7 @@ fun Equalizer(
 ) {
     Box(
         modifier = modifier
-            .background(color = MaterialTheme.colorScheme.primary)
+            .background(color = MaterialTheme.colorScheme.surfaceVariant)
             .padding(16.dp)
     ) {
         Chart(
@@ -45,19 +45,19 @@ fun Equalizer(
                 ),
                 lines = listOf(
                     LineChart.LineSpec(
-                        lineColor = MaterialTheme.colorScheme.secondaryContainer.toArgb(),
+                        lineColor = MaterialTheme.colorScheme.tertiary.toArgb(),
                         lineThicknessDp = 6f,
                         point = ShapeComponent(
                             shape = Shapes.pillShape,
-                            color = MaterialTheme.colorScheme.secondaryContainer.toArgb(),
-                            strokeColor = MaterialTheme.colorScheme.onPrimary.toArgb(),
+                            color = MaterialTheme.colorScheme.tertiary.toArgb(),
+                            strokeColor = MaterialTheme.colorScheme.tertiaryContainer.toArgb(),
                             strokeWidthDp = 2f
                         ),
                         lineBackgroundShader = BrushShader(
                             verticalGradient(
                                 colors = listOf(
-                                    MaterialTheme.colorScheme.secondaryContainer.copy(0.5f),
-                                    MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0f)
+                                    MaterialTheme.colorScheme.tertiary.copy(0.5f),
+                                    MaterialTheme.colorScheme.tertiary.copy(alpha = 0f)
                                 ),
                             )
                         ),
@@ -67,21 +67,21 @@ fun Equalizer(
             chartModelProducer = equalizerProducer,
             bottomAxis = bottomAxis(
                 label = textComponent {
-                    this.color = MaterialTheme.colorScheme.onPrimary.toArgb()
+                    this.color = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
                 },
                 guideline = lineComponent(
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     thickness = currentChartStyle.axis.axisGuidelineWidth,
                     shape = currentChartStyle.axis.axisGuidelineShape
                 ),
                 tickPosition = HorizontalAxis.TickPosition.Center(),
                 tick = lineComponent(
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     thickness = currentChartStyle.axis.axisTickWidth,
                     shape = currentChartStyle.axis.axisTickShape
                 ),
                 axis = lineComponent(
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     thickness = currentChartStyle.axis.axisLineWidth,
                     shape = currentChartStyle.axis.axisLineShape
                 ),
