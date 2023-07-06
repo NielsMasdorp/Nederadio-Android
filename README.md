@@ -8,28 +8,23 @@ This is mostly a pet project created to learn Jetpack Compose and the new Jetpac
 
 Nederadio is built using all the latest practices in Android development:
 
- - 100%  Kotlin
- - MVVM
- - 100% Jetpack Compose
- - Clean Architecture for domain logic
- - Material3
- - Material You on Android 12 and higher
- - Dark/Light mode
- - Cast support including to TVs
- - Android Auto support
- - Current song information (except when casting or the stream does not support it)
- - Sleep timer which slowly fades the volume and stops the stream after a set time
- - Simple equalizer with presets
+- 100%  Kotlin
+- MVVM
+- 100% Jetpack Compose
+- Clean Architecture for domain logic
+- Material3
+- Material You on Android 12 and higher
+- Dark/Light mode
+- Cast support including to TVs
+- Android Auto support
+- Current song information (except when casting or the stream does not support it)
+- Sleep timer which slowly fades the volume and stops the stream after a set time
 
 ## In action
 
 ### App
 
-
-
-General use            |  Equalizer
-:-------------------------:|:-------------------------:
-<video src="https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-84f2-b05d3e9b19aa.mp4">  |   <img src="/app/screenshots/equalizer.png" width="300" />
+https://user-images.githubusercontent.com/5968599/236145601-d423e644-0a26-4b85-84f2-b05d3e9b19aa.mp4
 
 ### Android Auto
 
