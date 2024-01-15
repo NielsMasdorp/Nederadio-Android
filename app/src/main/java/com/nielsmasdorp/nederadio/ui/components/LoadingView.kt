@@ -30,17 +30,13 @@ fun LoadingView(
             .wrapContentSize(Alignment.Center)
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
-        val progress by animateLottieCompositionAsState(
-            composition = composition,
-            iterations = Int.MAX_VALUE
-        )
 
         LottieAnimation(
             modifier = Modifier
                 .size(192.dp)
                 .align(Alignment.Center),
             composition = composition,
-            progress = progress,
+            iterations = LottieConstants.IterateForever,
         )
     }
 }

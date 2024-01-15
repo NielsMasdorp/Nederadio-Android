@@ -1,5 +1,7 @@
 package com.nielsmasdorp.nederadio.ui.home
 
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.LeadingIconTab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
@@ -11,9 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 /**
@@ -80,5 +80,5 @@ fun StreamTabsPreview() = StreamTabs(
             streams = emptyList()
         )
     ),
-    pagerState = rememberPagerState()
+    pagerState = rememberPagerState { 2 }
 )

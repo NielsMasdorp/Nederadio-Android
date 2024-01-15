@@ -1,11 +1,11 @@
 package com.nielsmasdorp.nederadio.ui.home
 
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -18,8 +18,7 @@ fun StreamTabsContent(
 ) {
     HorizontalPager(
         modifier = modifier,
-        state = pagerState,
-        count = tabs.size
+        state = pagerState
     ) { page ->
         tabs[page].screen()
     }
@@ -40,5 +39,5 @@ fun StreamTabsContentPreview() = StreamTabsContent(
             streams = emptyList()
         )
     ),
-    pagerState = rememberPagerState()
+    pagerState = rememberPagerState { 2 }
 )

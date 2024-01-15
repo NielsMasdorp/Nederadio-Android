@@ -41,7 +41,7 @@ class StreamOptionsProvider : OptionsProvider {
             .setReceiverApplicationId(APP_ID)
             .setCastMediaOptions(
                 CastMediaOptions.Builder()
-                    .setNotificationOptions(null)
+                    .setNotificationOptions(notificationOptions)
                     .setMediaSessionEnabled(false)
                     .build()
             )

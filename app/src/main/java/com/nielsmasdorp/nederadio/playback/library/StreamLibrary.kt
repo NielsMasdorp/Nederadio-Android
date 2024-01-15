@@ -79,7 +79,7 @@ class StreamLibrary(private val context: Context, getSuccessfulStreams: GetSucce
                             )
                         }
                     )
-                    .setFolderType(MediaMetadata.FOLDER_TYPE_MIXED)
+                    .setMediaType(MediaMetadata.MEDIA_TYPE_FOLDER_RADIO_STATIONS)
                     .setIsPlayable(false)
                     .setIsBrowsable(true)
                     .build()

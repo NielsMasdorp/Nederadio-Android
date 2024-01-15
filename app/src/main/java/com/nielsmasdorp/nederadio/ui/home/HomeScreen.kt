@@ -3,11 +3,11 @@ package com.nielsmasdorp.nederadio.ui.home
 import android.view.View
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.google.accompanist.pager.rememberPagerState
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
 import com.nielsmasdorp.nederadio.domain.stream.Stream
@@ -32,7 +32,7 @@ fun HomeScreen(
     onAbout: () -> Unit = {}
 ) {
 
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { 2 }
 
     Column(modifier = modifier) {
         TopBar(

@@ -3,7 +3,7 @@ package com.nielsmasdorp.nederadio.ui
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -15,9 +15,9 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.nielsmasdorp.nederadio.domain.stream.*
 import com.nielsmasdorp.nederadio.ui.components.EventHandler
@@ -65,7 +65,7 @@ fun NederadioApp(
         onDispose { viewModel.onStopped() }
     }
 
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
 
@@ -91,7 +91,8 @@ fun NederadioApp(
     val showSleepTimerDialog: Boolean by viewModel.showSleepTimer.collectAsState(initial = false)
     val currentBottomSheetFraction: Float by animateFloatAsState(
         targetValue = if (scaffoldState.bottomSheetState.targetValue == SheetValue.Expanded) 0f else 1f,
-        animationSpec = tween(durationMillis = AnimationDurationMs, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = AnimationDurationMs, easing = FastOutSlowInEasing),
+        label = "bottomSheetFractionAnimation"
     )
     EventHandler(event = viewModel.errorState.error) {
         scaffoldState.snackbarHostState.showSnackbar(message = it)
@@ -147,7 +148,7 @@ fun NederadioApp(
             WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
         sheetSwipeEnabled = false
     ) {
-        AnimatedNavHost(
+        NavHost(
             navController = navController,
             startDestination = "home",
             route = "route"
@@ -156,25 +157,25 @@ fun NederadioApp(
                 "home",
                 enterTransition = {
                     slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Left,
+                        towards = SlideDirection.Left,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.Left,
+                        towards = SlideDirection.Left,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 popEnterTransition = {
                     slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Right,
+                        towards = SlideDirection.Right,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 popExitTransition = {
                     slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.Right,
+                        towards = SlideDirection.Right,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 }
@@ -196,13 +197,13 @@ fun NederadioApp(
                 "search",
                 enterTransition = {
                     slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Left,
+                        towards = SlideDirection.Left,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.Right,
+                        towards = SlideDirection.Right,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 }
@@ -223,13 +224,13 @@ fun NederadioApp(
                 "equalizer",
                 enterTransition = {
                     slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Left,
+                        towards = SlideDirection.Left,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.Right,
+                        towards = SlideDirection.Right,
                         animationSpec = tween(delayMillis = AnimationDurationMs)
                     )
                 }

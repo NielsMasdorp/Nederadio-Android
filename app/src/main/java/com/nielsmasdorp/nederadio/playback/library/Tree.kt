@@ -14,7 +14,7 @@ class Tree(val rootNode: MediaItemNode) {
             .setMediaId(RECENT_ITEM_ID)
             .setMediaMetadata(
                 MediaMetadata.Builder()
-                    .setFolderType(MediaMetadata.FOLDER_TYPE_ALBUMS)
+                    .setMediaType(MediaMetadata.MEDIA_TYPE_FOLDER_RADIO_STATIONS)
                     .setIsPlayable(false)
                     .build()
             )

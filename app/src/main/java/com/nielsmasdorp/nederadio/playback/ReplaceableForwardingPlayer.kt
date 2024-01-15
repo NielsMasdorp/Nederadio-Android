@@ -434,6 +434,10 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
         player.setDeviceMuted(muted, flags)
     }
 
+    override fun setAudioAttributes(audioAttributes: AudioAttributes, handleAudioFocus: Boolean) {
+        player.setAudioAttributes(audioAttributes, handleAudioFocus)
+    }
+
     private inner class PlayerListener : Listener {
         override fun onEvents(player: Player, events: Events) {
             if (events.contains(EVENT_POSITION_DISCONTINUITY) ||
