@@ -32,6 +32,13 @@
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="com.nielsmasdorp.nederadio.playback.StreamOptionsProvider" />
 
+        <receiver android:name="androidx.media3.session.MediaButtonReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".playback.StreamService"
             android:exported="true"
