@@ -54,20 +54,10 @@ android {
 dependencies {
     implementation project(':domain')
 
-    // google
-    implementation "com.google.android.gms:play-services-cast-framework:$google_cast_version"
+    // Google
     implementation "com.google.android.material:material:$material_version"
 
-    //androidx
-    implementation "androidx.mediarouter:mediarouter:$androidx_media_router_version"
-    implementation "androidx.appcompat:appcompat:$androidx_app_compat_version"
-    implementation "androidx.core:core-ktx:$androidx_core_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidx_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidx_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidx_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$androidx_lifecycle_version"
-    implementation "androidx.navigation:navigation-compose:$androidx_navigation_version"
-    implementation "androidx.activity:activity-compose:$androidx_activity_version"
+    // Androidx
     implementation "androidx.media3:media3-exoplayer:$androidx_media3_version"
     implementation "androidx.media3:media3-session:$androidx_media3_version"
     implementation "androidx.media3:media3-common:$androidx_media3_version"
@@ -75,14 +65,11 @@ dependencies {
     implementation "androidx.media3:media3-cast:$androidx_media3_version"
     implementation "androidx.compose.ui:ui:$androidx_compose_version"
     implementation "androidx.compose.ui:ui-tooling:$androidx_compose_version"
-    implementation "androidx.compose.foundation:foundation:$androidx_compose_version"
-    implementation "androidx.compose.material:material:$androidx_compose_version"
     implementation "androidx.compose.material:material-icons-core:$androidx_compose_version"
     implementation "androidx.compose.material:material-icons-extended:$androidx_compose_version"
-    implementation "androidx.compose.runtime:runtime-livedata:$androidx_compose_version"
     implementation "androidx.compose.material3:material3:$androidx_compose_material3_version"
 
-    //kotlin
+    // Kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_android_version"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:$kotlinx_guava_version"
@@ -91,24 +78,24 @@ dependencies {
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-compose:$koin_compose_version"
 
-    //Ktor
+    // Ktor
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-client-serialization:$ktor_version"
     implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
 
-    // accompanist
+    // Accompanist
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
     implementation "com.google.accompanist:accompanist-placeholder:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
 
-    // misc
+    // Misc
     implementation "com.github.skydoves:landscapist-glide:$landscapist_glide_version"
     implementation "com.airbnb.android:lottie-compose:$lottie_version"
     implementation "com.patrykandpatrick.vico:compose-m3:$vico_version"
 
-    //test
+    // Test
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version"
     testImplementation "androidx.arch.core:core-testing:$androidx_lifecycle_testing_version"

@@ -6,7 +6,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.util.UnstableApi
 import com.google.android.gms.cast.MediaInfo
-import com.google.android.gms.cast.MediaMetadata.MEDIA_TYPE_GENERIC
+import com.google.android.gms.cast.MediaMetadata.MEDIA_TYPE_MUSIC_TRACK
 import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.common.images.WebImage
 import com.google.android.gms.cast.MediaMetadata as CastMetadata
@@ -44,7 +44,7 @@ class StreamMediaItemConverter(private val castTitle: () -> String) : MediaItemC
     }
 
     override fun toMediaQueueItem(mediaItem: MediaItem): MediaQueueItem {
-        val metadata = CastMetadata(MEDIA_TYPE_GENERIC).apply {
+        val metadata = CastMetadata(MEDIA_TYPE_MUSIC_TRACK).apply {
             putString(KEY_MEDIA_ID, mediaItem.mediaId)
             putString(CastMetadata.KEY_ARTIST, mediaItem.mediaMetadata.artist.toString())
             putString(CastMetadata.KEY_TITLE, castTitle())
