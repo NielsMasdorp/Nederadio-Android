@@ -27,14 +27,12 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
-import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.equalizer.EqualizerManager
 import com.nielsmasdorp.nederadio.domain.settings.GetLastPlayedId
 import com.nielsmasdorp.nederadio.domain.stream.SetActiveStream
 import com.nielsmasdorp.nederadio.playback.library.StreamLibrary
 import com.nielsmasdorp.nederadio.playback.library.Tree
 import com.nielsmasdorp.nederadio.ui.NederadioActivity
-import com.nielsmasdorp.nederadio.util.connectedDeviceName
 import com.nielsmasdorp.nederadio.util.sendCommandToController
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -228,10 +226,11 @@ class StreamService :
      * Track has been updates
      */
     override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+        mediaMetadata.title ?: return
         mediaSession.sendCommandToController(
             key = TRACK_UPDATED_COMMAND,
             value = Bundle().apply {
-                putString(TRACK_UPDATED_COMMAND_VALUE_KEY, getTrackInfo(mediaMetadata))
+                putString(TRACK_UPDATED_COMMAND_VALUE_KEY, mediaMetadata.title.toString())
             }
         )
     }
@@ -280,9 +279,7 @@ class StreamService :
      * to connected controllers
      */
     override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
-        player.currentMediaItem?.mediaMetadata?.let { mediaMetadata ->
-            onMediaMetadataChanged(mediaMetadata = mediaMetadata)
-        }
+        onMediaMetadataChanged(mediaMetadata = player.mediaMetadata)
     }
 
     /**
@@ -302,6 +299,7 @@ class StreamService :
                 if (ms > 0) startSleepTimer(ms) else stopSleepTimer()
                 Futures.immediateFuture(SessionResult(RESULT_SUCCESS))
             }
+
             else -> super.onCustomCommand(session, controller, customCommand, args)
         }
     }
@@ -404,7 +402,7 @@ class StreamService :
         castContext = CastContext.getSharedInstance(this)
         castPlayer = CastPlayer(
             castContext,
-            StreamMediaItemConverter { getTrackInfo() }
+            StreamMediaItemConverter()
         ).apply {
             setSessionAvailabilityListener(this@StreamService)
         }
@@ -414,7 +412,9 @@ class StreamService :
                 castPlayer
             } else {
                 localPlayer
-            }
+            },
+            castContext = castContext,
+            context = applicationContext
         ).apply {
             addListener(this@StreamService)
         }
@@ -422,19 +422,6 @@ class StreamService :
         mediaSession = MediaLibrarySession.Builder(this, player, this)
             .setSessionActivity(pendingIntent)
             .build()
-    }
-
-    private fun getTrackInfo(mediaMetadata: MediaMetadata? = null): String {
-        val trackInfo = mediaMetadata?.title?.toString()
-        return if (castPlayer.isCastSessionAvailable) {
-            castContext.connectedDeviceName()?.let { name ->
-                getString(R.string.stream_subtitle_casting_device, name)
-            } ?: getString(R.string.stream_subtitle_casting)
-        } else if (trackInfo.isNullOrBlank()) {
-            getString(R.string.stream_subtitle_unknown_song)
-        } else {
-            trackInfo
-        }
     }
 
     private fun releaseMediaSession() {

@@ -1,5 +1,6 @@
 package com.nielsmasdorp.nederadio.util
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.core.net.toUri
@@ -87,6 +88,15 @@ fun CastContext.connectedDeviceName(): String? {
         .currentCastSession
         ?.castDevice
         ?.friendlyName
+}
+
+fun CastContext.castingSubtitle(context: Context): String {
+    val castDeviceName = connectedDeviceName()
+    return if (!castDeviceName.isNullOrBlank()) {
+        context.getString(R.string.stream_subtitle_casting_device, castDeviceName)
+    } else {
+        context.getString(R.string.stream_subtitle_casting)
+    }
 }
 
 fun PlayerControls<*>.view(): PlayerControlView = getView() as PlayerControlView

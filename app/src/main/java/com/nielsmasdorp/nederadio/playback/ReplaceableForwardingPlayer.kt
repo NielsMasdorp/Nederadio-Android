@@ -1,15 +1,20 @@
 package com.nielsmasdorp.nederadio.playback
 
+import android.content.Context
 import android.os.Looper
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.TextureView
+import androidx.media3.cast.CastPlayer
 import androidx.media3.common.*
 import androidx.media3.common.Player.*
+import androidx.media3.common.text.Cue
 import androidx.media3.common.text.CueGroup
 import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
+import com.google.android.gms.cast.framework.CastContext
+import com.nielsmasdorp.nederadio.util.castingSubtitle
 import kotlin.math.min
 
 /**
@@ -17,12 +22,16 @@ import kotlin.math.min
  */
 @Suppress("TooManyFunctions")
 @UnstableApi
-class ReplaceableForwardingPlayer(private var player: Player) : Player {
+class ReplaceableForwardingPlayer(
+    private var player: Player,
+    private val castContext: CastContext,
+    private val context: Context
+) : Player {
 
     private val externalListeners: MutableList<Listener> = arrayListOf()
     private val internalListener: Listener = PlayerListener()
 
-    private val playlist: MutableList<MediaItem> = arrayListOf()
+    private var playlist: MutableList<MediaItem> = arrayListOf()
     private var currentPlaylistIndex: Int = 0
 
     init {
@@ -30,14 +39,30 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
     }
 
     fun setPlayer(newPlayer: Player) {
-        for (listener in externalListeners) {
-            player.removeListener(listener)
-            newPlayer.addListener(listener)
-        }
 
         // Add the listener that updates the current media item index
         // when station is changed via external input
         player.removeListener(internalListener)
+
+        playlist = playlist.map { item ->
+            item.buildUpon()
+                .setMediaMetadata(
+                    item.mediaMetadata
+                        .buildUpon()
+                        .setTitle(
+                            if (newPlayer is CastPlayer) {
+                                // Hardcoded title for casting playback
+                                castContext.castingSubtitle(context = context)
+                            } else {
+                                // local exoplayer will update title with song from stream
+                                null
+                            }
+                        )
+                        .build()
+                )
+                .build()
+        }.toMutableList()
+
         newPlayer.addListener(internalListener)
 
         newPlayer.apply {
@@ -57,12 +82,10 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
     override fun getApplicationLooper(): Looper = player.applicationLooper
 
     override fun addListener(listener: Listener) {
-        player.addListener(listener)
         externalListeners.add(listener)
     }
 
     override fun removeListener(listener: Listener) {
-        player.removeListener(listener)
         externalListeners.remove(listener)
     }
 
@@ -143,7 +166,7 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
 
     override fun replaceMediaItem(index: Int, mediaItem: MediaItem) {
         player.replaceMediaItem(index, mediaItem)
-        playlist.set(index, mediaItem)
+        playlist[index] = mediaItem
     }
 
     override fun replaceMediaItems(
@@ -153,7 +176,7 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
     ) {
         player.replaceMediaItems(fromIndex, toIndex, mediaItems)
         mediaItems.forEachIndexed { index, mediaItem ->
-            playlist.set(fromIndex + index, mediaItem)
+            playlist[fromIndex + index] = mediaItem
         }
     }
 
@@ -173,6 +196,7 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
     override fun clearMediaItems() {
         player.clearMediaItems()
         playlist.clear()
+        currentPlaylistIndex = 0
     }
 
     override fun isCommandAvailable(command: Int): Boolean = player.isCommandAvailable(command)
@@ -439,7 +463,231 @@ class ReplaceableForwardingPlayer(private var player: Player) : Player {
     }
 
     private inner class PlayerListener : Listener {
+
+        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+            for (listener in externalListeners) {
+                listener.onTimelineChanged(timeline, reason)
+            }
+        }
+
+        override fun onTracksChanged(tracks: Tracks) {
+            for (listener in externalListeners) {
+                listener.onTracksChanged(tracks)
+            }
+        }
+
+        override fun onPlaylistMetadataChanged(mediaMetadata: MediaMetadata) {
+            for (listener in externalListeners) {
+                listener.onPlaylistMetadataChanged(mediaMetadata)
+            }
+        }
+
+        override fun onIsLoadingChanged(isLoading: Boolean) {
+            for (listener in externalListeners) {
+                listener.onIsLoadingChanged(isLoading)
+            }
+        }
+
+        override fun onLoadingChanged(isLoading: Boolean) {
+            for (listener in externalListeners) {
+                listener.onLoadingChanged(isLoading)
+            }
+        }
+
+        override fun onAvailableCommandsChanged(availableCommands: Commands) {
+            for (listener in externalListeners) {
+                listener.onAvailableCommandsChanged(availableCommands)
+            }
+        }
+
+        override fun onTrackSelectionParametersChanged(parameters: TrackSelectionParameters) {
+            for (listener in externalListeners) {
+                listener.onTrackSelectionParametersChanged(parameters)
+            }
+        }
+
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            for (listener in externalListeners) {
+                listener.onPlayerStateChanged(playWhenReady, playbackState)
+            }
+        }
+
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            for (listener in externalListeners) {
+                listener.onPlaybackStateChanged(playbackState)
+            }
+        }
+
+        override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+            for (listener in externalListeners) {
+                listener.onPlayWhenReadyChanged(playWhenReady, reason)
+            }
+        }
+
+        override fun onPlaybackSuppressionReasonChanged(playbackSuppressionReason: Int) {
+            for (listener in externalListeners) {
+                listener.onPlaybackSuppressionReasonChanged(playbackSuppressionReason)
+            }
+        }
+
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            for (listener in externalListeners) {
+                listener.onIsPlayingChanged(isPlaying)
+            }
+        }
+
+        override fun onRepeatModeChanged(repeatMode: Int) {
+            for (listener in externalListeners) {
+                listener.onRepeatModeChanged(repeatMode)
+            }
+        }
+
+        override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
+            for (listener in externalListeners) {
+                listener.onShuffleModeEnabledChanged(shuffleModeEnabled)
+            }
+        }
+
+        override fun onPlayerErrorChanged(error: PlaybackException?) {
+            for (listener in externalListeners) {
+                listener.onPlayerErrorChanged(error)
+            }
+        }
+
+        override fun onPositionDiscontinuity(reason: Int) {
+            for (listener in externalListeners) {
+                listener.onPositionDiscontinuity(reason)
+            }
+        }
+
+        override fun onPositionDiscontinuity(
+            oldPosition: PositionInfo,
+            newPosition: PositionInfo,
+            reason: Int
+        ) {
+            for (listener in externalListeners) {
+                listener.onPositionDiscontinuity(oldPosition, newPosition, reason)
+            }
+        }
+
+        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
+            for (listener in externalListeners) {
+                listener.onPlaybackParametersChanged(playbackParameters)
+            }
+        }
+
+        override fun onSeekBackIncrementChanged(seekBackIncrementMs: Long) {
+            for (listener in externalListeners) {
+                onSeekBackIncrementChanged(seekBackIncrementMs)
+            }
+        }
+
+        override fun onSeekForwardIncrementChanged(seekForwardIncrementMs: Long) {
+            for (listener in externalListeners) {
+                listener.onSeekForwardIncrementChanged(seekForwardIncrementMs)
+            }
+        }
+
+        override fun onMaxSeekToPreviousPositionChanged(maxSeekToPreviousPositionMs: Long) {
+            for (listener in externalListeners) {
+                listener.onMaxSeekToPreviousPositionChanged(maxSeekToPreviousPositionMs)
+            }
+        }
+
+        override fun onAudioSessionIdChanged(audioSessionId: Int) {
+            for (listener in externalListeners) {
+                listener.onAudioSessionIdChanged(audioSessionId)
+            }
+        }
+
+        override fun onAudioAttributesChanged(audioAttributes: AudioAttributes) {
+            for (listener in externalListeners) {
+                onAudioAttributesChanged(audioAttributes)
+            }
+        }
+
+        override fun onVolumeChanged(volume: Float) {
+            for (listener in externalListeners) {
+                listener.onVolumeChanged(volume)
+            }
+        }
+
+        override fun onSkipSilenceEnabledChanged(skipSilenceEnabled: Boolean) {
+            for (listener in externalListeners) {
+                listener.onSkipSilenceEnabledChanged(skipSilenceEnabled)
+            }
+        }
+
+        override fun onDeviceInfoChanged(deviceInfo: DeviceInfo) {
+            for (listener in externalListeners) {
+                onDeviceInfoChanged(deviceInfo)
+            }
+        }
+
+        override fun onDeviceVolumeChanged(volume: Int, muted: Boolean) {
+            for (listener in externalListeners) {
+                listener.onDeviceVolumeChanged(volume, muted)
+            }
+        }
+
+        override fun onVideoSizeChanged(videoSize: VideoSize) {
+            for (listener in externalListeners) {
+                onVideoSizeChanged(videoSize)
+            }
+        }
+
+        override fun onSurfaceSizeChanged(width: Int, height: Int) {
+            for (listener in externalListeners) {
+                listener.onSurfaceSizeChanged(width, height)
+            }
+        }
+
+        override fun onRenderedFirstFrame() {
+            for (listener in externalListeners) {
+                listener.onRenderedFirstFrame()
+            }
+        }
+
+        override fun onCues(cues: MutableList<Cue>) {
+            for (listener in externalListeners) {
+                listener.onCues(cues)
+            }
+        }
+
+        override fun onCues(cueGroup: CueGroup) {
+            for (listener in externalListeners) {
+                listener.onCues(cueGroup)
+            }
+        }
+
+        override fun onMetadata(metadata: Metadata) {
+            for (listener in externalListeners) {
+                listener.onMetadata(metadata)
+            }
+        }
+
+        override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+            for (listener in externalListeners) {
+                listener.onMediaItemTransition(mediaItem, reason)
+            }
+        }
+
+        override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
+            for (listener in externalListeners) {
+                listener.onMediaMetadataChanged(mediaMetadata)
+            }
+        }
+
+        override fun onPlayerError(error: PlaybackException) {
+            for (listener in externalListeners) {
+                listener.onPlayerError(error)
+            }
+        }
+
         override fun onEvents(player: Player, events: Events) {
+            for (listener in externalListeners) {
+                listener.onEvents(player, events)
+            }
             if (events.contains(EVENT_POSITION_DISCONTINUITY) ||
                 events.contains(EVENT_MEDIA_ITEM_TRANSITION) ||
                 events.contains(EVENT_TIMELINE_CHANGED)

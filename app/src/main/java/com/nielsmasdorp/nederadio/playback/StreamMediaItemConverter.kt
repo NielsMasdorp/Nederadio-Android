@@ -15,13 +15,14 @@ import com.google.android.gms.cast.MediaMetadata as CastMetadata
  * @author Niels Masdorp (NielsMasdorp)
  */
 @UnstableApi
-class StreamMediaItemConverter(private val castTitle: () -> String) : MediaItemConverter {
+class StreamMediaItemConverter : MediaItemConverter {
 
     override fun toMediaItem(mediaQueueItem: MediaQueueItem): MediaItem {
         val mediaInfo = mediaQueueItem.media!!
         val metadata = mediaInfo.metadata!!
         val contentUrl = mediaInfo.contentUrl!!
         val imageUrl = metadata.images.first().url
+        val artist = metadata.getString(CastMetadata.KEY_ARTIST)!!
         val title = metadata.getString(CastMetadata.KEY_TITLE)!!
         val mediaId = metadata.getString(KEY_MEDIA_ID)!!
 
@@ -34,9 +35,9 @@ class StreamMediaItemConverter(private val castTitle: () -> String) : MediaItemC
             )
             .setMediaMetadata(
                 MediaMetadata.Builder()
-                    .setArtist(title)
-                    .setSubtitle(title)
-                    .setMediaType(MediaMetadata.MEDIA_TYPE_RADIO_STATION)
+                    .setArtist(artist)
+                    .setTitle(title)
+                    .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
                     .setArtworkUri(imageUrl)
                     .build()
             )
@@ -47,7 +48,7 @@ class StreamMediaItemConverter(private val castTitle: () -> String) : MediaItemC
         val metadata = CastMetadata(MEDIA_TYPE_MUSIC_TRACK).apply {
             putString(KEY_MEDIA_ID, mediaItem.mediaId)
             putString(CastMetadata.KEY_ARTIST, mediaItem.mediaMetadata.artist.toString())
-            putString(CastMetadata.KEY_TITLE, castTitle())
+            putString(CastMetadata.KEY_TITLE, mediaItem.mediaMetadata.title.toString())
             addImage(WebImage(mediaItem.mediaMetadata.artworkUri!!))
         }
         val mediaInfo = MediaInfo.Builder(mediaItem.mediaId)
