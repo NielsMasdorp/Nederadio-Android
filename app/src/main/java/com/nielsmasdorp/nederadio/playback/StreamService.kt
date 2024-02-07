@@ -353,7 +353,7 @@ class StreamService :
             MediaItemsWithStartPosition(
                 /* mediaItems */ streams.toMutableList(),
                 /* startIndex */streams.indexOf(lastPlayedStream),
-                /* startPositionMs */ 0L
+                /* startPositionMs */ C.TIME_UNSET
             )
         }
     }

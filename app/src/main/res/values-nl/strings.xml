@@ -62,7 +62,6 @@
 
     <string name="stream_subtitle_casting">Casten..</string>
     <string name="stream_subtitle_casting_device">Casten naar %s</string>
-    <string name="stream_subtitle_unknown_song">Geen informatie bekend</string>
 
     <string name="equalizer_enable_content_descr">Zet de equalizer aan</string>
     <string name="equalizer_selected_preset_descr">Geselecteerde preset</string>

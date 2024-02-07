@@ -63,7 +63,6 @@
 
     <string name="stream_subtitle_casting">Casting..</string>
     <string name="stream_subtitle_casting_device">Casting to %s</string>
-    <string name="stream_subtitle_unknown_song">No information present</string>
 
     <string name="equalizer_enable_content_descr">Enable the equalizer</string>
     <string name="equalizer_selected_preset_descr">Selected preset</string>
