@@ -44,9 +44,6 @@ class ReplaceableForwardingPlayer(
         // when station is changed via external input
         player.removeListener(internalListener)
 
-        // Update playlist with correct titles
-        // Can be removed when CastPlayer supports dynamic
-        // song information via the stream band
         playlist = playlist.map { item ->
             item.buildUpon()
                 .setMediaMetadata(
