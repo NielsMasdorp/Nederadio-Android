@@ -5,34 +5,35 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 buildscript {
 
     //google
-    ext.material_version = '1.11.0'
+    ext.material_version = '1.12.0'
+    ext.app_distribution_plugin_version = '4.0.0'
 
     //kotlin
     ext.kotlin_version = '1.9.10'
-    ext.kotlinx_coroutines_android_version = '1.6.4'
+    ext.kotlinx_coroutines_android_version = '1.8.0'
     ext.kotlinx_coroutines_core_version = '1.6.4'
     ext.kotlinx_serialization_version = '1.3.2'
     ext.kotlinx_guava_version = '1.6.4'
 
     //androidx
-    ext.androidx_media3_version = '1.2.1'
+    ext.androidx_media3_version = '1.3.1'
     ext.androidx_compose_version = '1.5.4'
-    ext.androidx_compose_material3_version = '1.1.2'
+    ext.androidx_compose_material3_version = '1.2.1'
 
     //koin
-    ext.koin_version = '3.4.2'
-    ext.koin_compose_version = '3.4.2'
+    ext.koin_version = '3.5.3'
 
     //ktor
-    ext.ktor_version = '1.6.8'
+    ext.ktor_version = '2.3.9'
 
     //accompanist
     ext.accompanist_version = '0.32.0'
 
     //misc
     ext.landscapist_glide_version = '2.2.2'
-    ext.lottie_version = '6.1.0'
+    ext.lottie_version = '6.4.0'
     ext.vico_version = '1.6.5'
+    ext.easy_launcher_version = '6.2.0'
 
     //test
     ext.junit_version = "4.13.2"
@@ -52,9 +53,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.1'
+        classpath 'com.android.tools.build:gradle:8.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        classpath "com.google.firebase:firebase-appdistribution-gradle:$app_distribution_plugin_version"
     }
 }
 
@@ -68,6 +70,24 @@ detekt {
     autoCorrect = true
     config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
     buildUponDefaultConfig = true
+}
+
+ext.getVersionCode = { ->
+    try {
+        def runNumber = System.getenv('GITHUB_RUN_NUMBER')
+        if (runNumber) {
+            return Integer.parseInt(runNumber)
+        }
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', '--first-parent', '--count', 'origin/main'
+            standardOutput = stdout
+        }
+        return Integer.parseInt(stdout.toString().trim())
+    }
+    catch (ignored) {
+        return 1
+    }
 }
 
 /**

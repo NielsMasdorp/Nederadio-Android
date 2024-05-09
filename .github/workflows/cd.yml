@@ -1,0 +1,47 @@
+name: 'Build & distribute'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Setup Java"
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: "Validate gradle wrapper"
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: "Use cached gradle wrapper"
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: "Build"
+        run: ./gradlew app:assQa
+
+      #      We need to do this at some point:
+      #      https://github.com/wzieba/Firebase-Distribution-Github-Action/wiki/FIREBASE_TOKEN-migration
+
+      - name: "Distribute"
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          token: ${{ secrets.FIREBASE_TOKEN_ANDROID }}
+          groups: testers
+          file: app/build/outputs/apk/qa/app-qa.apk
+          releaseNotesFile: app/release-notes.txt

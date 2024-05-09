@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "576626084592",
+    "project_id": "nederadio-4611a",
+    "storage_bucket": "nederadio-4611a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576626084592:android:725f5fa27712251dc85035",
+        "android_client_info": {
+          "package_name": "com.nielsmasdorp.nederadio.qa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY8N_LYcO6fYd-993AXN5EQG4mkWC3RlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

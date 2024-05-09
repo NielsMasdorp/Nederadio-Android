@@ -3,15 +3,19 @@ package com.nielsmasdorp.nederadio.data.network
 import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
-import io.ktor.client.features.*
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.features.logging.LogLevel
-import io.ktor.client.features.logging.Logger
-import io.ktor.client.features.logging.Logging
-import io.ktor.client.features.observer.ResponseObserver
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.DEFAULT
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.observer.ResponseObserver
+import io.ktor.client.request.header
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.URLProtocol
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 private const val TIME_OUT = 60_000
@@ -28,8 +32,8 @@ val ktorHttpClient = HttpClient(Android) {
         }
     }
 
-    install(JsonFeature) {
-        serializer = KotlinxSerializer(
+    install(ContentNegotiation) {
+        json(
             Json {
                 prettyPrint = true
                 isLenient = true
@@ -44,11 +48,7 @@ val ktorHttpClient = HttpClient(Android) {
     }
 
     install(Logging) {
-        logger = object : Logger {
-            override fun log(message: String) {
-                Log.v("Logger Ktor =>", message)
-            }
-        }
+        logger = Logger.DEFAULT
         level = LogLevel.ALL
     }
 
