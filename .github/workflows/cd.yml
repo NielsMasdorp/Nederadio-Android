@@ -3,7 +3,7 @@ name: 'Build & distribute'
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
