@@ -1,6 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlinx-serialization'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlinx-serialization'
+    id "com.starter.easylauncher" version "$easy_launcher_version"
+    id 'com.google.firebase.appdistribution'
+}
 
 repositories {
     mavenCentral()
@@ -14,13 +18,44 @@ android {
         minSdkVersion 26
         //noinspection OldTargetApi
         targetSdkVersion 34
-        versionCode 201
-        versionName "2.3.7"
+        versionCode project.getVersionCode()
+        versionName "2.3.7" + project.getVersionCode()
     }
+
+    signingConfigs {
+        firebase {
+            storeFile file("firebase.jks")
+            storePassword 'password'
+            keyAlias 'alias'
+            keyPassword 'password'
+        }
+    }
+
     buildTypes {
-        release {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        qa {
+            applicationIdSuffix = ".qa"
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.firebase
+            firebaseAppDistribution {
+                artifactType = "APK"
+                groups = "testers"
+                releaseNotesFile = "app/release-notes.txt"
+            }
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -51,8 +86,18 @@ android {
     namespace 'com.nielsmasdorp.nederadio'
 }
 
+easylauncher {
+    buildTypes {
+        qa {
+            filters = redRibbonFilter()
+        }
+    }
+}
+
 dependencies {
     implementation project(':domain')
+
+    implementation platform('com.google.firebase:firebase-bom:32.5.0')
 
     // Google
     implementation "com.google.android.material:material:$material_version"
@@ -76,7 +121,11 @@ dependencies {
 
     // Koin
     implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-androidx-compose:$koin_compose_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+    implementation "io.ktor:ktor-client-serialization:$ktor_version"
+    implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
+    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
+    implementation "io.ktor:ktor-serialization-kotlinx-json:$ktor_version"
 
     // Ktor
     implementation "io.ktor:ktor-client-android:$ktor_version"

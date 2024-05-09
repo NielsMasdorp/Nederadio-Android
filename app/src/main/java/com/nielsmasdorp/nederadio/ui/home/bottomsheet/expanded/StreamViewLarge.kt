@@ -1,6 +1,7 @@
 package com.nielsmasdorp.nederadio.ui.home.bottomsheet.expanded
 
 import android.view.View
+import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerControlView
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.ActiveStream
@@ -30,6 +32,7 @@ import com.nielsmasdorp.nederadio.ui.extension.setColors
 /**
  * @author Niels Masdorp (NielsMasdorp)
  */
+@OptIn(UnstableApi::class)
 @Composable
 fun StreamViewLarge(
     playerControls: PlayerControls<View>,

@@ -1,7 +1,9 @@
-name: 'Build & test'
+name: 'Build & distribute'
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -29,8 +31,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: "Check for code violations"
-        run: ./gradlew detekt
+      - name: "Build"
+        run: ./gradlew app:assQa
 
-      - name: "Build, test and lint"
-        run: ./gradlew app:assDebug test app:lintDebug
+      #      We need to do this at some point:
+      #      https://github.com/wzieba/Firebase-Distribution-Github-Action/wiki/FIREBASE_TOKEN-migration
+
+      - name: "Distribute"
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          token: ${{ secrets.FIREBASE_TOKEN_ANDROID }}
+          groups: testers
+          file: app/build/outputs/apk/qa/app-qa.apk
+          releaseNotesFile: app/release-notes.txt

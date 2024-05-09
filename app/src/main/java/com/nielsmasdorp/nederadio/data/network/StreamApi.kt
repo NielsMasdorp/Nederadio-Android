@@ -2,6 +2,7 @@ package com.nielsmasdorp.nederadio.data.network
 
 import com.nielsmasdorp.nederadio.data.network.reponse.StreamResponse
 import io.ktor.client.*
+import io.ktor.client.call.body
 import io.ktor.client.request.*
 
 /**
@@ -9,5 +10,5 @@ import io.ktor.client.request.*
  */
 class StreamApi(private val client: HttpClient) {
 
-    suspend fun getStreams(): List<StreamResponse> = client.get("/data.json")
+    suspend fun getStreams(): List<StreamResponse> = client.get("/data.json").body()
 }

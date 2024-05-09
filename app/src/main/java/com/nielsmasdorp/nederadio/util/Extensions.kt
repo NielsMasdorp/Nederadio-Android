@@ -3,6 +3,7 @@ package com.nielsmasdorp.nederadio.util
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
+import androidx.annotation.OptIn
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -19,7 +20,9 @@ import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.stream.Failure
 import com.nielsmasdorp.nederadio.domain.stream.PlayerControls
 import com.nielsmasdorp.nederadio.domain.stream.Stream
-import io.ktor.client.features.*
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.RedirectResponseException
+import io.ktor.client.plugins.ServerResponseException
 
 /**
  * @author Niels Masdorp
@@ -99,18 +102,5 @@ fun CastContext.castingSubtitle(context: Context): String {
     }
 }
 
+@OptIn(UnstableApi::class)
 fun PlayerControls<*>.view(): PlayerControlView = getView() as PlayerControlView
-
-/**
- * Move an item that matches a given predicate to the front of the list
- * If no element is found, the list remains untouched
- */
-fun <T> MutableList<T>.moveToFront(predicate: (T) -> Boolean): MutableList<T> {
-    return this.apply {
-        val item = find(predicate)
-        item?.let {
-            remove(it)
-            add(0, it)
-        }
-    }
-}
