@@ -21,12 +21,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.equalizer.EqualizerState
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EqualizerScreen(
     modifier: Modifier = Modifier,
-    viewModel: EqualizerViewModel = getViewModel(),
+    viewModel: EqualizerViewModel = koinViewModel(),
     onExitEqualizer: () -> Unit = {},
     backPressHandler: (() -> Unit)? = null
 ) {

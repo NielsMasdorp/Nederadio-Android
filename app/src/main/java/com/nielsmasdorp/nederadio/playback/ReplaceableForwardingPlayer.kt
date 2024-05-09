@@ -255,14 +255,18 @@ class ReplaceableForwardingPlayer(
 
     override fun seekForward() = player.seekForward()
 
+    @Deprecated("Deprecated in Java")
     override fun hasPrevious(): Boolean = player.hasPrevious()
 
+    @Deprecated("Deprecated in Java")
     override fun hasPreviousWindow(): Boolean = player.hasPreviousWindow()
 
     override fun hasPreviousMediaItem(): Boolean = player.hasPreviousMediaItem()
 
+    @Deprecated("Deprecated in Java")
     override fun previous() = player.previous()
 
+    @Deprecated("Deprecated in Java")
     override fun seekToPreviousWindow() = player.seekToPreviousWindow()
 
     override fun seekToPreviousMediaItem() = player.seekToPreviousMediaItem()
@@ -271,14 +275,18 @@ class ReplaceableForwardingPlayer(
 
     override fun seekToPrevious() = player.seekToPrevious()
 
+    @Deprecated("Deprecated in Java")
     override fun hasNext(): Boolean = player.hasNext()
 
+    @Deprecated("Deprecated in Java")
     override fun hasNextWindow(): Boolean = player.hasNextWindow()
 
     override fun hasNextMediaItem(): Boolean = player.hasNextMediaItem()
 
+    @Deprecated("Deprecated in Java")
     override fun next() = player.next()
 
+    @Deprecated("Deprecated in Java")
     override fun seekToNextWindow() = player.seekToNextWindow()
 
     override fun seekToNextMediaItem() = player.seekToNextMediaItem()
@@ -324,16 +332,19 @@ class ReplaceableForwardingPlayer(
 
     override fun getCurrentPeriodIndex(): Int = player.currentPeriodIndex
 
+    @Deprecated("Deprecated in Java")
     override fun getCurrentWindowIndex(): Int = player.currentWindowIndex
 
     override fun getCurrentMediaItemIndex(): Int = player.currentMediaItemIndex
 
+    @Deprecated("Deprecated in Java")
     override fun getNextWindowIndex(): Int = player.nextWindowIndex
 
     override fun getNextMediaItemIndex(): Int {
         return player.nextMediaItemIndex
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getPreviousWindowIndex(): Int = player.previousWindowIndex
 
     override fun getPreviousMediaItemIndex(): Int = player.previousMediaItemIndex
@@ -354,16 +365,19 @@ class ReplaceableForwardingPlayer(
 
     override fun getTotalBufferedDuration(): Long = player.totalBufferedDuration
 
+    @Deprecated("Deprecated in Java")
     override fun isCurrentWindowDynamic(): Boolean = player.isCurrentWindowDynamic
 
     override fun isCurrentMediaItemDynamic(): Boolean = player.isCurrentMediaItemDynamic
 
+    @Deprecated("Deprecated in Java")
     override fun isCurrentWindowLive(): Boolean = player.isCurrentWindowLive
 
     override fun isCurrentMediaItemLive(): Boolean = player.isCurrentMediaItemLive
 
     override fun getCurrentLiveOffset(): Long = player.currentLiveOffset
 
+    @Deprecated("Deprecated in Java")
     override fun isCurrentWindowSeekable(): Boolean = player.isCurrentWindowSeekable
 
     override fun isCurrentMediaItemSeekable(): Boolean = player.isCurrentMediaItemSeekable
@@ -430,6 +444,7 @@ class ReplaceableForwardingPlayer(
 
     override fun isDeviceMuted(): Boolean = player.isDeviceMuted
 
+    @Deprecated("Deprecated in Java")
     override fun setDeviceVolume(volume: Int) {
         player.deviceVolume = volume
     }
@@ -438,18 +453,21 @@ class ReplaceableForwardingPlayer(
         player.setDeviceVolume(volume, flags)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun increaseDeviceVolume() = player.increaseDeviceVolume()
 
     override fun increaseDeviceVolume(flags: Int) {
         player.increaseDeviceVolume(flags)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun decreaseDeviceVolume() = player.decreaseDeviceVolume()
 
     override fun decreaseDeviceVolume(flags: Int) {
         player.decreaseDeviceVolume(flags)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun setDeviceMuted(muted: Boolean) {
         player.isDeviceMuted = muted
     }
@@ -488,6 +506,7 @@ class ReplaceableForwardingPlayer(
             }
         }
 
+        @Deprecated("Deprecated in Java")
         override fun onLoadingChanged(isLoading: Boolean) {
             for (listener in externalListeners) {
                 listener.onLoadingChanged(isLoading)
@@ -506,6 +525,7 @@ class ReplaceableForwardingPlayer(
             }
         }
 
+        @Deprecated("Deprecated in Java")
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             for (listener in externalListeners) {
                 listener.onPlayerStateChanged(playWhenReady, playbackState)
@@ -554,6 +574,7 @@ class ReplaceableForwardingPlayer(
             }
         }
 
+        @Deprecated("Deprecated in Java")
         override fun onPositionDiscontinuity(reason: Int) {
             for (listener in externalListeners) {
                 listener.onPositionDiscontinuity(reason)
@@ -648,6 +669,7 @@ class ReplaceableForwardingPlayer(
             }
         }
 
+        @Deprecated("Deprecated in Java")
         override fun onCues(cues: MutableList<Cue>) {
             for (listener in externalListeners) {
                 listener.onCues(cues)

@@ -240,6 +240,7 @@ class AppViewModelTest {
         every { getActiveStream.stream } returns flow { emit(ActiveStream.Empty) }
         every { manager.sleepTimerFlow } returns flow { emit(null) }
         every { manager.errorFlow } returns flow { emit(StreamingError.Empty) }
+        coEvery { addToFavorites.invoke(id) } just runs
 
         // when
         val vm = createViewModel(

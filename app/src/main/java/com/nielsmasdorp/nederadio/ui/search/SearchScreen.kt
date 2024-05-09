@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import com.nielsmasdorp.nederadio.ui.components.StreamsGrid
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * @author Niels Masdorp (NielsMasdorp)
@@ -18,7 +18,7 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel = getViewModel(),
+    viewModel: SearchViewModel = koinViewModel(),
     onExitSearch: () -> Unit = {},
     backPressHandler: (() -> Unit)? = null
 ) {

@@ -34,7 +34,7 @@ import com.nielsmasdorp.nederadio.ui.home.bottomsheet.expanded.StreamViewLarge
 import com.nielsmasdorp.nederadio.ui.search.SearchScreen
 import com.nielsmasdorp.nederadio.ui.search.SearchViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 private const val AnimationDurationMs = 50
 
@@ -49,7 +49,7 @@ fun NederadioApp(
     largePlayerControls: PlayerControls<View>,
     castButton: View,
     modifier: Modifier = Modifier,
-    viewModel: AppViewModel = getViewModel()
+    viewModel: AppViewModel = koinViewModel()
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -208,7 +208,7 @@ fun NederadioApp(
                     )
                 }
             ) {
-                val searchViewModel = getViewModel<SearchViewModel>(
+                val searchViewModel = koinViewModel<SearchViewModel>(
                     viewModelStoreOwner = navController.getBackStackEntry("route")
                 )
                 SearchScreen(
@@ -235,7 +235,7 @@ fun NederadioApp(
                     )
                 }
             ) {
-                val equalizerViewModel = getViewModel<EqualizerViewModel>(
+                val equalizerViewModel = koinViewModel<EqualizerViewModel>(
                     viewModelStoreOwner = navController.getBackStackEntry("route")
                 )
                 EqualizerScreen(
