@@ -14,6 +14,17 @@ class LocalStreamProvider : StreamProvider {
         isCurrent: suspend (String) -> Boolean
     ): List<Stream> {
         // one could use this to provide a local list of streams if no backend needs to be used
+        // example:
+//        return listOf(
+//            Stream(
+//                isActive = isCurrent("0"),
+//                isFavorite = isFavorite("0"),
+//                id = "0",
+//                url = "url",
+//                title = "title",
+//                imageUrl = "imageUrl"
+//            )
+//        )
         return listOf()
     }
 }
