@@ -5,6 +5,7 @@ import com.nielsmasdorp.nederadio.R
 import com.nielsmasdorp.nederadio.domain.connectivity.NetworkManager
 import com.nielsmasdorp.nederadio.domain.settings.SettingsRepository
 import com.nielsmasdorp.nederadio.domain.stream.Failure
+import com.nielsmasdorp.nederadio.domain.stream.StreamProvider
 import com.nielsmasdorp.nederadio.domain.stream.StreamRepository
 import com.nielsmasdorp.nederadio.domain.stream.Streams
 import com.nielsmasdorp.nederadio.util.toFailure
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 class StreamRepositoryImpl(
     private val context: Context,
     private val networkManager: NetworkManager,
-    private val apiStreamProvider: ApiStreamProvider,
+    private val streamProvider: StreamProvider,
     private val settingsRepository: SettingsRepository,
 ) : StreamRepository {
 
@@ -98,7 +99,7 @@ class StreamRepositoryImpl(
                 try {
                     val currentId = settingsRepository.getLastPlayedId()
                     val favoriteIds = settingsRepository.getFavorites()
-                    val streams = apiStreamProvider.getStreams(
+                    val streams = streamProvider.getStreams(
                         isCurrent = { id -> currentId == id },
                         isFavorite = { id -> favoriteIds.contains(id) }
                     )
