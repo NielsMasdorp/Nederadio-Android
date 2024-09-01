@@ -16,7 +16,7 @@ buildscript {
     ext.kotlinx_guava_version = '1.6.4'
 
     //androidx
-    ext.androidx_media3_version = '1.3.1'
+    ext.androidx_media3_version = '1.4.1'
     ext.androidx_compose_version = '1.5.4'
     ext.androidx_compose_material3_version = '1.2.1'
 
@@ -53,19 +53,21 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath 'com.android.tools.build:gradle:8.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath "com.google.firebase:firebase-appdistribution-gradle:$app_distribution_plugin_version"
     }
 }
 
+
+
 plugins {
     id "io.gitlab.arturbosch.detekt" version "$detekt_version"
 }
 
 detekt {
-    input = files(collectSourceDirs())
+    source = files(collectSourceDirs())
     parallel = true
     autoCorrect = true
     config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
@@ -142,12 +144,14 @@ allprojects {
                     "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
                     "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
                     "-opt-in=androidx.compose.runtime.ExperimentalComposeApi",
-                    "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
+                    "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
             ]
+            jvmTarget = JavaVersion.VERSION_17
         }
     }
+
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register('clean', Delete) {
+    delete rootProject.layout.getBuildDirectory()
 }
