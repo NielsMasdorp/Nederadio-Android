@@ -5,11 +5,11 @@ import android.net.ConnectivityManager
 import androidx.media3.common.util.UnstableApi
 import com.nielsmasdorp.nederadio.data.equalizer.AndroidEqualizerManager
 import com.nielsmasdorp.nederadio.data.network.AndroidNetworkManager
-import com.nielsmasdorp.nederadio.data.network.StreamApi
 import com.nielsmasdorp.nederadio.data.network.ktorHttpClient
 import com.nielsmasdorp.nederadio.data.settings.SharedPreferencesSettingsRepository
 import com.nielsmasdorp.nederadio.data.stream.AndroidStreamManager
-import com.nielsmasdorp.nederadio.data.stream.ApiStreamRepository
+import com.nielsmasdorp.nederadio.data.stream.ApiStreamProvider
+import com.nielsmasdorp.nederadio.data.stream.StreamRepositoryImpl
 import com.nielsmasdorp.nederadio.domain.connectivity.NetworkManager
 import com.nielsmasdorp.nederadio.domain.equalizer.EqualizerManager
 import com.nielsmasdorp.nederadio.domain.equalizer.GetEqualizerSettings
@@ -30,7 +30,7 @@ import org.koin.dsl.module
  */
 @UnstableApi
 val streamModule = module {
-    single<StreamRepository> { ApiStreamRepository(androidContext(), get(), get(), get()) }
+    single<StreamRepository> { StreamRepositoryImpl(androidContext(), get(), get(), get()) }
     single { GetAllStreams(repository = get()) }
     single { GetSuccessfulStreams(getAllStreams = get()) }
     single { GetActiveStream(repository = get()) }
@@ -48,6 +48,8 @@ val streamModule = module {
             streamLibrary = get()
         )
     }
+    single<StreamProvider> { ApiStreamProvider(client = ktorHttpClient) }
+    // single<StreamProvider> { LocalStreamProvider() }
 }
 
 val settingsModule = module {
@@ -70,7 +72,6 @@ val equalizerModule = module {
 val networkModule = module {
     single { androidApplication().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
     single<NetworkManager> { AndroidNetworkManager(connectivityManager = get()) }
-    single { StreamApi(client = ktorHttpClient) }
 }
 
 val uiModule = module {

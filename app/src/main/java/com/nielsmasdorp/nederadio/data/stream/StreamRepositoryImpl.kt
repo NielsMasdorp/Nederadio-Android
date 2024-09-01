@@ -2,7 +2,6 @@ package com.nielsmasdorp.nederadio.data.stream
 
 import android.content.Context
 import com.nielsmasdorp.nederadio.R
-import com.nielsmasdorp.nederadio.data.network.StreamApi
 import com.nielsmasdorp.nederadio.domain.connectivity.NetworkManager
 import com.nielsmasdorp.nederadio.domain.settings.SettingsRepository
 import com.nielsmasdorp.nederadio.domain.stream.Failure
@@ -19,10 +18,10 @@ import kotlinx.coroutines.launch
  * @author Niels Masdorp (NielsMasdorp)
  * loads streams from API
  */
-class ApiStreamRepository(
+class StreamRepositoryImpl(
     private val context: Context,
     private val networkManager: NetworkManager,
-    private val streamApi: StreamApi,
+    private val apiStreamProvider: ApiStreamProvider,
     private val settingsRepository: SettingsRepository,
 ) : StreamRepository {
 
@@ -42,6 +41,7 @@ class ApiStreamRepository(
                             stream.copy(isFavorite = favorites.contains(stream.id))
                         }
                     )
+
                     else -> streamsFlow.value
                 }
             }
@@ -65,6 +65,7 @@ class ApiStreamRepository(
                     }
                 }
             )
+
             else -> streamsFlow.value
         }
     }
@@ -79,6 +80,7 @@ class ApiStreamRepository(
                     }
                 )
             }
+
             else -> streamsFlow.value
         }
     }
@@ -94,13 +96,12 @@ class ApiStreamRepository(
                 )
             } else {
                 try {
-                    val streams = streamApi.getStreams()
-                        .map {
-                            it.toDomain(
-                                isCurrent = settingsRepository.getLastPlayedId() == it.id,
-                                isFavorite = settingsRepository.isFavorite(id = it.id)
-                            )
-                        }
+                    val currentId = settingsRepository.getLastPlayedId()
+                    val favoriteIds = settingsRepository.getFavorites()
+                    val streams = apiStreamProvider.getStreams(
+                        isCurrent = { id -> currentId == id },
+                        isFavorite = { id -> favoriteIds.contains(id) }
+                    )
                     streamsFlow.value = Streams.Success(streams = streams)
                 } catch (ex: Exception) {
                     streamsFlow.value =
