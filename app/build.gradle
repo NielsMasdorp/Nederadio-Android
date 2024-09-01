@@ -69,10 +69,6 @@ android {
         kotlinCompilerExtensionVersion "1.5.3"
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -97,7 +93,7 @@ easylauncher {
 dependencies {
     implementation project(':domain')
 
-    implementation platform('com.google.firebase:firebase-bom:32.5.0')
+    implementation platform('com.google.firebase:firebase-bom:33.2.0')
 
     // Google
     implementation "com.google.android.material:material:$material_version"
