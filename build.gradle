@@ -142,7 +142,8 @@ allprojects {
                     "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
                     "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
                     "-opt-in=androidx.compose.runtime.ExperimentalComposeApi",
-                    "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
+                    "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                    "-opt-in=androidx.media3.common.util.UnstableApi",
             ]
         }
     }
