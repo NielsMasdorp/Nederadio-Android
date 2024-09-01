@@ -141,6 +141,7 @@ allprojects {
             freeCompilerArgs.add("-opt-in=androidx.compose.animation.ExperimentalAnimationApi")
             freeCompilerArgs.add("-opt-in=androidx.compose.runtime.ExperimentalComposeApi")
             freeCompilerArgs.add("-opt-in=androidx.compose.ui.ExperimentalComposeUiApi")
+            freeCompilerArgs.add("-opt-in=androidx.media3.common.util.UnstableApi")
         }
     }
 }
