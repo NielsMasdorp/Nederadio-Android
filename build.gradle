@@ -133,15 +133,16 @@ allprojects {
 
     tasks.withType(KotlinCompile).configureEach {
         compilerOptions {
-            freeCompilerArgs.add("-opt-in=kotlin.ExperimentalUnsignedTypes")
-            freeCompilerArgs.add("-opt-in=kotlinx.coroutines.InternalCoroutinesApi")
-            freeCompilerArgs.add("-opt-in=androidx.compose.foundation.ExperimentalFoundationApi")
-            freeCompilerArgs.add("-opt-in=androidx.compose.material.ExperimentalMaterialApi")
-            freeCompilerArgs.add("-opt-in=androidx.compose.material3.ExperimentalMaterial3Api")
-            freeCompilerArgs.add("-opt-in=androidx.compose.animation.ExperimentalAnimationApi")
-            freeCompilerArgs.add("-opt-in=androidx.compose.runtime.ExperimentalComposeApi")
-            freeCompilerArgs.add("-opt-in=androidx.compose.ui.ExperimentalComposeUiApi")
-            freeCompilerArgs.add("-opt-in=androidx.media3.common.util.UnstableApi")
+            freeCompilerArgs.addAll(
+                    "-opt-in=kotlinx.coroutines.InternalCoroutinesApi",
+                    "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+                    "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+                    "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+                    "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+                    "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                    "-opt-in=androidx.compose.runtime.ExperimentalComposeApi",
+                    "-opt-in=androidx.media3.common.util.UnstableApi"
+            )
         }
     }
 }
